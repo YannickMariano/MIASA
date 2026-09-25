@@ -815,6 +815,15 @@ h1,h2,h3,p{margin:0}
 .decision-copy h2{margin-top:10px;font-size:clamp(22px,2.6vw,30px);font-weight:800;letter-spacing:-.03em;line-height:1.15}
 .decision-copy p{margin-top:10px;font-size:14.5px;line-height:1.55;color:rgba(252,251,245,.82)}
 .decision-badge{margin-top:16px;display:inline-flex;padding:8px 14px;border-radius:12px;background:var(--bg);color:var(--forest);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.08em}
+.link-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--tint-2);color:var(--green-700);font-family:var(--mono);font-size:12px;font-weight:500}
+.link-pill .ms{font-size:16px}
+.decision-badges{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.decision-badges .decision-badge{margin-top:0}
+.pump-badge{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:12px;background:rgba(252,251,245,.14);border:1px solid rgba(252,251,245,.25);color:var(--bg);font-size:13px;font-weight:700}
+.pump-badge .ms{font-size:18px}
+.pump-badge.on{background:#4F7F95;border-color:#4F7F95;animation:pumpPulse 1.4s ease-in-out infinite}
+.pump-badge.locked{background:#E0B64E;border-color:#E0B64E;color:var(--forest)}
+@keyframes pumpPulse{0%,100%{box-shadow:0 0 0 0 rgba(79,127,149,.6)}50%{box-shadow:0 0 0 8px rgba(79,127,149,0)}}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px}
 .stat-card{padding:18px;border-radius:24px;background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--glass-border);box-shadow:0 14px 30px -24px rgba(11,61,42,.4);transition:transform .35s var(--ease),box-shadow .35s}
 .stat-card:hover{transform:translateY(-4px);box-shadow:0 24px 44px -26px rgba(24,155,103,.5)}
