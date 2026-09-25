@@ -10,6 +10,7 @@ async function request(path, options) {
 
 export const api = {
   dashboard: () => request('/dashboard'),
+  sensorHistory: (limit = 100) => request(`/sensors/history?limit=${limit}`),
   toggleIrrigation: (enabled) => request('/irrigation/toggle', { method: 'POST', body: JSON.stringify({ enabled }) }),
   updateSettings: (data) => request('/irrigation/settings', { method: 'PUT', body: JSON.stringify(data) }),
   analyzePlant: async (image) => {
