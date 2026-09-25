@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:linear-gradient(180deg,#FCFBF5 0%,#EDF4EA 30%,#EDF4EA 75%,#FCFBF5 100%);overflow-x:clip;">
+  <dc-import name="SiteNav" current="recoltes" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html#carte" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Récoltes</span></div>
+    <div style="margin-top:22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="max-width:700px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>OBSERVATOIRE DES RÉCOLTES · 2026</div>
+        <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Toutes les récoltes de Madagascar.</h1>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Volumes, saisons, prix et disponibilité, région par région. Cliquez sur une région pour voir le détail.</p>
+      </div>
+      <span style="white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#51645A;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.6);">Données illustratives</span>
+    </div>
+
+    <div style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;">
+      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+        <div style="padding:18px 20px;border-radius:22px;background:{{ k.bg }};color:{{ k.color }};border:1px solid rgba(255,255,255,0.9);box-shadow:0 14px 30px -24px rgba(11,61,42,0.45);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;opacity:0.85;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">{{ k.icon }}</span>{{ k.label }}</div>
+          <div style="margin-top:6px;font-size:30px;font-weight:800;letter-spacing:-0.035em;">{{ k.value }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="7">
+          <button onClick="{{ f.pick }}" style="white-space:nowrap;padding:10px 16px;border-radius:999px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.color }};font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ f.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <label style="position:relative;display:block;width:min(100%,230px);">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#51645A;">search</span>
+          <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Région ou culture" style="width:100%;padding:12px 12px 12px 40px;border-radius:14px;border:1px solid rgba(255,255,255,0.95);background:rgba(255,255,255,0.75);font:500 14.5px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;" style-focus="border-color:#189B67;">
+        </label>
+        <select value="{{ sort }}" onChange="{{ setSort }}" style="padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.95);background:rgba(255,255,255,0.75);font:600 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;cursor:pointer;">
+          <option value="tons">Trier : volume</option>
+          <option value="trend">Trier : évolution</option>
+          <option value="prod">Trier : producteurs</option>
+          <option value="name">Trier : nom</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;display:grid;grid-template-columns:{{ cols }};gap:16px;align-items:start;">
+      <div style="position:relative;padding:clamp(12px,2vw,22px);border-radius:30px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 40px 80px -48px rgba(11,61,42,0.4), inset 0 1px 0 #fff;">
+        <x-import component-from-global-scope="mg-map" from="./mg-map.js" filter="{{ filter }}" active="{{ sel }}" regions="{{ regionsJson }}" hint-size="100%,560px" style="width:100%;"></x-import>
+      </div>
+      <article key="{{ d.id }}" style="border-radius:30px;background:rgba(255,255,255,0.66);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 30px 60px -40px rgba(11,61,42,0.45), inset 0 1px 0 #fff;padding:24px;animation:panelIn .45s cubic-bezier(.2,.8,.2,1);">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#127A51;">{{ d.cityUpper }}</div>
+            <div style="margin-top:4px;font-size:28px;font-weight:800;letter-spacing:-0.035em;">{{ d.name }}</div>
+          </div>
+          <span style="white-space:nowrap;padding:6px 12px;border-radius:999px;background:rgba(24,155,103,0.12);color:#0F6B47;font-size:13px;font-weight:700;">{{ d.crop }}</span>
+        </div>
+        <div style="margin-top:18px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:44px;font-weight:800;letter-spacing:-0.045em;line-height:1;">{{ d.tonsLabel }}</span><span style="font-size:15px;font-weight:600;color:#51645A;">tonnes</span>
+          <span style="display:inline-flex;align-items:center;gap:3px;padding:4px 9px;border-radius:999px;background:{{ d.trendBg }};color:{{ d.trendColor }};font-size:12.5px;font-weight:700;"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">{{ d.trendIcon }}</span>{{ d.trendLabel }} vs 2025</span>
+        </div>
+        <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <sc-for list="{{ d.facts }}" as="fa" hint-placeholder-count="4">
+            <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">{{ fa.l }}</div><div style="margin-top:3px;font-size:14.5px;font-weight:700;">{{ fa.v }}</div></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:20px;">
+          <div style="font-size:13.5px;font-weight:700;">Volumes récoltés par mois</div>
+          <div style="margin-top:10px;height:90px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;">
+            <sc-for list="{{ d.months }}" as="m" hint-placeholder-count="12">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
+                <div style="width:100%;height:{{ m.h }}%;min-height:3px;border-radius:5px 5px 2px 2px;background:{{ m.bg }};transition:height .6s cubic-bezier(.2,.8,.2,1);"></div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#51645A;">{{ m.l }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="margin-top:18px;font-size:13.5px;color:#4B5F55;line-height:1.5;"><b style="color:#10281E;">Autres cultures :</b> {{ d.other }}</div>
+        <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <a href="{{ d.prodHref }}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 10px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14px;text-align:center;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">storefront</span>Voir les produits</a>
+          <a href="{{ d.simHref }}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 10px;border-radius:13px;border:1px solid rgba(24,155,103,0.35);color:#0F6B47;font-weight:700;font-size:14px;background:rgba(255,255,255,0.7);text-align:center;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">view_in_ar</span>Simuler</a>
+        </div>
+      </article>
+    </div>
+
+    <div style="margin-top:16px;border-radius:28px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -34px rgba(11,61,42,0.45);overflow:hidden;">
+      <div style="padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid rgba(16,40,30,0.06);">
+        <div style="font-size:16px;font-weight:800;">Détail par région</div>
+        <div style="font-size:13px;color:#51645A;font-weight:600;">{{ countLabel }}</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <div style="min-width:860px;">
+          <div style="display:grid;grid-template-columns:1.4fr 1.1fr 1fr 0.9fr 1fr 1fr 0.9fr 0.9fr;gap:10px;padding:12px 22px;font-size:11.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#51645A;">
+            <span>Région</span><span>Culture</span><span style="text-align:right;">Volume (t)</span><span style="text-align:right;">Évolution</span><span>Saison</span><span>Disponibilité</span><span style="text-align:right;">Producteurs</span><span style="text-align:right;">Prix moyen</span>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <button onClick="{{ r.pick }}" style="width:100%;display:grid;grid-template-columns:1.4fr 1.1fr 1fr 0.9fr 1fr 1fr 0.9fr 0.9fr;gap:10px;align-items:center;padding:14px 22px;border:none;border-top:1px solid rgba(16,40,30,0.05);background:{{ r.bg }};text-align:left;cursor:pointer;font:500 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;transition:background .2s;" style-hover="background:rgba(24,155,103,0.06);">
+              <span style="display:flex;align-items:center;gap:10px;font-weight:800;"><span style="flex:none;width:9px;height:9px;border-radius:50%;background:{{ r.dot }};"></span>{{ r.name }}</span>
+              <span>{{ r.crop }}</span>
+              <span style="text-align:right;font-weight:800;">{{ r.tonsLabel }}</span>
+              <span style="text-align:right;font-weight:700;color:{{ r.trendColor }};">{{ r.trendLabel }}</span>
+              <span>{{ r.season }}</span>
+              <span><span style="padding:3px 9px;border-radius:999px;background:{{ r.availBg }};color:{{ r.availColor }};font-size:12px;font-weight:700;white-space:nowrap;">{{ r.avail }}</span></span>
+              <span style="text-align:right;">{{ r.prodLabel }}</span>
+              <span style="text-align:right;font-weight:700;">{{ r.priceLabel }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const REGIONS = [
+  {id:'analamanga',name:'Analamanga',city:'Antananarivo',lat:-18.91,lon:47.52,cat:'riz',crop:'Riz',sim:'riz',tons:12450,trend:4.2,season:'Mars – Juin',h:[2,3,4,5],avail:'Disponible',prod:3420,price:2300,coop:48,other:'Tomate, haricot, légumes-feuilles'},
+  {id:'alaotra',name:'Alaotra-Mangoro',city:'Ambatondrazaka',lat:-17.83,lon:48.42,cat:'riz',crop:'Riz',sim:'riz',tons:18920,trend:6.8,season:'Avril – Juillet',h:[3,4,5,6],avail:'Disponible',prod:5140,price:2100,coop:72,other:'Arachide, manioc, poisson d\'eau douce'},
+  {id:'vakinankaratra',name:'Vakinankaratra',city:'Antsirabe',lat:-19.87,lon:47.03,cat:'legumes',crop:'Pomme de terre',sim:'pdt',tons:8230,trend:-2.1,season:'Janv. – Avril',h:[0,1,2,3,11],avail:'Disponible',prod:2870,price:1500,coop:39,other:'Maïs, haricot, fruits tempérés, lait'},
+  {id:'itasy',name:'Itasy',city:'Miarinarivo',lat:-18.96,lon:46.90,cat:'legumes',crop:'Tomate',sim:'tomate',tons:5380,trend:3.4,season:'Juin – Sept.',h:[5,6,7,8],avail:'Stock limité',prod:1720,price:2000,coop:21,other:'Riz, maïs, manioc'},
+  {id:'sava',name:'SAVA',city:'Sambava',lat:-14.27,lon:50.17,cat:'vanille',crop:'Vanille',sim:'vanille',tons:1240,trend:-5.6,season:'Juin – Sept.',h:[5,6,7,8],avail:'Sur commande',prod:1960,price:60000,coop:34,other:'Café, girofle, cacao, riz'},
+  {id:'diana',name:'Diana',city:'Ambanja',lat:-13.68,lon:48.45,cat:'vanille',crop:'Vanille',sim:'vanille',tons:420,trend:1.8,season:'Juin – Août',h:[5,6,7],avail:'Stock limité',prod:640,price:58000,coop:12,other:'Cacao, ylang-ylang, poivre'},
+  {id:'atsinanana',name:'Atsinanana',city:'Toamasina',lat:-18.15,lon:49.40,cat:'fruits',crop:'Litchi',sim:'riz',tons:9600,trend:8.1,season:'Nov. – Janv.',h:[10,11,0],avail:'Hors saison',prod:2310,price:1800,coop:27,other:'Girofle, café, banane'},
+  {id:'boeny',name:'Boeny',city:'Mahajanga',lat:-15.72,lon:46.32,cat:'fruits',crop:'Mangue',sim:'mais',tons:6150,trend:2.6,season:'Oct. – Déc.',h:[9,10,11],avail:'Hors saison',prod:1480,price:900,coop:18,other:'Riz, anacarde, raphia'},
+  {id:'matsiatra',name:'Haute Matsiatra',city:'Fianarantsoa',lat:-21.45,lon:47.09,cat:'cafe',crop:'Café arabica',sim:'cafe',tons:2780,trend:5.3,season:'Mai – Août',h:[4,5,6,7],avail:'Disponible',prod:1540,price:9500,coop:26,other:'Thé, riz, vigne'},
+  {id:'vatovavy',name:'Vatovavy',city:'Mananjary',lat:-21.23,lon:48.34,cat:'cafe',crop:'Café robusta',sim:'cafe',tons:1960,trend:-1.2,season:'Juin – Sept.',h:[5,6,7,8],avail:'Disponible',prod:1180,price:7000,coop:15,other:'Poivre, cannelle, banane'},
+  {id:'menabe',name:'Menabe',city:'Morondava',lat:-20.28,lon:44.28,cat:'mais',crop:'Maïs',sim:'mais',tons:5260,trend:3.9,season:'Mars – Mai',h:[2,3,4],avail:'Disponible',prod:1390,price:1100,coop:16,other:'Riz, haricot de Lima, pois du Cap'},
+  {id:'atsimo',name:'Atsimo-Andrefana',city:'Toliara',lat:-23.35,lon:43.67,cat:'mais',crop:'Maïs',sim:'mais',tons:7420,trend:-3.8,season:'Mars – Mai',h:[2,3,4],avail:'Stock limité',prod:2080,price:1200,coop:22,other:'Manioc, patate douce, coton'},
+];
+const REGIONS_JSON = JSON.stringify(REGIONS);
+const FILTERS = [['all','Toutes les cultures'],['riz','Riz'],['mais','Maïs'],['fruits','Fruits'],['legumes','Légumes'],['cafe','Café'],['vanille','Vanille']];
+const ML = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+const fr = n => Math.round(n).toLocaleString('fr-FR');
+const AV = { 'Disponible': ['rgba(24,155,103,0.12)', '#0F6B47'], 'Stock limité': ['rgba(24,155,103,0.06)', '#3E5147'], 'Sur commande': ['#0B3D2A', '#FCFBF5'], 'Hors saison': ['rgba(16,40,30,0.06)', '#51645A'] };
+class Component extends DCLogic {
+  state = { filter: 'all', sel: 'alaotra', q: '', sort: 'tons', w: typeof window !== 'undefined' ? innerWidth : 1280 };
+  componentDidMount() {
+    this.r = () => this.setState({ w: innerWidth }); addEventListener('resize', this.r);
+    this.h = e => { if (e.detail) this.setState({ sel: e.detail }); }; addEventListener('mgmap:hover', this.h);
+  }
+  componentWillUnmount() { removeEventListener('resize', this.r); removeEventListener('mgmap:hover', this.h); }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    let list = REGIONS.filter(r => (s.filter === 'all' || r.cat === s.filter) && (!q || (r.name + ' ' + r.crop + ' ' + r.city).toLowerCase().includes(q)));
+    const sorters = { tons: (a, b) => b.tons - a.tons, trend: (a, b) => b.trend - a.trend, prod: (a, b) => b.prod - a.prod, name: (a, b) => a.name.localeCompare(b.name) };
+    list = list.slice().sort(sorters[s.sort]);
+    const d = REGIONS.find(r => r.id === s.sel) || REGIONS[0];
+    const tr = t => (t >= 0 ? '+' : '−') + Math.abs(t).toLocaleString('fr-FR') + ' %';
+    const share = d.tons / d.h.length;
+    const all = REGIONS.filter(r => s.filter === 'all' || r.cat === s.filter);
+    return {
+      filter: s.filter, sel: d.id, regionsJson: REGIONS_JSON, q: s.q, sort: s.sort,
+      setQ: e => this.setState({ q: e.target.value }), setSort: e => this.setState({ sort: e.target.value }),
+      cols: s.w >= 1000 ? 'minmax(0,1.15fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      kpis: [
+        { icon: 'agriculture', label: 'Récolte totale', value: fr(all.reduce((a, r) => a + r.tons, 0)) + ' t', bg: '#189B67', color: '#FCFBF5' },
+        { icon: 'groups', label: 'Producteurs', value: fr(all.reduce((a, r) => a + r.prod, 0)), bg: 'rgba(255,255,255,0.65)', color: '#10281E' },
+        { icon: 'handshake', label: 'Coopératives', value: fr(all.reduce((a, r) => a + r.coop, 0)), bg: 'rgba(255,255,255,0.65)', color: '#10281E' },
+        { icon: 'map', label: 'Régions suivies', value: String(all.length), bg: 'rgba(255,255,255,0.65)', color: '#10281E' } ],
+      filters: FILTERS.map(([id, label]) => { const on = s.filter === id; return { label, pick: () => { const first = REGIONS.find(r => id === 'all' || r.cat === id); this.setState({ filter: id, sel: first ? first.id : s.sel }); }, bg: on ? '#189B67' : 'rgba(255,255,255,0.65)', color: on ? '#FCFBF5' : '#10281E', border: on ? '#189B67' : 'rgba(255,255,255,0.95)' }; }),
+      d: { ...d, cityUpper: d.city.toUpperCase(), tonsLabel: fr(d.tons), trendLabel: tr(d.trend), trendIcon: d.trend >= 0 ? 'trending_up' : 'trending_down',
+        trendBg: d.trend >= 0 ? 'rgba(24,155,103,0.12)' : 'rgba(11,61,42,0.08)', trendColor: d.trend >= 0 ? '#0F6B47' : '#0B3D2A',
+        facts: [{ l: 'Saison de récolte', v: d.season }, { l: 'Disponibilité', v: d.avail }, { l: 'Producteurs', v: fr(d.prod) + ' · ' + d.coop + ' coop.' }, { l: 'Prix moyen', v: fr(d.price) + ' Ar/kg' }],
+        months: ML.map((l, i) => { const on = d.h.includes(i); const idx = d.h.indexOf(i); const v = on ? share * (0.7 + (idx === Math.floor(d.h.length / 2) ? 0.6 : 0.3)) : 0; return { l, h: on ? Math.round(v / (share * 1.3) * 100) : 3, bg: on ? '#189B67' : 'rgba(24,155,103,0.12)' }; }),
+        prodHref: 'Produits.dc.html?region=' + encodeURIComponent(d.name), simHref: 'Simulation.dc.html?crop=' + d.sim },
+      countLabel: list.length + ' région' + (list.length > 1 ? 's' : ''),
+      rows: list.map(r => { const on = r.id === d.id; const [ab, ac] = AV[r.avail]; return { ...r, tonsLabel: fr(r.tons), trendLabel: tr(r.trend), trendColor: r.trend >= 0 ? '#0F6B47' : '#0B3D2A', prodLabel: fr(r.prod), priceLabel: fr(r.price) + ' Ar/kg', availBg: ab, availColor: ac, bg: on ? 'rgba(24,155,103,0.09)' : 'transparent', dot: on ? '#189B67' : 'rgba(24,155,103,0.35)', pick: () => { this.setState({ sel: r.id }); const a = document.querySelector('article'); if (a) scrollTo({ top: a.getBoundingClientRect().top + scrollY - 100, behavior: 'smooth' }); } }; }),
+    };
+  }
+}
+</script>
+</body>
+</html>

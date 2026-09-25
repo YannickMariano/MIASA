@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<header style="padding:{{ pad }};transition:padding .4s cubic-bezier(.2,.8,.2,1);font-family:'Plus Jakarta Sans',system-ui,sans-serif;">
+  <div style="max-width:1200px;margin:0 auto;height:{{ h }}px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 10px 0 16px;border-radius:20px;background:rgba(252,251,245,0.74);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(255,255,255,0.9);box-shadow:{{ shadow }};transition:all .4s cubic-bezier(.2,.8,.2,1);">
+    <a href="Voly%20Site%20Vitrine.dc.html" style="display:flex;align-items:center;gap:10px;color:#10281E;text-decoration:none;">
+      <span style="width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#1FB077,#0F6B47);display:grid;place-items:center;color:#FCFBF5;box-shadow:0 6px 16px -6px rgba(24,155,103,0.7), inset 0 1px 0 rgba(255,255,255,0.35);"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">eco</span></span>
+      <span style="font-weight:800;font-size:21px;letter-spacing:-0.035em;">Voly</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:0.08em;color:#127A51;padding:3px 7px;border-radius:6px;background:rgba(24,155,103,0.1);">MG</span>
+    </a>
+    <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:2px;">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="7">
+          <a href="{{ l.href }}" style="white-space:nowrap;padding:8px 13px;border-radius:12px;font-size:14.5px;font-weight:600;text-decoration:none;color:{{ l.color }};background:{{ l.bg }};transition:background .25s,color .25s;" style-hover="background:rgba(24,155,103,0.08);color:#10281E;">{{ l.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <a href="Produits.dc.html?publier=1" style="white-space:nowrap;display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14.5px;text-decoration:none;box-shadow:0 10px 22px -12px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-1px);background:#14875A;color:#FCFBF5;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">add</span>Publier un produit</a>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggle }}" aria-label="Menu" style="width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,0.9);background:rgba(255,255,255,0.6);display:grid;place-items:center;cursor:pointer;color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;">{{ menuIcon }}</span></button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1200px;margin:8px auto 0;padding:10px;border-radius:22px;background:rgba(252,251,245,0.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 24px 48px -24px rgba(11,61,42,0.35);animation:menuIn .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:2px;">
+      <sc-for list="{{ links }}" as="l" hint-placeholder-count="7">
+        <a href="{{ l.href }}" style="display:flex;align-items:center;justify-content:space-between;padding:15px 14px;border-radius:14px;font-size:17px;font-weight:700;color:#10281E;text-decoration:none;background:{{ l.bg }};">{{ l.label }}<span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">arrow_forward</span></a>
+      </sc-for>
+      <a href="Produits.dc.html?publier=1" style="margin-top:6px;display:flex;justify-content:center;padding:15px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:16px;text-decoration:none;">Publier un produit</a>
+    </div>
+  </sc-if>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:100},&quot;current&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;accueil&quot;,&quot;cultures&quot;,&quot;simulation&quot;,&quot;capteur&quot;,&quot;recoltes&quot;,&quot;risques&quot;,&quot;produits&quot;,&quot;diagnostic&quot;],&quot;default&quot;:&quot;cultures&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const LINKS = [['accueil','Accueil','Voly%20Site%20Vitrine.dc.html'],['cultures','Cultures','Cultures.dc.html'],['simulation','Simulation','Simulation.dc.html'],['capteur','Capteur','Capteur.dc.html'],['recoltes','Récoltes','Recoltes.dc.html'],['risques','Risques','Risques.dc.html'],['produits','Produits','Produits.dc.html'],['diagnostic','Diagnostic','Diagnostic.dc.html']];
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1280, sc: false, open: false };
+  componentDidMount() {
+    this.r = () => this.setState({ w: innerWidth });
+    this.s = () => { const sc = scrollY > 16; if (sc !== this.state.sc) this.setState({ sc }); };
+    addEventListener('resize', this.r); addEventListener('scroll', this.s, { passive: true }); this.r(); this.s();
+  }
+  componentWillUnmount() { removeEventListener('resize', this.r); removeEventListener('scroll', this.s); }
+  renderVals() {
+    const cur = this.props.current ?? '', desktop = this.state.w >= 1240;
+    return {
+      desktop, mobile: !desktop, open: !desktop && this.state.open, menuIcon: this.state.open ? 'close' : 'menu',
+      toggle: () => this.setState({ open: !this.state.open }),
+      pad: this.state.sc ? '10px clamp(12px,3vw,24px)' : '16px clamp(12px,3vw,24px)', h: this.state.sc ? 60 : 68,
+      shadow: this.state.sc ? '0 14px 34px -20px rgba(11,61,42,0.35), inset 0 1px 0 #fff' : '0 8px 24px -20px rgba(11,61,42,0.25)',
+      links: LINKS.map(([id, label, href]) => ({ href, label, color: cur === id ? '#10281E' : '#51645A', bg: cur === id ? 'rgba(24,155,103,0.10)' : 'transparent' })),
+    };
+  }
+}
+</script>
+</body>
+</html>

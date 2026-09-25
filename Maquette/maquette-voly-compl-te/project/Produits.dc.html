@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <div style="position:absolute;right:-12%;top:-8%;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.14), transparent 65%);pointer-events:none;"></div>
+  <dc-import name="SiteNav" current="produits" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html#produits" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Publications</span></div>
+    <div style="margin-top:22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="max-width:700px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>TOUTES LES PUBLICATIONS</div>
+        <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Les produits des producteurs.</h1>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Trouvez un produit près de chez vous et contactez directement le producteur. Aucun paiement ne passe par la plateforme.</p>
+      </div>
+      <button onClick="{{ openPublish }}" style="display:inline-flex;align-items:center;gap:10px;padding:16px 22px;border-radius:15px;border:none;background:#189B67;color:#FCFBF5;font:700 15.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 14px 28px -12px rgba(24,155,103,0.85), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;">add_a_photo</span>Publier un produit</button>
+    </div>
+
+    <div style="margin-top:28px;padding:12px;border-radius:22px;background:rgba(255,255,255,0.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 14px 30px -26px rgba(11,61,42,0.45);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+          <button onClick="{{ c.pick }}" style="white-space:nowrap;padding:9px 14px;border-radius:999px;border:none;background:{{ c.bg }};color:{{ c.color }};font:700 13.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <label style="position:relative;display:block;width:min(100%,210px);">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#51645A;">search</span>
+          <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Rechercher" style="width:100%;padding:11px 12px 11px 40px;border-radius:13px;border:1px solid rgba(16,40,30,0.1);background:rgba(255,255,255,0.85);font:500 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;" style-focus="border-color:#189B67;">
+        </label>
+        <select value="{{ region }}" onChange="{{ setRegion }}" style="padding:11px 12px;border-radius:13px;border:1px solid rgba(16,40,30,0.1);background:rgba(255,255,255,0.85);font:600 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;cursor:pointer;">
+          <option value="">Toutes les régions</option>
+          <sc-for list="{{ regions }}" as="r" hint-placeholder-count="10"><option value="{{ r }}">{{ r }}</option></sc-for>
+        </select>
+        <select value="{{ sort }}" onChange="{{ setSort }}" style="padding:11px 12px;border-radius:13px;border:1px solid rgba(16,40,30,0.1);background:rgba(255,255,255,0.85);font:600 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;cursor:pointer;">
+          <option value="recent">Plus récents</option>
+          <option value="asc">Prix croissant</option>
+          <option value="desc">Prix décroissant</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13.5px;font-weight:600;color:#51645A;">{{ countLabel }}</div>
+
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,262px),1fr));gap:16px;">
+      <sc-for list="{{ items }}" as="pr" hint-placeholder-count="8">
+        <div onClick="{{ pr.open }}" style="cursor:pointer;padding:12px;border-radius:26px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 14px 34px -22px rgba(11,61,42,0.4), inset 0 1px 0 #fff;display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s;animation:panelIn .5s cubic-bezier(.2,.8,.2,1);" style-hover="transform:translateY(-6px);box-shadow:0 30px 56px -26px rgba(24,155,103,0.55), 0 0 0 1px rgba(24,155,103,0.3), inset 0 1px 0 #fff;">
+          <div style="position:relative;height:170px;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.10) 0 10px, rgba(24,155,103,0.03) 10px 20px), #EAF1E6;">
+            <sc-if value="{{ pr.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ pr.photo }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></sc-if>
+            <sc-if value="{{ pr.noPhoto }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:12px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3E5A4B;background:rgba(252,251,245,0.85);padding:4px 8px;border-radius:6px;">{{ pr.img }}</div></sc-if>
+            <div style="position:absolute;left:12px;top:12px;display:flex;gap:6px;">
+              <span style="padding:5px 10px;border-radius:999px;background:rgba(252,251,245,0.92);font-size:11.5px;font-weight:700;color:#3E5147;">{{ pr.ago }}</span>
+              <sc-if value="{{ pr.isNew }}" hint-placeholder-val="{{ false }}"><span style="padding:5px 10px;border-radius:999px;background:#189B67;font-size:11.5px;font-weight:700;color:#FCFBF5;">Votre publication</span></sc-if>
+            </div>
+          </div>
+          <div style="padding:14px 8px 4px;flex:1;display:flex;flex-direction:column;">
+            <div style="font-size:12px;font-weight:700;color:#127A51;">{{ pr.cat }}</div>
+            <div style="margin-top:3px;font-size:19px;font-weight:800;letter-spacing:-0.03em;">{{ pr.name }}</div>
+            <div style="margin-top:5px;display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4B5F55;font-weight:500;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">location_on</span>{{ pr.loc }}</div>
+            <div style="margin-top:12px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;"><span style="font-size:23px;font-weight:800;letter-spacing:-0.03em;color:#127A51;">{{ pr.priceLabel }}</span><span style="font-size:13px;color:#51645A;font-weight:600;">{{ pr.unit }}</span></div>
+            <div style="margin-top:4px;font-size:12.5px;color:#51645A;font-weight:600;">Disponible : {{ pr.qty }}</div>
+            <div style="flex:1;min-height:12px;"></div>
+            <div style="display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid rgba(16,40,30,0.08);">
+              <span style="width:30px;height:30px;border-radius:50%;background:rgba(24,155,103,0.14);color:#0F6B47;display:grid;place-items:center;font-size:11.5px;font-weight:800;">{{ pr.init }}</span>
+              <div style="flex:1;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ pr.seller }}</div>
+              <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">arrow_forward</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:20px;padding:32px;border-radius:24px;background:rgba(255,255,255,0.6);text-align:center;font-size:15px;color:#51645A;">Aucune publication ne correspond. Essayez une autre région ou catégorie.</div>
+    </sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+
+  <sc-if value="{{ hasDetail }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDetail }}" style="position:fixed;inset:0;z-index:150;display:flex;align-items:flex-start;justify-content:center;padding:clamp(12px,4vh,48px) 12px;overflow-y:auto;background:rgba(11,61,42,0.38);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadeIn .25s ease;">
+      <div onClick="{{ stop }}" style="position:relative;width:100%;max-width:960px;border-radius:30px;background:rgba(252,251,245,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 40px 100px -30px rgba(11,61,42,0.6);animation:modalIn .4s cubic-bezier(.2,.8,.2,1);overflow:hidden;">
+        <button onClick="{{ closeDetail }}" aria-label="Fermer" style="position:absolute;right:16px;top:16px;z-index:2;width:44px;height:44px;border-radius:14px;border:1px solid rgba(16,40,30,0.1);background:rgba(252,251,245,0.92);display:grid;place-items:center;cursor:pointer;color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">close</span></button>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));">
+          <div style="padding:16px;">
+            <div style="position:relative;aspect-ratio:4/3;border-radius:22px;overflow:hidden;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.12) 0 12px, rgba(24,155,103,0.04) 12px 24px), #E6EFE2;">
+              <sc-if value="{{ dt.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ dt.photo }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></sc-if>
+              <sc-if value="{{ dt.noPhoto }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:14px;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3E5A4B;background:rgba(252,251,245,0.88);padding:5px 9px;border-radius:7px;">{{ dt.img }} · {{ dt.photoIdx }}/3</div></sc-if>
+            </div>
+            <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+              <sc-for list="{{ thumbs }}" as="th" hint-placeholder-count="3">
+                <button onClick="{{ th.pick }}" style="aspect-ratio:4/3;border-radius:14px;border:2px solid {{ th.border }};background:repeating-linear-gradient(135deg, rgba(24,155,103,0.12) 0 8px, rgba(24,155,103,0.04) 8px 16px), #E6EFE2;cursor:pointer;"></button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:26px 26px 26px 14px;display:flex;flex-direction:column;gap:16px;">
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:#127A51;">{{ dt.cat }} · {{ dt.ago }}</div>
+              <div style="margin-top:4px;font-size:clamp(26px,3vw,34px);font-weight:800;letter-spacing:-0.035em;line-height:1.1;padding-right:44px;">{{ dt.name }}</div>
+              <div style="margin-top:10px;display:flex;align-items:baseline;gap:8px;"><span style="font-size:30px;font-weight:800;letter-spacing:-0.035em;color:#127A51;">{{ dt.priceLabel }}</span><span style="font-size:14px;font-weight:600;color:#51645A;">{{ dt.unit }}</span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Quantité</div><div style="margin-top:3px;font-size:14.5px;font-weight:700;">{{ dt.qty }}</div></div>
+              <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Localisation</div><div style="margin-top:3px;font-size:14.5px;font-weight:700;">{{ dt.loc }}</div></div>
+            </div>
+            <p style="margin:0;font-size:14.5px;line-height:1.6;color:#3E5147;">{{ dt.desc }}</p>
+            <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:rgba(255,255,255,0.8);border:1px solid rgba(16,40,30,0.06);">
+              <span style="width:44px;height:44px;border-radius:50%;background:rgba(24,155,103,0.14);color:#0F6B47;display:grid;place-items:center;font-size:14px;font-weight:800;">{{ dt.init }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:800;">{{ dt.seller }}</div><div style="font-size:12.5px;color:#51645A;font-weight:500;">Préfère : {{ dt.contact }}</div></div>
+              <a href="{{ telHref }}" onClick="{{ revealPhone }}" style="white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:11px 14px;border-radius:13px;border:1px solid rgba(24,155,103,0.35);color:#0F6B47;font-weight:700;font-size:14px;background:rgba(255,255,255,0.7);"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">call</span>{{ phoneLabel }}</a>
+            </div>
+            <div style="padding:14px;border-radius:18px;background:rgba(24,155,103,0.06);display:flex;flex-direction:column;gap:10px;">
+              <div style="font-size:14px;font-weight:800;">Envoyer un message</div>
+              <sc-for list="{{ thread }}" as="m" hint-placeholder-count="0">
+                <div style="align-self:flex-end;max-width:85%;padding:10px 14px;border-radius:16px 16px 4px 16px;background:#189B67;color:#FCFBF5;font-size:14px;line-height:1.45;animation:panelIn .3s ease;">{{ m.text }}<div style="margin-top:4px;font-size:11px;opacity:0.8;text-align:right;">{{ m.time }} · envoyé</div></div>
+              </sc-for>
+              <textarea value="{{ msg }}" onChange="{{ setMsg }}" rows="2" placeholder="Bonjour, je suis intéressé(e) par votre produit…" style="width:100%;padding:12px 14px;border-radius:13px;border:1px solid rgba(16,40,30,0.1);background:rgba(255,255,255,0.9);font:500 14.5px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;resize:vertical;" style-focus="border-color:#189B67;"></textarea>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ quick }}" as="qk" hint-placeholder-count="3">
+                  <button onClick="{{ qk.pick }}" style="padding:7px 11px;border-radius:999px;border:1px solid rgba(24,155,103,0.25);background:rgba(255,255,255,0.8);color:#0F6B47;font:600 12.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;">{{ qk.label }}</button>
+                </sc-for>
+              </div>
+              <button onClick="{{ send }}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:14px;border:none;background:#189B67;color:#FCFBF5;font:700 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">send</span>Envoyer le message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ publishOpen }}" hint-placeholder-val="{{ false }}">
+    <dc-import name="PublishModal" on-close="{{ closePublish }}" on-submit="{{ addProduct }}" on-view-all="{{ closePublish }}" hint-size="100%,100%" style="position:fixed;inset:0;z-index:200;"></dc-import>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:250;display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:16px;background:#0B3D2A;color:#FCFBF5;font-size:14.5px;font-weight:700;box-shadow:0 20px 40px -16px rgba(11,61,42,0.6);animation:modalIn .35s cubic-bezier(.2,.8,.2,1);white-space:nowrap;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#3CC58C;font-variation-settings:'FILL' 1;">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const P = [
+  {id:1,name:'Riz local makalioka',cat:'Céréales',region:'Vakinankaratra',city:'Antsirabe',price:25000,unit:'/ sac de 50 kg',qty:'40 sacs',seller:'Hery Rakoto',age:2,img:'photo · sacs de riz',contact:'Appel',desc:'Riz blanc décortiqué, récolte d\'avril, bien séché et trié. Livraison possible à Antsirabe ville.'},
+  {id:2,name:'Tomates fraîches',cat:'Légumes',region:'Itasy',city:'Miarinarivo',price:3500,unit:'/ kg',qty:'300 kg',seller:'Voahangy Rasoa',age:5,img:'photo · cagettes de tomates',contact:'Message',desc:'Tomates rondes cueillies à maturité, sans traitement chimique en fin de cycle. Vente par cagette de 20 kg.'},
+  {id:3,name:'Vanille bourbon noire',cat:'Épices',region:'SAVA',city:'Sambava',price:180000,unit:'/ kg',qty:'25 kg',seller:'Coop. Sava Mitsinjo',age:26,img:'photo · bottes de vanille',contact:'Appel + message',desc:'Gousses de 16 à 18 cm, taux d\'humidité 30–35 %, préparation traditionnelle. Échantillon possible.'},
+  {id:4,name:'Café arabica vert',cat:'Café & cacao',region:'Haute Matsiatra',city:'Fianarantsoa',price:18000,unit:'/ kg',qty:'200 kg',seller:'Andry Ratsimba',age:30,img:'photo · grains de café vert',contact:'Appel',desc:'Arabica d\'altitude (1 300 m), traitement lavé, récolte 2026.'},
+  {id:5,name:'Pommes de terre',cat:'Légumes',region:'Vakinankaratra',city:'Antsirabe',price:1500,unit:'/ kg',qty:'1,2 t',seller:'Faly Randria',age:8,img:'photo · pommes de terre',contact:'Appel',desc:'Variété Spunta, calibre moyen à gros, stockées à l\'abri de la lumière.'},
+  {id:6,name:'Maïs grain sec',cat:'Céréales',region:'Atsimo-Andrefana',city:'Toliara',price:1200,unit:'/ kg',qty:'2 t',seller:'Coop. Tsimanavaka',age:48,img:'photo · maïs en grains',contact:'Appel + message',desc:'Maïs jaune égrené, séché au soleil, idéal pour la provende ou la mouture.'},
+  {id:7,name:'Litchis',cat:'Fruits',region:'Atsinanana',city:'Toamasina',price:2500,unit:'/ kg',qty:'800 kg',seller:'Nirina Andria',age:12,img:'photo · litchis frais',contact:'Message',desc:'Litchis frais de la côte Est, cueillis la veille. Vente en paniers de 10 kg.'},
+  {id:8,name:'Haricots rouges secs',cat:'Légumes',region:'Vakinankaratra',city:'Ambatolampy',price:4000,unit:'/ kg',qty:'150 kg',seller:'Lova Rakotomalala',age:72,img:'photo · haricots rouges',contact:'Appel',desc:'Haricots rouges triés à la main, saison 2026.'},
+  {id:9,name:'Mangues',cat:'Fruits',region:'Boeny',city:'Mahajanga',price:800,unit:'/ kg',qty:'500 kg',seller:'Tahina Mahefa',age:20,img:'photo · mangues',contact:'Appel + message',desc:'Mangues greffées, sucrées, récolte de novembre.'},
+  {id:10,name:'Clous de girofle',cat:'Épices',region:'Atsinanana',city:'Mahanoro',price:22000,unit:'/ kg',qty:'60 kg',seller:'Coop. Tsara Tany',age:96,img:'photo · clous de girofle',contact:'Message',desc:'Girofle séché, qualité export, moins de 2 % de griffes.'},
+  {id:11,name:'Riz rouge bio',cat:'Céréales',region:'Alaotra-Mangoro',city:'Ambatondrazaka',price:3200,unit:'/ kg',qty:'1 t',seller:'Coop. Lac Alaotra',age:36,img:'photo · riz rouge',contact:'Appel',desc:'Riz rouge cultivé en SRI, sans engrais chimiques.'},
+  {id:12,name:'Cacao fermenté',cat:'Café & cacao',region:'Diana',city:'Ambanja',price:14000,unit:'/ kg',qty:'300 kg',seller:'Mialy Zafy',age:120,img:'photo · fèves de cacao',contact:'Appel + message',desc:'Fèves de cacao de la vallée du Sambirano, fermentées 6 jours et séchées.'},
+];
+const CATS = ['Tous','Céréales','Légumes','Fruits','Épices','Café & cacao','Autre'];
+const REGIONS = [...new Set(P.map(p => p.region))].sort();
+const fr = n => Math.round(n).toLocaleString('fr-FR');
+const ago = h => h < 1 ? 'À l\'instant' : h < 24 ? 'Il y a ' + h + ' h' : h < 48 ? 'Hier' : 'Il y a ' + Math.round(h / 24) + ' j';
+const init = n => n.replace(/^Coop\.\s*/, '').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+class Component extends DCLogic {
+  state = { cat: 'Tous', region: '', q: '', sort: 'recent', mine: [], detail: null, photo: 0, msg: '', threads: {}, reveal: false, publish: false, toast: '' };
+  componentDidMount() {
+    const u = new URLSearchParams(location.search);
+    const st = {}; if (u.get('publier')) st.publish = true;
+    const r = u.get('region'); if (r && REGIONS.includes(r)) st.region = r;
+    this.setState(st);
+    this.k = e => { if (e.key === 'Escape' && this.state.detail) this.setState({ detail: null }); }; addEventListener('keydown', this.k);
+  }
+  componentWillUnmount() { removeEventListener('keydown', this.k); clearTimeout(this.tt); }
+  flash(t) { clearTimeout(this.tt); this.setState({ toast: t }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2800); }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const all = [...s.mine, ...P];
+    let list = all.filter(p => (s.cat === 'Tous' || p.cat === s.cat) && (!s.region || p.region === s.region) && (!q || (p.name + ' ' + p.city + ' ' + p.seller).toLowerCase().includes(q)));
+    list = list.slice().sort(s.sort === 'asc' ? (a, b) => a.price - b.price : s.sort === 'desc' ? (a, b) => b.price - a.price : (a, b) => a.age - b.age);
+    const map = p => ({ ...p, loc: p.city ? p.city + ', ' + p.region : p.region, priceLabel: fr(p.price) + ' Ar', ago: ago(p.age), init: init(p.seller), hasPhoto: !!p.photo, noPhoto: !p.photo, isNew: !!p.mine });
+    const d = s.detail ? all.find(p => p.id === s.detail) : null;
+    const thread = d ? (s.threads[d.id] || []) : [];
+    return {
+      openPublish: () => this.setState({ publish: true }), closePublish: () => this.setState({ publish: false }), publishOpen: s.publish,
+      addProduct: f => {
+        const p = { id: Date.now(), name: f.name, cat: f.cat, region: f.region, city: f.city, price: +String(f.price).replace(/\D/g, '') || 0, unit: f.unit, qty: f.qty || 'Non précisée', seller: 'Vous', age: 0, img: 'vos photos', photo: f.photos && f.photos[0], contact: f.contact, desc: f.desc || 'Aucune description.', phone: f.phone, mine: true };
+        this.setState({ mine: [p, ...this.state.mine], cat: 'Tous', region: '', q: '', sort: 'recent' }); this.flash('Publication en ligne');
+      },
+      cats: CATS.map(c => { const on = s.cat === c; return { label: c, pick: () => this.setState({ cat: c }), bg: on ? '#189B67' : 'transparent', color: on ? '#FCFBF5' : '#10281E' }; }),
+      regions: REGIONS, region: s.region, setRegion: e => this.setState({ region: e.target.value }),
+      q: s.q, setQ: e => this.setState({ q: e.target.value }), sort: s.sort, setSort: e => this.setState({ sort: e.target.value }),
+      countLabel: list.length + ' publication' + (list.length > 1 ? 's' : '') + (s.region ? ' · ' + s.region : ''),
+      items: list.map(p => ({ ...map(p), open: () => this.setState({ detail: p.id, photo: 0, msg: '', reveal: false }) })), empty: !list.length,
+      hasDetail: !!d, dt: d ? { ...map(d), photoIdx: s.photo + 1 } : {},
+      thumbs: [0, 1, 2].map(i => ({ pick: () => this.setState({ photo: i }), border: s.photo === i ? '#189B67' : 'transparent' })),
+      closeDetail: () => this.setState({ detail: null }), stop: e => e.stopPropagation(),
+      phoneLabel: s.reveal ? (d && d.phone ? d.phone : '034 12 345 67') : 'Contacter', telHref: s.reveal ? 'tel:' + (d && d.phone ? d.phone.replace(/\s/g, '') : '0341234567') : '#',
+      revealPhone: e => { if (!s.reveal) { e.preventDefault(); this.setState({ reveal: true }); } },
+      thread, msg: s.msg, setMsg: e => this.setState({ msg: e.target.value }),
+      quick: ['Est-ce toujours disponible ?', 'Livrez-vous ?', 'Prix pour une grande quantité ?'].map(label => ({ label, pick: () => this.setState({ msg: label }) })),
+      send: () => { const t = s.msg.trim(); if (!t || !d) return; const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); this.setState({ msg: '', threads: { ...s.threads, [d.id]: [...thread, { text: t, time }] } }); this.flash('Message envoyé à ' + d.seller); },
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

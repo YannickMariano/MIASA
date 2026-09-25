@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.6);opacity:0}}
+@keyframes wave{0%{transform:scale(.4);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <div style="position:absolute;right:-10%;top:-6%;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.15), transparent 65%);pointer-events:none;"></div>
+  <dc-import name="SiteNav" current="capteur" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html#capteur" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Analyse du sol</span></div>
+    <div style="margin-top:22px;max-width:720px;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>ANALYSE EN DIRECT</div>
+      <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Lancez une analyse de votre sol.</h1>
+      <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Branchez votre capteur, lancez l'analyse : humidité, température, pH et nutriments sont mesurés en direct, puis un rapport vous dit quoi faire.</p>
+    </div>
+
+    <div style="margin-top:36px;display:grid;grid-template-columns:{{ topCols }};gap:16px;">
+      <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -32px rgba(11,61,42,0.45), inset 0 1px 0 #fff;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="position:relative;flex:none;width:56px;height:56px;border-radius:18px;background:{{ connBg }};color:{{ connColor }};display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:28px;line-height:1;">sensors</span></span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#127A51;">CAPTEUR MG-0421</div>
+            <div style="margin-top:3px;font-size:17px;font-weight:800;">{{ connLabel }}</div>
+            <div style="margin-top:2px;font-size:13px;color:#51645A;font-weight:500;">{{ connSub }}</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Batterie</div><div style="margin-top:3px;font-size:15px;font-weight:800;">82 %</div></div>
+          <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Profondeur</div><div style="margin-top:3px;font-size:15px;font-weight:800;">20 cm</div></div>
+          <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Parcelle</div><div style="margin-top:3px;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Ambohidratrimo</div></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button onClick="{{ connect }}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border-radius:14px;border:1px solid rgba(24,155,103,0.35);background:rgba(255,255,255,0.75);color:#0F6B47;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">usb</span>{{ connectLabel }}</button>
+          <button onClick="{{ useDemo }}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border-radius:14px;border:1px solid rgba(16,40,30,0.1);background:rgba(255,255,255,0.6);color:#10281E;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">play_circle</span>Mode démo</button>
+        </div>
+        <sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;font-size:12.5px;line-height:1.5;color:#3E5147;padding:10px 12px;border-radius:12px;background:rgba(24,155,103,0.07);"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.3;color:#189B67;">info</span>{{ notice }}</div>
+        </sc-if>
+      </div>
+
+      <div style="position:relative;overflow:hidden;padding:24px;border-radius:28px;background:linear-gradient(165deg,#0B3D2A 0%,#0F5A3D 60%,#127A51 100%);color:#FCFBF5;box-shadow:0 40px 80px -40px rgba(11,61,42,0.6);display:flex;flex-wrap:wrap;align-items:center;gap:28px;">
+        <div style="position:relative;flex:none;width:180px;height:180px;margin:0 auto;">
+          <sc-if value="{{ running }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(252,251,245,0.35);animation:wave 2.2s ease-out infinite;"></span>
+            <span style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(252,251,245,0.35);animation:wave 2.2s ease-out 1.1s infinite;"></span>
+          </sc-if>
+          <svg width="180" height="180" viewBox="0 0 180 180" style="position:relative;display:block;transform:rotate(-90deg);">
+            <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(252,251,245,0.14)" stroke-width="12"></circle>
+            <circle cx="90" cy="90" r="78" fill="none" stroke="#3CC58C" stroke-width="12" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="{{ ringOffset }}" style="transition:stroke-dashoffset .4s linear;"></circle>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div style="font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;">{{ progress }}<span style="font-size:20px;">%</span></div>
+            <div style="margin-top:6px;font-size:12.5px;font-weight:600;color:rgba(252,251,245,0.8);">{{ ringLabel }}</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:min(100%,260px);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9FE3C4;">{{ stateTag }}</div>
+          <div style="margin-top:8px;font-size:clamp(22px,2.6vw,30px);font-weight:800;letter-spacing:-0.03em;line-height:1.15;">{{ phase }}</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:7px;">
+            <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:{{ ph.color }};">
+                <span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;font-variation-settings:'FILL' 1;">{{ ph.icon }}</span>{{ ph.label }}
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;">
+            <button onClick="{{ start }}" style="display:inline-flex;align-items:center;gap:10px;padding:15px 22px;border-radius:15px;border:none;background:#FCFBF5;color:#0B3D2A;font:800 15.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 14px 28px -14px rgba(0,0,0,0.5);"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">{{ startIcon }}</span>{{ startLabel }}</button>
+            <sc-if value="{{ running }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ stop }}" style="display:inline-flex;align-items:center;gap:8px;padding:15px 18px;border-radius:15px;border:1px solid rgba(252,251,245,0.3);background:rgba(252,251,245,0.1);color:#FCFBF5;font:700 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">stop</span>Arrêter</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px;">
+      <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="8">
+        <div style="padding:18px;border-radius:24px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 14px 30px -24px rgba(11,61,42,0.4);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#189B67;">{{ m.icon }}</span>{{ m.label }}</span>
+            <span style="padding:3px 9px;border-radius:999px;background:{{ m.pillBg }};color:{{ m.pillColor }};font-size:11.5px;font-weight:700;">{{ m.status }}</span>
+          </div>
+          <div style="margin-top:12px;display:flex;align-items:baseline;gap:6px;"><span style="font-size:32px;font-weight:800;letter-spacing:-0.04em;line-height:1;">{{ m.value }}</span><span style="font-size:13px;font-weight:600;color:#51645A;">{{ m.unit }}</span></div>
+          <svg viewBox="0 0 200 40" preserveAspectRatio="none" style="margin-top:12px;display:block;width:100%;height:40px;overflow:visible;">
+            <rect x="0" y="{{ m.bandY }}" width="200" height="{{ m.bandH }}" fill="rgba(24,155,103,0.08)"></rect>
+            <path d="{{ m.path }}" fill="none" stroke="#189B67" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+          </svg>
+          <div style="margin-top:6px;font-size:11.5px;color:#51645A;font-weight:600;">Idéal : {{ m.ideal }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:{{ botCols }};gap:16px;">
+      <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -34px rgba(11,61,42,0.45);">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="font-size:16px;font-weight:800;">Flux en direct</div>
+          <div style="display:flex;gap:14px;font-size:12px;font-weight:600;color:#51645A;">
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:3px;border-radius:2px;background:#189B67;"></span>Humidité (%)</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:3px;border-radius:2px;background:#0B3D2A;"></span>Température (°C × 3)</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 400 180" preserveAspectRatio="none" style="margin-top:14px;display:block;width:100%;height:200px;overflow:visible;">
+          <line x1="0" y1="45" x2="400" y2="45" stroke="rgba(16,40,30,0.06)"></line>
+          <line x1="0" y1="90" x2="400" y2="90" stroke="rgba(16,40,30,0.06)"></line>
+          <line x1="0" y1="135" x2="400" y2="135" stroke="rgba(16,40,30,0.06)"></line>
+          <path d="{{ humArea }}" fill="rgba(24,155,103,0.12)"></path>
+          <path d="{{ humPath }}" fill="none" stroke="#189B67" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+          <path d="{{ tempPath }}" fill="none" stroke="#0B3D2A" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+        </svg>
+        <div style="margin-top:8px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;"><span>−20 s</span><span>−10 s</span><span>Maintenant</span></div>
+      </div>
+      <div style="padding:18px;border-radius:28px;background:#0B3D2A;color:#FCFBF5;display:flex;flex-direction:column;min-height:280px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;"><span>Journal du capteur</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9FE3C4;">{{ logCount }} mesures</span></div>
+        <div style="margin-top:12px;flex:1;display:flex;flex-direction:column;gap:5px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.45;color:rgba(252,251,245,0.85);overflow:hidden;max-height:260px;">
+          <sc-for list="{{ log }}" as="lg" hint-placeholder-count="0">
+            <div style="display:flex;gap:10px;"><span style="color:#9FE3C4;flex:none;">{{ lg.t }}</span><span>{{ lg.m }}</span></div>
+          </sc-for>
+          <sc-if value="{{ logEmpty }}" hint-placeholder-val="{{ true }}"><div style="color:rgba(252,251,245,0.6);">En attente d'une analyse…</div></sc-if>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasReport }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ repRef }}" style="margin-top:40px;animation:panelIn .6s cubic-bezier(.2,.8,.2,1);">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>RAPPORT · {{ rep.time }}</div>
+            <h2 style="margin:12px 0 0;font-size:clamp(28px,3.6vw,44px);line-height:1.05;letter-spacing:-0.04em;font-weight:800;">{{ rep.headline }}</h2>
+          </div>
+          <button onClick="{{ saveReport }}" style="display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:14px;border:none;background:#189B67;color:#FCFBF5;font:700 14.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">{{ saveIcon }}</span>{{ saveLabel }}</button>
+        </div>
+        <div style="margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px;">
+          <div style="padding:24px;border-radius:26px;background:#189B67;color:#FCFBF5;display:flex;align-items:center;gap:20px;">
+            <div style="font-size:64px;font-weight:800;letter-spacing:-0.05em;line-height:1;">{{ rep.score }}</div>
+            <div><div style="font-size:13px;font-weight:600;opacity:0.85;">Santé du sol / 100</div><div style="margin-top:4px;font-size:18px;font-weight:800;">{{ rep.verdict }}</div><div style="margin-top:6px;font-size:13.5px;line-height:1.45;opacity:0.9;">{{ rep.okCount }} indicateurs sur 8 dans la zone idéale.</div></div>
+          </div>
+          <div style="padding:22px;border-radius:26px;background:rgba(24,155,103,0.07);">
+            <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">tips_and_updates</span>Que faire maintenant ?</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ rep.recos }}" as="rc" hint-placeholder-count="2">
+                <div style="display:flex;gap:10px;font-size:14px;line-height:1.5;"><span style="flex:none;font-family:'Material Symbols Rounded';font-size:19px;line-height:1.2;color:#189B67;">{{ rc.icon }}</span><span><b>{{ rc.t }}</b> {{ rc.d }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:32px;">
+        <div style="font-size:16px;font-weight:800;">Analyses enregistrées</div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ history }}" as="hi" hint-placeholder-count="1">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);">
+              <span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;color:#189B67;">description</span>
+              <div style="flex:1;font-size:14px;font-weight:700;">{{ hi.label }}</div>
+              <span style="font-size:14px;font-weight:800;color:#127A51;">{{ hi.score }}/100</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const MET = [
+  {k:'hum',label:'Humidité',unit:'%',icon:'water_drop',base:68,noise:1.1,lo:55,hi:75,d:1},
+  {k:'temp',label:'Température du sol',unit:'°C',icon:'thermostat',base:22.4,noise:0.25,lo:18,hi:26,d:1},
+  {k:'ph',label:'pH',unit:'',icon:'science',base:6.1,noise:0.04,lo:5.5,hi:7,d:1},
+  {k:'ec',label:'Conductivité',unit:'mS/cm',icon:'bolt',base:1.18,noise:0.04,lo:0.8,hi:2,d:2},
+  {k:'n',label:'Azote (N)',unit:'mg/kg',icon:'compost',base:31,noise:1.2,lo:40,hi:80,d:0},
+  {k:'p',label:'Phosphore (P)',unit:'mg/kg',icon:'grain',base:24,noise:0.9,lo:15,hi:40,d:0},
+  {k:'k',label:'Potassium (K)',unit:'mg/kg',icon:'spa',base:152,noise:3.5,lo:120,hi:250,d:0},
+  {k:'lux',label:'Luminosité',unit:'lux',icon:'light_mode',base:18600,noise:700,lo:10000,hi:40000,d:0},
+];
+const PHASES = ['Étalonnage du capteur','Mesure de l\'humidité','Mesure de la température','pH et nutriments','Synthèse du rapport'];
+const RECO = {
+  hum: ['water_drop', ['Sol trop sec :', 'arrosez tôt le matin et paillez le sol.'], ['Sol trop humide :', 'suspendez l\'irrigation et vérifiez le drainage.']],
+  temp: ['thermostat', ['Sol froid :', 'retardez le semis de quelques jours.'], ['Sol chaud :', 'paillez pour protéger les racines.']],
+  ph: ['science', ['Sol acide :', 'apportez 1 à 2 t/ha de dolomie.'], ['Sol basique :', 'apportez du compost bien décomposé.']],
+  ec: ['bolt', ['Sol pauvre en sels minéraux :', 'ajoutez de la matière organique.'], ['Salinité élevée :', 'lessivez le sol par un arrosage abondant.']],
+  n: ['compost', ['Azote insuffisant :', 'apportez 5 t/ha de compost ou de fumier, ou associez une légumineuse.'], ['Excès d\'azote :', 'réduisez les engrais azotés.']],
+  p: ['grain', ['Phosphore faible :', 'apportez du guano ou du phosphate naturel.'], ['Phosphore élevé :', 'aucun apport nécessaire cette saison.']],
+  k: ['spa', ['Potassium faible :', 'apportez de la cendre de bois ou du sulfate de potassium.'], ['Potassium élevé :', 'aucun apport nécessaire.']],
+  lux: ['light_mode', ['Lumière faible :', 'élaguez les arbres d\'ombrage.'], ['Lumière très forte :', 'un ombrage léger peut aider les jeunes plants.']],
+};
+const TICKS = 36;
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const fr = (n, d) => Number(n).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const now = () => new Date().toLocaleTimeString('fr-FR');
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? innerWidth : 1280, conn: 'none', notice: '', running: false, tick: 0, series: {}, log: [], report: null, history: [], saved: false };
+  repRef = React.createRef();
+  live = {};
+  componentDidMount() { this.r = () => this.setState({ w: innerWidth }); addEventListener('resize', this.r); }
+  componentWillUnmount() { removeEventListener('resize', this.r); clearInterval(this.iv); try { this.reader && this.reader.cancel(); } catch (e) {} }
+  async connectSerial() {
+    if (!('serial' in navigator)) { this.setState({ conn: 'demo', notice: 'Ce navigateur ne permet pas la connexion USB directe (utilisez Chrome ou Edge sur ordinateur). Le mode démo est activé.' }); return; }
+    try {
+      this.setState({ conn: 'connecting', notice: '' });
+      const port = await navigator.serial.requestPort(); await port.open({ baudRate: 9600 });
+      this.setState({ conn: 'serial', notice: 'Capteur connecté. Format attendu : une ligne JSON par mesure, ex. {"hum":68.2,"temp":22.4}.' });
+      const dec = new TextDecoderStream(); port.readable.pipeTo(dec.writable); this.reader = dec.readable.getReader();
+      let buf = '';
+      while (true) { const { value, done } = await this.reader.read(); if (done) break; buf += value; const lines = buf.split('\n'); buf = lines.pop();
+        lines.forEach(l => { try { const o = JSON.parse(l); Object.keys(o).forEach(k => { if (typeof o[k] === 'number') this.live[k] = o[k]; }); } catch (e) {} }); }
+    } catch (e) { this.setState({ conn: 'demo', notice: 'Aucun capteur sélectionné. Le mode démo est activé.' }); }
+  }
+  read(m, t) {
+    if (this.state.conn === 'serial' && this.live[m.k] != null) return this.live[m.k];
+    return m.base + Math.sin(t / 3 + m.base) * m.noise + (Math.random() - 0.5) * m.noise;
+  }
+  start = () => {
+    if (this.state.running) return;
+    const conn = this.state.conn === 'none' || this.state.conn === 'connecting' ? 'demo' : this.state.conn;
+    this.setState({ running: true, tick: 0, series: {}, log: [{ t: now(), m: 'Analyse démarrée · ' + (conn === 'serial' ? 'capteur USB' : 'mode démo') }], report: null, saved: false, conn });
+    this.iv = setInterval(() => {
+      const t = this.state.tick + 1, series = { ...this.state.series };
+      MET.forEach(m => { series[m.k] = [...(series[m.k] || []), this.read(m, t)].slice(-40); });
+      const m = MET[t % MET.length], v = series[m.k][series[m.k].length - 1];
+      const log = [{ t: now(), m: m.label + ' ' + fr(v, m.d) + (m.unit ? ' ' + m.unit : '') }, ...this.state.log].slice(0, 12);
+      this.setState({ tick: t, series, log });
+      if (t >= TICKS) this.finish();
+    }, 420);
+  };
+  stop = () => { clearInterval(this.iv); this.setState({ running: false, log: [{ t: now(), m: 'Analyse interrompue' }, ...this.state.log] }); };
+  finish() {
+    clearInterval(this.iv);
+    const s = this.state.series, avg = k => s[k].reduce((a, b) => a + b, 0) / s[k].length;
+    const res = MET.map(m => { const v = avg(m.k); return { m, v, st: v < m.lo ? -1 : v > m.hi ? 1 : 0 }; });
+    const ok = res.filter(r => r.st === 0).length;
+    const score = Math.round(40 + ok / MET.length * 55 + Math.random() * 4);
+    const recos = res.filter(r => r.st !== 0).map(r => { const [icon, lo, hi] = RECO[r.m.k]; const [t, d] = r.st < 0 ? lo : hi; return { icon, t, d }; });
+    if (!recos.length) recos.push({ icon: 'check', t: 'Tout est bon :', d: 'aucune intervention nécessaire. Nouvelle mesure conseillée dans 3 jours.' });
+    recos.push({ icon: 'water_drop', t: 'Arrosage :', d: res[0].st === 0 ? 'pas nécessaire aujourd\'hui, sol suffisamment humide.' : 'à ajuster selon la recommandation ci-dessus.' });
+    const report = { score, ok, time: new Date().toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }), recos,
+      verdict: score >= 80 ? 'Sol en très bonne santé' : score >= 65 ? 'Sol en bonne santé' : 'Sol à améliorer',
+      headline: ok === MET.length ? 'Votre sol est en parfaite condition.' : 'Votre sol va bien, ' + (MET.length - ok) + ' point' + (MET.length - ok > 1 ? 's' : '') + ' à corriger.' };
+    this.setState({ running: false, report, log: [{ t: now(), m: 'Analyse terminée · score ' + score + '/100' }, ...this.state.log] });
+    setTimeout(() => { const el = this.repRef.current; if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 100, behavior: 'smooth' }); }, 300);
+  }
+  renderVals() {
+    const s = this.state, wide = s.w >= 980, prog = Math.round(s.tick / TICKS * 100);
+    const pi = Math.min(PHASES.length - 1, Math.floor(s.tick / TICKS * PHASES.length));
+    const CONN = { none: ['Non connecté', 'Branchez le capteur en USB ou utilisez le mode démo.', 'rgba(16,40,30,0.06)', '#51645A'], connecting: ['Connexion…', 'Sélectionnez le capteur dans la fenêtre du navigateur.', 'rgba(24,155,103,0.12)', '#189B67'], serial: ['Connecté · USB', 'Données reçues en temps réel.', '#189B67', '#FCFBF5'], demo: ['Mode démo', 'Mesures simulées réalistes.', 'rgba(24,155,103,0.12)', '#189B67'] }[s.conn];
+    const spark = (arr, m) => { if (!arr || arr.length < 2) return 'M0 20 L200 20'; const mn = Math.min(m.lo, ...arr), mx = Math.max(m.hi, ...arr), sp = mx - mn || 1; return arr.map((v, i) => (i ? 'L' : 'M') + (i / (arr.length - 1) * 200).toFixed(1) + ' ' + (38 - (v - mn) / sp * 36).toFixed(1)).join(' '); };
+    const band = m => { const arr = s.series[m.k] || []; const mn = Math.min(m.lo, ...arr), mx = Math.max(m.hi, ...arr), sp = mx - mn || 1; const y1 = 38 - (m.hi - mn) / sp * 36, y2 = 38 - (m.lo - mn) / sp * 36; return [y1.toFixed(1), (y2 - y1).toFixed(1)]; };
+    const metrics = MET.map(m => { const arr = s.series[m.k]; const v = arr && arr[arr.length - 1]; const st = v == null ? null : v < m.lo ? 'Faible' : v > m.hi ? 'Élevé' : 'Optimal'; const [bandY, bandH] = band(m);
+      return { ...m, value: v == null ? '—' : fr(v, m.d), status: st || 'En attente', pillBg: st === 'Optimal' ? 'rgba(24,155,103,0.12)' : st ? '#0B3D2A' : 'rgba(16,40,30,0.06)', pillColor: st === 'Optimal' ? '#0F6B47' : st ? '#FCFBF5' : '#51645A', path: spark(arr, m), bandY, bandH, ideal: fr(m.lo, m.d) + ' – ' + fr(m.hi, m.d) + (m.unit ? ' ' + m.unit : '') }; });
+    const line = (arr, f) => (arr && arr.length > 1) ? arr.map((v, i) => (i ? 'L' : 'M') + (i / 39 * 400).toFixed(1) + ' ' + (180 - f(v)).toFixed(1)).join(' ') : 'M0 180 L0 180';
+    const hp = line(s.series.hum, v => v * 1.8), n = (s.series.hum || []).length;
+    return {
+      topCols: wide ? 'minmax(0,0.85fr) minmax(0,1.15fr)' : 'minmax(0,1fr)', botCols: wide ? 'minmax(0,1.6fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      connLabel: CONN[0], connSub: CONN[1], connBg: CONN[2], connColor: CONN[3],
+      connectLabel: s.conn === 'serial' ? 'Capteur connecté' : 'Connecter le capteur',
+      connect: () => this.connectSerial(), useDemo: () => this.setState({ conn: 'demo', notice: 'Mode démo activé : les mesures sont simulées à partir de valeurs réalistes.' }),
+      hasNotice: !!s.notice, notice: s.notice,
+      running: s.running, progress: prog, ringOffset: (490.1 * (1 - prog / 100)).toFixed(1),
+      ringLabel: s.running ? 'En cours' : s.report ? 'Terminé' : 'Prêt',
+      stateTag: s.running ? 'ANALYSE EN COURS' : s.report ? 'ANALYSE TERMINÉE' : 'PRÊT',
+      phase: s.running ? PHASES[pi] + '…' : s.report ? 'Rapport disponible ci-dessous.' : 'Plantez la sonde à 20 cm, puis lancez l\'analyse.',
+      phases: PHASES.map((l, i) => { const done = s.report || (s.running && i < pi), cur = s.running && i === pi; return { label: l, icon: done ? 'check_circle' : cur ? 'radio_button_checked' : 'radio_button_unchecked', color: done || cur ? '#FCFBF5' : 'rgba(252,251,245,0.55)' }; }),
+      start: this.start, stop: this.stop,
+      startLabel: s.running ? 'Analyse en cours…' : s.report ? 'Relancer une analyse' : 'Lancer une analyse', startIcon: s.running ? 'hourglass_top' : 'play_arrow',
+      metrics,
+      humPath: hp, humArea: n > 1 ? hp + ' L' + ((n - 1) / 39 * 400).toFixed(1) + ' 180 L0 180 Z' : 'M0 180 Z', tempPath: line(s.series.temp, v => v * 3),
+      log: s.log, logEmpty: !s.log.length, logCount: s.tick * MET.length,
+      hasReport: !!s.report, rep: s.report || {}, repRef: this.repRef,
+      saveReport: () => { if (s.saved) return; this.setState({ saved: true, history: [{ label: 'Analyse du ' + s.report.time + ' · Ambohidratrimo', score: s.report.score }, ...s.history] }); },
+      saveLabel: s.saved ? 'Rapport enregistré' : 'Enregistrer le rapport', saveIcon: s.saved ? 'check' : 'save',
+      hasHistory: s.history.length > 0, history: s.history,
+    };
+  }
+}
+</script>
+</body>
+</html>

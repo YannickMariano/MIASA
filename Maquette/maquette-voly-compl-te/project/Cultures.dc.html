@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <div style="position:absolute;right:-12%;top:-10%;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.16), transparent 65%);pointer-events:none;"></div>
+  <dc-import name="SiteNav" current="cultures" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Cultures</span></div>
+    <div style="margin-top:22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="max-width:680px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>GUIDES DE CULTURE</div>
+        <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Toutes les cultures, pas à pas.</h1>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Choisissez une culture : région adaptée, calendrier, étapes et erreurs à éviter, tout est sur une seule fiche.</p>
+      </div>
+      <label style="position:relative;display:block;width:min(100%,320px);">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'Material Symbols Rounded';font-size:21px;line-height:1;color:#51645A;">search</span>
+        <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Rechercher une culture" style="width:100%;padding:14px 14px 14px 44px;border-radius:15px;border:1px solid rgba(255,255,255,0.95);background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 24px -18px rgba(11,61,42,0.4);font:500 15px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;" style-focus="border-color:#189B67;box-shadow:0 0 0 4px rgba(24,155,103,0.15);">
+      </label>
+    </div>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.pick }}" style="white-space:nowrap;padding:10px 16px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ c.label }} <span style="opacity:0.7;font-weight:600;">{{ c.count }}</span></button>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:28px;display:grid;grid-template-columns:{{ cols }};gap:20px;align-items:start;">
+      <div style="position:{{ listPos }};top:100px;display:grid;grid-template-columns:{{ listCols }};gap:10px;">
+        <sc-for list="{{ list }}" as="it" hint-placeholder-count="8">
+          <button onClick="{{ it.pick }}" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:20px;border:1px solid {{ it.border }};background:{{ it.bg }};box-shadow:{{ it.shadow }};text-align:left;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;color:#10281E;transition:all .3s cubic-bezier(.2,.8,.2,1);" style-hover="transform:translateY(-2px);">
+            <span style="flex:none;width:56px;height:56px;border-radius:14px;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.14) 0 7px, rgba(24,155,103,0.05) 7px 14px), #EAF1E6;display:grid;place-items:center;color:#127A51;"><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;">{{ it.icon }}</span></span>
+            <span style="flex:1;min-width:0;">
+              <span style="display:block;font-size:16px;font-weight:800;letter-spacing:-0.02em;">{{ it.name }}</span>
+              <span style="display:block;margin-top:2px;font-size:12.5px;color:#51645A;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ it.region }}</span>
+            </span>
+            <span style="flex:none;padding:4px 9px;border-radius:999px;background:rgba(24,155,103,0.1);font-size:11.5px;font-weight:700;color:#0F6B47;">{{ it.level }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:24px;border-radius:20px;background:rgba(255,255,255,0.6);font-size:14.5px;color:#51645A;">Aucune culture ne correspond à votre recherche.</div>
+        </sc-if>
+      </div>
+
+      <article key="{{ g.id }}" style="border-radius:32px;background:rgba(255,255,255,0.62);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 40px 80px -48px rgba(11,61,42,0.45), inset 0 1px 0 #fff;overflow:hidden;animation:panelIn .5s cubic-bezier(.2,.8,.2,1);">
+        <div style="position:relative;height:clamp(200px,24vw,260px);background:repeating-linear-gradient(135deg, rgba(24,155,103,0.12) 0 12px, rgba(24,155,103,0.04) 12px 24px), #E6EFE2;">
+          <div style="position:absolute;right:16px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3E5A4B;background:rgba(252,251,245,0.85);padding:4px 8px;border-radius:6px;">{{ g.img }}</div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:22px 24px;background:linear-gradient(180deg,transparent,rgba(11,61,42,0.78));color:#FCFBF5;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;">
+            <div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span style="padding:4px 10px;border-radius:999px;background:rgba(252,251,245,0.18);border:1px solid rgba(252,251,245,0.3);font-size:12px;font-weight:700;">{{ g.cat }}</span>
+                <span style="padding:4px 10px;border-radius:999px;background:#FCFBF5;color:#0B3D2A;font-size:12px;font-weight:700;">{{ g.level }}</span>
+              </div>
+              <div style="margin-top:10px;font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-0.04em;line-height:1;">{{ g.name }}</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button onClick="{{ toggleSave }}" style="display:inline-flex;align-items:center;gap:7px;padding:12px 14px;border-radius:13px;border:1px solid rgba(252,251,245,0.35);background:rgba(252,251,245,0.14);color:#FCFBF5;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;font-variation-settings:'FILL' {{ saveFill }};">bookmark</span>{{ saveLabel }}</button>
+              <a href="{{ simHref }}" style="display:inline-flex;align-items:center;gap:7px;padding:12px 16px;border-radius:13px;background:#FCFBF5;color:#0B3D2A;font-weight:700;font-size:14px;">Simuler<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">view_in_ar</span></a>
+            </div>
+          </div>
+        </div>
+        <div style="padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;gap:30px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr));gap:10px;">
+            <sc-for list="{{ g.facts }}" as="fa" hint-placeholder-count="6">
+              <div style="padding:14px;border-radius:16px;background:rgba(24,155,103,0.06);">
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">{{ fa.icon }}</span>{{ fa.label }}</div>
+                <div style="margin-top:5px;font-size:14.5px;font-weight:700;line-height:1.35;">{{ fa.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+              <div style="font-size:18px;font-weight:800;letter-spacing:-0.02em;">Calendrier cultural</div>
+              <div style="display:flex;gap:14px;font-size:12.5px;font-weight:600;color:#51645A;">
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:#3CC58C;"></span>Plantation</span>
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:#0F6B47;"></span>Récolte</span>
+              </div>
+            </div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;">
+              <sc-for list="{{ g.months }}" as="m" hint-placeholder-count="12">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div style="width:100%;height:34px;border-radius:9px;background:{{ m.bg }};"></div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;">{{ m.l }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:18px;font-weight:800;letter-spacing:-0.02em;">Étapes de culture</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ g.steps }}" as="st" hint-placeholder-count="5">
+                <div style="display:flex;gap:14px;padding:16px;border-radius:18px;background:rgba(255,255,255,0.7);border:1px solid rgba(16,40,30,0.06);">
+                  <span style="flex:none;width:36px;height:36px;border-radius:12px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;">{{ st.n }}</span>
+                  <div>
+                    <div style="font-size:15.5px;font-weight:800;">{{ st.t }}</div>
+                    <div style="margin-top:3px;font-size:14.5px;line-height:1.55;color:#4B5F55;">{{ st.d }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;">
+            <div style="padding:18px;border-radius:20px;background:#189B67;color:#FCFBF5;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">lightbulb</span>Conseils</div>
+              <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;">
+                <sc-for list="{{ g.tips }}" as="tp" hint-placeholder-count="2">
+                  <div style="display:flex;gap:8px;font-size:14px;line-height:1.5;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1.2;">check</span>{{ tp }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="padding:18px;border-radius:20px;background:rgba(11,61,42,0.06);border:1px solid rgba(11,61,42,0.08);">
+              <div style="display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:800;color:#0B3D2A;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">block</span>Erreurs à éviter</div>
+              <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;">
+                <sc-for list="{{ g.mistakes }}" as="mk" hint-placeholder-count="2">
+                  <div style="display:flex;gap:8px;font-size:14px;line-height:1.5;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1.2;color:#0B3D2A;">close</span>{{ mk }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-radius:20px;background:rgba(24,155,103,0.07);">
+            <div style="font-size:14.5px;font-weight:600;color:#3E5147;">Votre {{ g.nameLower }} montre des signes de maladie ?</div>
+            <a href="Diagnostic.dc.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14px;">Lancer un diagnostic<span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">arrow_forward</span></a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const M = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+const WATER = ['', 'Faible', 'Moyen', 'Élevé'];
+const G = [
+  {id:'riz',name:'Riz',cat:'Céréales',icon:'grass',level:'Facile',region:'Alaotra-Mangoro, Analamanga, Boeny',water:3,soil:'Argileux, retient bien l\'eau',cycle:'120 – 150 jours',yield:'3 à 5 t/ha',temp:'20 – 30 °C',plant:[10,11,0],harvest:[3,4,5],img:'photo · rizière en repiquage',
+   steps:[['Préparer la pépinière','Semer les graines pré-germées sur une planche humide, 60 à 80 g/m².'],['Préparer la rizière','Labourer, niveler et mettre en boue la parcelle ; entretenir les diguettes.'],['Repiquer','À 20–25 jours, 1 à 3 brins par touffe, espacement 20 × 20 cm.'],['Entretenir','Maintenir 3 à 5 cm d\'eau, désherber 2 à 3 fois, apporter du compost au tallage.'],['Récolter','Quand 85 % des grains sont dorés ; sécher au soleil jusqu\'à 14 % d\'humidité.']],
+   tips:['Le système de riziculture intensive (SRI) augmente fortement les rendements avec moins de semences.','Alternez inondation et assèchement pour renforcer les racines.'],
+   mistakes:['Repiquer des plants trop âgés (plus de 30 jours).','Laisser la rizière à sec pendant la floraison.']},
+  {id:'mais',name:'Maïs',cat:'Céréales',icon:'grass',level:'Facile',region:'Atsimo-Andrefana, Menabe, Vakinankaratra',water:2,soil:'Limoneux, bien drainé',cycle:'90 – 120 jours',yield:'2 à 4 t/ha',temp:'18 – 32 °C',plant:[9,10,11],harvest:[2,3,4],img:'photo · champ de maïs',
+   steps:[['Préparer le sol','Labour à 20 cm et apport de fumier (10 t/ha).'],['Semer','Juste après les premières pluies, 2 graines par poquet, 80 × 40 cm.'],['Démarier et sarcler','À 15 jours, garder le plus beau plant par poquet.'],['Fertiliser','Compost ou urée à 30 jours, puis à la montaison.'],['Récolter','Quand les spathes sont sèches et les grains durs.']],
+   tips:['Associez le maïs au haricot pour enrichir le sol en azote.','Surveillez la chenille légionnaire dès la levée.'],
+   mistakes:['Semer trop dense : les épis restent petits.','Stocker les grains avant séchage complet.']},
+  {id:'manioc',name:'Manioc',cat:'Tubercules',icon:'nature',level:'Facile',region:'Presque toutes les régions',water:1,soil:'Sableux ou latéritique, léger',cycle:'8 – 18 mois',yield:'8 à 15 t/ha',temp:'22 – 32 °C',plant:[9,10,11,0],harvest:[5,6,7,8],img:'photo · plants de manioc',
+   steps:[['Choisir les boutures','Tiges saines de 20 à 25 cm, avec 5 à 7 yeux.'],['Planter','Boutures inclinées à 45°, espacement 1 × 1 m.'],['Désherber','2 à 3 sarclages pendant les trois premiers mois.'],['Récolter','À partir de 8 mois, arracher selon les besoins.']],
+   tips:['Très résistant à la sécheresse : une culture de sécurité alimentaire.','Les jeunes feuilles (ravitoto) se consomment aussi.'],
+   mistakes:['Prendre des boutures sur des plants atteints de mosaïque.','Laisser les racines trop longtemps en terre : elles deviennent fibreuses.']},
+  {id:'pdt',name:'Pomme de terre',cat:'Tubercules',icon:'nutrition',level:'Moyen',region:'Vakinankaratra, Itasy',water:2,soil:'Léger, riche en matière organique',cycle:'90 – 110 jours',yield:'10 à 20 t/ha',temp:'12 – 22 °C',plant:[8,9,10,0],harvest:[11,0,1,3],img:'photo · récolte de pommes de terre',
+   steps:[['Préparer les semences','Tubercules germés de 40 à 60 g.'],['Planter','Sillons de 10 cm, espacement 70 × 30 cm.'],['Butter','Remonter la terre au pied à 25–30 cm de hauteur.'],['Surveiller','Traiter contre le mildiou par temps humide.'],['Récolter','Deux semaines après le jaunissement du feuillage.']],
+   tips:['Pratiquez la rotation : jamais deux saisons de suite sur la même parcelle.','Stockez à l\'abri de la lumière pour éviter le verdissement.'],
+   mistakes:['Planter des tubercules non germés.','Arroser le feuillage le soir : cela favorise le mildiou.']},
+  {id:'tomate',name:'Tomate',cat:'Légumes',icon:'local_florist',level:'Moyen',region:'Itasy, Analamanga, Haute Matsiatra',water:2,soil:'Limoneux, riche et drainé',cycle:'70 – 90 jours',yield:'20 à 40 t/ha',temp:'18 – 28 °C',plant:[3,4,5],harvest:[6,7,8,9],img:'photo · plants de tomates',
+   steps:[['Semer en pépinière','Sous abri ; repiquer au stade 4–5 feuilles.'],['Transplanter','Espacement 80 × 50 cm, compost au fond du trou.'],['Tuteurer','Dès 30 cm, attacher sans serrer.'],['Tailler','Supprimer les gourmands chaque semaine.'],['Récolter','À maturité, tous les 2 à 3 jours.']],
+   tips:['Paillez le sol pour garder l\'humidité et limiter les maladies.','La saison fraîche et sèche donne les meilleurs rendements.'],
+   mistakes:['Mouiller les feuilles en arrosant.','Cultiver tomates et pommes de terre côte à côte (maladies communes).']},
+  {id:'haricot',name:'Haricot',cat:'Légumes',icon:'spa',level:'Facile',region:'Vakinankaratra, Amoron\'i Mania, Itasy',water:2,soil:'Léger, peu acide',cycle:'60 – 90 jours',yield:'1 à 2 t/ha',temp:'16 – 26 °C',plant:[0,1,8,9],harvest:[3,4,11],img:'photo · gousses de haricot',
+   steps:[['Préparer le sol','Labour léger ; inutile d\'apporter de l\'azote.'],['Semer','3 graines par poquet, espacement 40 × 20 cm.'],['Sarcler','Deux fois avant la floraison.'],['Récolter','Gousses vertes pour le légume, sèches pour le grain.']],
+   tips:['Il enrichit le sol en azote : idéal avant un maïs.','Deux saisons possibles sur les Hautes Terres.'],
+   mistakes:['Semer dans un sol détrempé.','Récolter des gousses mouillées.']},
+  {id:'cafe',name:'Café',cat:'Rente',icon:'coffee',level:'Avancé',region:'Haute Matsiatra, Vatovavy, Atsinanana',water:2,soil:'Profond, humifère, légèrement acide',cycle:'1re récolte après 3 ans',yield:'0,5 à 1 t/ha',temp:'18 – 24 °C (arabica)',plant:[10,11],harvest:[4,5,6,7],img:'photo · cerises de café',
+   steps:[['Élever les plants','8 à 10 mois en pépinière, sous ombrage.'],['Planter','Trous de 60 cm, espacement 2,5 × 2 m.'],['Ombrager','Associer des arbres d\'ombrage (Albizzia).'],['Tailler','Après chaque récolte, retirer le bois mort.'],['Récolter','Cueillir uniquement les cerises rouges.']],
+   tips:['Un paillage épais protège les racines en saison sèche.','Un tri soigné des cerises augmente le prix de vente.'],
+   mistakes:['Cueillir les cerises vertes avec les mûres.','Planter en plein soleil, sans ombrage.']},
+  {id:'vanille',name:'Vanille',cat:'Rente',icon:'psychiatry',level:'Avancé',region:'SAVA, Diana',water:2,soil:'Humifère, bien drainé',cycle:'1re récolte après 3 ans',yield:'0,3 à 0,6 t/ha (vert)',temp:'21 – 32 °C',plant:[9,10,11],harvest:[5,6,7,8],img:'photo · gousses de vanille',
+   steps:[['Installer les tuteurs','Gliricidia ou Jatropha, espacement 1,5 × 2 m.'],['Planter les lianes','Boutures de 1 m, dont 3 nœuds en terre.'],['Guider','Former des boucles à 1,5 m pour faciliter la pollinisation.'],['Polliniser','À la main, le matin, chaque fleur dans les 24 h.'],['Récolter et préparer','Gousses à pointe jaune ; échaudage, étuvage puis séchage.']],
+   tips:['Marquez vos gousses pour lutter contre le vol.','La qualité de préparation fait la valeur de la vanille.'],
+   mistakes:['Récolter trop tôt : les gousses perdent leur arôme.','Laisser trop de fleurs : la liane s\'épuise.']},
+];
+const CATS = ['Toutes','Céréales','Tubercules','Légumes','Rente'];
+class Component extends DCLogic {
+  state = { sel: 'riz', cat: 'Toutes', q: '', w: typeof window !== 'undefined' ? innerWidth : 1280, saved: {} };
+  componentDidMount() {
+    const c = new URLSearchParams(location.search).get('crop'); if (c && G.find(g => g.id === c)) this.setState({ sel: c });
+    this.r = () => this.setState({ w: innerWidth }); addEventListener('resize', this.r);
+  }
+  componentWillUnmount() { removeEventListener('resize', this.r); }
+  renderVals() {
+    const s = this.state, wide = s.w >= 980;
+    const q = s.q.trim().toLowerCase();
+    const list = G.filter(g => (s.cat === 'Toutes' || g.cat === s.cat) && (!q || (g.name + ' ' + g.region).toLowerCase().includes(q)));
+    const g = G.find(x => x.id === s.sel) || G[0];
+    const saved = !!s.saved[g.id];
+    return {
+      q: s.q, setQ: e => this.setState({ q: e.target.value }),
+      cols: wide ? 'minmax(0,340px) minmax(0,1fr)' : 'minmax(0,1fr)',
+      listPos: wide ? 'sticky' : 'relative', listCols: wide ? '1fr' : 'repeat(auto-fill,minmax(min(100%,260px),1fr))',
+      cats: CATS.map(c => { const on = s.cat === c; return { label: c, count: c === 'Toutes' ? G.length : G.filter(x => x.cat === c).length, pick: () => this.setState({ cat: c }), bg: on ? '#189B67' : 'rgba(255,255,255,0.65)', color: on ? '#FCFBF5' : '#10281E', border: on ? '#189B67' : 'rgba(255,255,255,0.95)' }; }),
+      list: list.map(x => { const on = x.id === g.id; return { ...x, pick: () => { this.setState({ sel: x.id }); if (!wide) setTimeout(() => { const a = document.querySelector('article'); a && scrollTo({ top: a.getBoundingClientRect().top + scrollY - 90, behavior: 'smooth' }); }, 30); }, bg: on ? '#FFFFFF' : 'rgba(255,255,255,0.55)', border: on ? '#189B67' : 'rgba(255,255,255,0.95)', shadow: on ? '0 0 0 3px rgba(24,155,103,0.15), 0 16px 30px -18px rgba(24,155,103,0.6)' : '0 8px 20px -18px rgba(11,61,42,0.35)' }; }),
+      empty: list.length === 0,
+      g: { ...g, nameLower: g.name.toLowerCase(),
+        facts: [['location_on','Régions adaptées',g.region],['landscape','Type de sol',g.soil],['water_drop','Besoin en eau',WATER[g.water]],['schedule','Cycle',g.cycle],['agriculture','Rendement moyen',g.yield],['thermostat','Température idéale',g.temp]].map(([icon,label,value]) => ({ icon, label, value })),
+        months: M.map((l, i) => ({ l, bg: g.harvest.includes(i) ? '#0F6B47' : g.plant.includes(i) ? '#3CC58C' : 'rgba(24,155,103,0.08)' })),
+        steps: g.steps.map(([t, d], i) => ({ n: '0' + (i + 1), t, d })) },
+      simHref: 'Simulation.dc.html?crop=' + g.id,
+      saveLabel: saved ? 'Enregistrée' : 'Enregistrer', saveFill: saved ? 1 : 0,
+      toggleSave: () => this.setState({ saved: { ...s.saved, [g.id]: !saved } }),
+    };
+  }
+}
+</script>
+</body>
+</html>

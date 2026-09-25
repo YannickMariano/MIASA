@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes dash{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <div style="position:absolute;left:-12%;top:-8%;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.14), transparent 65%);pointer-events:none;"></div>
+  <dc-import name="SiteNav" current="simulation" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html#simulation" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Simulation</span></div>
+    <div style="margin-top:22px;max-width:720px;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>SIMULATEUR DE PARCELLE</div>
+      <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Faites une simulation complète.</h1>
+      <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Réglez chaque facteur de votre parcelle puis lancez la simulation : rendement, croissance mois par mois, risques et conseils.</p>
+    </div>
+
+    <div style="margin-top:36px;display:grid;grid-template-columns:{{ cols }};gap:20px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <sc-for list="{{ cards }}" as="cd" hint-placeholder-count="3">
+          <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -32px rgba(11,61,42,0.45), inset 0 1px 0 #fff;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:34px;height:34px;border-radius:11px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;">{{ cd.n }}</span>
+              <div style="font-size:17px;font-weight:800;letter-spacing:-0.02em;">{{ cd.title }}</div>
+            </div>
+            <div style="margin-top:18px;display:flex;flex-direction:column;gap:20px;">
+              <sc-for list="{{ cd.items }}" as="it" hint-placeholder-count="4">
+                <div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:700;">
+                    <span style="display:flex;align-items:center;gap:7px;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">{{ it.icon }}</span>{{ it.label }}</span>
+                    <sc-if value="{{ it.isRange }}" hint-placeholder-val="{{ false }}"><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12.5px;padding:3px 8px;border-radius:7px;background:rgba(24,155,103,0.1);color:#0F6B47;">{{ it.display }}</span></sc-if>
+                  </div>
+                  <sc-if value="{{ it.isSeg }}" hint-placeholder-val="{{ true }}">
+                    <div style="margin-top:10px;display:grid;grid-template-columns:{{ it.cols }};gap:6px;">
+                      <sc-for list="{{ it.options }}" as="o" hint-placeholder-count="4">
+                        <button onClick="{{ o.pick }}" style="padding:10px 6px;border-radius:12px;border:1px solid {{ o.border }};background:{{ o.bg }};color:{{ o.color }};font:700 13px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ o.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ it.isRange }}" hint-placeholder-val="{{ false }}">
+                    <input type="range" min="{{ it.min }}" max="{{ it.max }}" step="{{ it.step }}" value="{{ it.val }}" onChange="{{ it.onChange }}" style="margin-top:10px;width:100%;accent-color:#189B67;cursor:pointer;">
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#51645A;font-weight:600;"><span>{{ it.lo }}</span><span>{{ it.hi }}</span></div>
+                  </sc-if>
+                  <sc-if value="{{ it.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <select value="{{ it.val }}" onChange="{{ it.onChange }}" style="margin-top:10px;width:100%;padding:12px 14px;border-radius:13px;border:1px solid rgba(16,40,30,0.12);background:rgba(255,255,255,0.85);font:600 14.5px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;cursor:pointer;">
+                      <sc-for list="{{ it.options }}" as="o" hint-placeholder-count="8"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                    </select>
+                    <div style="margin-top:8px;font-size:12.5px;color:#51645A;font-weight:500;">{{ it.hint }}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="position:{{ sidePos }};top:100px;display:flex;flex-direction:column;gap:14px;">
+        <div style="position:relative;height:clamp(380px,40vw,470px);border-radius:30px;overflow:hidden;background:linear-gradient(165deg,#0B3D2A 0%,#0F5A3D 60%,#127A51 100%);color:#FCFBF5;box-shadow:0 40px 80px -40px rgba(11,61,42,0.6);">
+          <div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 85% 5%, rgba(252,251,245,{{ sunLight }}), transparent 65%);"></div>
+          <div style="position:absolute;left:18px;top:18px;right:18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;">
+            <span style="white-space:nowrap;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);font-size:12.5px;font-weight:600;"><span style="width:7px;height:7px;border-radius:50%;background:#3CC58C;"></span>{{ cropName }} · {{ surfaceLabel }}</span>
+            <span style="white-space:nowrap;display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);font-size:12.5px;font-weight:600;">{{ stageLabel }}</span>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-top:30px;padding-bottom:80px;">
+            <div style="transform:scale({{ sceneScale }});perspective:1500px;">
+              <div style="position:relative;width:340px;height:340px;transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-40deg);">
+                <div style="position:absolute;inset:-36px;border-radius:60px;background:rgba(0,0,0,0.35);transform:translateZ(-70px);filter:blur(22px);"></div>
+                <div style="position:absolute;left:0;top:100%;width:100%;height:40px;transform-origin:50% 0;transform:rotateX(-90deg);background:linear-gradient(180deg,#189B67 0 7px,#33483A 7px,#152219);"></div>
+                <div style="position:absolute;right:100%;top:0;width:40px;height:100%;transform-origin:100% 50%;transform:rotateY(-90deg);background:linear-gradient(270deg,#189B67 0 7px,#283D30 7px,#111C15);"></div>
+                <div style="position:absolute;left:100%;top:0;width:40px;height:100%;transform-origin:0 50%;transform:rotateY(90deg);background:linear-gradient(90deg,#189B67 0 7px,#283D30 7px,#111C15);"></div>
+                <div style="position:absolute;left:0;bottom:100%;width:100%;height:40px;transform-origin:50% 100%;transform:rotateX(90deg);background:linear-gradient(0deg,#189B67 0 7px,#33483A 7px,#152219);"></div>
+                <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 4px, transparent 4px 60px), {{ soilColor }};transition:background-color .6s;box-shadow:inset 0 0 0 2px rgba(255,255,255,0.12);"></div>
+                <div style="position:absolute;left:0;right:0;top:10px;height:{{ chanH }}px;border-radius:6px;background:linear-gradient(90deg, rgba(200,240,225,0.2), rgba(235,252,245,0.9), rgba(200,240,225,0.2));background-size:200% 100%;animation:shimmer 4s linear infinite;opacity:{{ chanO }};transition:height .6s, opacity .6s;transform:translateZ(1px);"></div>
+                <sc-for list="{{ plants }}" as="p" hint-placeholder-count="25">
+                  <div style="position:absolute;left:{{ p.x }}px;top:{{ p.y }}px;width:0;height:0;transform-style:preserve-3d;transform:rotateZ(40deg) rotateX(-56deg);">
+                    <div style="position:absolute;left:-30px;bottom:0;width:60px;height:100px;transform-origin:50% 100%;transform:scale({{ p.s }});transition:transform .5s cubic-bezier(.2,.8,.2,1);">
+                      <div style="position:absolute;inset:0;transform-origin:50% 100%;animation:sway {{ p.dur }}s ease-in-out {{ p.delay }}s infinite;">
+                        <sc-for list="{{ p.blades }}" as="b" hint-placeholder-count="5">
+                          <div style="position:absolute;left:{{ b.l }}px;bottom:0;width:{{ b.w }}px;height:{{ b.h }}px;border-radius:50% 50% 40% 40% / 85% 85% 15% 15%;background:linear-gradient(0deg, {{ b.c1 }}, {{ b.c2 }});transform-origin:50% 100%;transform:rotate({{ b.r }}deg);"></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <sc-if value="{{ running }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(11,61,42,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:panelIn .3s ease;">
+              <span style="width:52px;height:52px;border-radius:50%;border:3px solid rgba(252,251,245,0.2);border-top-color:#FCFBF5;animation:spin .9s linear infinite;"></span>
+              <div style="font-size:16px;font-weight:700;">{{ phase }}</div>
+              <div style="width:220px;height:6px;border-radius:3px;background:rgba(252,251,245,0.18);overflow:hidden;"><div style="width:{{ progress }}%;height:100%;border-radius:3px;background:#3CC58C;transition:width .2s linear;"></div></div>
+            </div>
+          </sc-if>
+          <div style="position:absolute;left:14px;right:14px;bottom:14px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button onClick="{{ togglePlay }}" aria-label="Lecture" style="flex:none;width:36px;height:36px;border-radius:11px;border:none;background:#FCFBF5;color:#0B3D2A;display:grid;place-items:center;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;font-variation-settings:'FILL' 1;">{{ playIcon }}</span></button>
+              <input type="range" min="1" max="{{ months }}" step="1" value="{{ month }}" onChange="{{ setMonth }}" style="flex:1;min-width:0;accent-color:#3CC58C;cursor:pointer;">
+              <span style="flex:none;font-family:'JetBrains Mono',monospace;font-size:12px;">Mois {{ month }}/{{ months }}</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:18px;border-radius:24px;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -32px rgba(11,61,42,0.45);display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div>
+              <div style="font-size:12.5px;font-weight:600;color:#51645A;">Aperçu en direct</div>
+              <div style="margin-top:2px;font-size:15px;font-weight:800;">Conditions : {{ liveVerdict }}</div>
+            </div>
+            <div style="font-size:30px;font-weight:800;letter-spacing:-0.04em;color:#127A51;">{{ livePct }}<span style="font-size:16px;">/100</span></div>
+          </div>
+          <div style="height:8px;border-radius:4px;background:rgba(24,155,103,0.12);overflow:hidden;"><div style="width:{{ livePct }}%;height:100%;border-radius:4px;background:linear-gradient(90deg,#3CC58C,#189B67);transition:width .5s;"></div></div>
+          <button onClick="{{ simulate }}" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:17px;border-radius:16px;border:none;background:#189B67;color:#FCFBF5;font:800 16.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 16px 30px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;font-variation-settings:'FILL' 1;">play_arrow</span>Simuler</button>
+          <sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">info</span>Paramètres modifiés : relancez la simulation pour mettre à jour les résultats.</div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+      <section ref="{{ resRef }}" style="margin-top:48px;animation:panelIn .6s cubic-bezier(.2,.8,.2,1);">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>RÉSULTATS</div>
+            <h2 style="margin:12px 0 0;font-size:clamp(28px,3.6vw,44px);line-height:1.05;letter-spacing:-0.04em;font-weight:800;">{{ r.headline }}</h2>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <button onClick="{{ save }}" style="display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:13px;border:1px solid rgba(24,155,103,0.35);background:rgba(255,255,255,0.7);color:#0F6B47;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;font-variation-settings:'FILL' {{ savedFill }};">bookmark</span>{{ saveLabel }}</button>
+            <a href="{{ guideHref }}" style="display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14px;">Voir le guide de culture<span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">arrow_forward</span></a>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;">
+          <div style="padding:20px;border-radius:24px;background:#189B67;color:#FCFBF5;box-shadow:0 20px 40px -22px rgba(24,155,103,0.9);">
+            <div style="font-size:13px;font-weight:600;opacity:0.85;">Score de la parcelle</div>
+            <div style="margin-top:6px;font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;">{{ r.score }}<span style="font-size:18px;">/100</span></div>
+            <div style="margin-top:8px;font-size:13px;font-weight:600;opacity:0.9;">{{ r.verdict }}</div>
+          </div>
+          <sc-for list="{{ r.kpis }}" as="k" hint-placeholder-count="3">
+            <div style="padding:20px;border-radius:24px;background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.95);box-shadow:0 14px 30px -24px rgba(11,61,42,0.4);">
+              <div style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#51645A;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">{{ k.icon }}</span>{{ k.label }}</div>
+              <div style="margin-top:8px;font-size:30px;font-weight:800;letter-spacing:-0.035em;line-height:1.05;">{{ k.value }}</div>
+              <div style="margin-top:6px;font-size:12.5px;color:#51645A;font-weight:500;">{{ k.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;">
+          <div style="padding:22px;border-radius:26px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -34px rgba(11,61,42,0.45);">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;">
+              <div style="font-size:16px;font-weight:800;">Croissance mois par mois</div>
+              <div style="display:flex;gap:14px;font-size:12px;font-weight:600;color:#51645A;">
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:3px;border-radius:2px;background:#189B67;"></span>Votre parcelle</span>
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:0;border-top:2px dashed rgba(16,40,30,0.4);"></span>Conditions idéales</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 400 180" preserveAspectRatio="none" style="margin-top:14px;display:block;width:100%;height:180px;overflow:visible;">
+              <line x1="0" y1="45" x2="400" y2="45" stroke="rgba(16,40,30,0.06)"></line>
+              <line x1="0" y1="90" x2="400" y2="90" stroke="rgba(16,40,30,0.06)"></line>
+              <line x1="0" y1="135" x2="400" y2="135" stroke="rgba(16,40,30,0.06)"></line>
+              <path d="{{ r.idealPath }}" fill="none" stroke="rgba(16,40,30,0.35)" stroke-width="2" stroke-dasharray="5 5" vector-effect="non-scaling-stroke"></path>
+              <path d="{{ r.areaPath }}" fill="rgba(24,155,103,0.12)"></path>
+              <path d="{{ r.growthPath }}" fill="none" stroke="#189B67" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke" stroke-dasharray="900" style="animation:dash 1.8s cubic-bezier(.2,.8,.2,1) both;"></path>
+            </svg>
+            <div style="margin-top:8px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;"><span>Mois 1</span><span>{{ r.midLabel }}</span><span>{{ r.endLabel }}</span></div>
+          </div>
+          <div style="padding:22px;border-radius:26px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -34px rgba(11,61,42,0.45);">
+            <div style="font-size:16px;font-weight:800;">Impact de chaque facteur</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:11px;">
+              <sc-for list="{{ r.factors }}" as="fc" hint-placeholder-count="8">
+                <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 40px;align-items:center;gap:10px;font-size:13px;">
+                  <span style="font-weight:700;">{{ fc.label }}</span>
+                  <div style="height:8px;border-radius:4px;background:rgba(24,155,103,0.1);overflow:hidden;"><div style="width:{{ fc.pct }}%;height:100%;border-radius:4px;background:{{ fc.bg }};transition:width .8s cubic-bezier(.2,.8,.2,1);"></div></div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;color:{{ fc.color }};">{{ fc.pct }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;">
+          <div style="padding:22px;border-radius:26px;background:rgba(24,155,103,0.07);">
+            <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">tips_and_updates</span>Recommandations</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ r.recos }}" as="rc" hint-placeholder-count="3">
+                <div style="display:flex;gap:12px;padding:14px;border-radius:16px;background:rgba(255,255,255,0.75);">
+                  <span style="flex:none;width:32px;height:32px;border-radius:10px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">{{ rc.icon }}</span></span>
+                  <div><div style="font-size:14.5px;font-weight:800;">{{ rc.t }}</div><div style="margin-top:2px;font-size:13.5px;line-height:1.5;color:#4B5F55;">{{ rc.d }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:22px;border-radius:26px;background:#0B3D2A;color:#FCFBF5;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">warning</span>Risques identifiés</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ r.risks }}" as="rk" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);">
+                  <span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">{{ rk.icon }}</span>
+                  <div style="flex:1;font-size:14px;font-weight:600;line-height:1.4;">{{ rk.t }}</div>
+                  <span style="flex:none;padding:3px 9px;border-radius:999px;background:{{ rk.pillBg }};color:{{ rk.pillColor }};font-size:11.5px;font-weight:700;">{{ rk.level }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <a href="Risques.dc.html" style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;color:#BFEBD6;font-size:14px;font-weight:700;">Voir tous les risques climatiques<span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">arrow_forward</span></a>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CROPS = {
+  riz:{name:'Riz',h:82,t:26,sun:7,ph:[5.5,7],soil:'Argileux',y:4.5,mo:5,price:2200,n:6,w:5,bh:56,sp:30},
+  mais:{name:'Maïs',h:55,t:26,sun:8,ph:[5.8,7.2],soil:'Limoneux',y:3.2,mo:4,price:1200,n:5,w:9,bh:84,sp:46},
+  manioc:{name:'Manioc',h:45,t:27,sun:8,ph:[5,7],soil:'Sableux',y:12,mo:12,price:600,n:5,w:12,bh:72,sp:62},
+  pdt:{name:'Pomme de terre',h:62,t:18,sun:6,ph:[5,6.5],soil:'Limoneux',y:16,mo:4,price:1500,n:7,w:15,bh:32,sp:70},
+  tomate:{name:'Tomate',h:60,t:23,sun:8,ph:[6,7],soil:'Limoneux',y:28,mo:3,price:2000,n:6,w:13,bh:48,sp:50},
+  haricot:{name:'Haricot',h:55,t:21,sun:7,ph:[6,7.5],soil:'Limoneux',y:1.5,mo:3,price:3500,n:6,w:12,bh:34,sp:60},
+  cafe:{name:'Café',h:65,t:21,sun:5,ph:[5.5,6.5],soil:'Humifère',y:0.8,mo:12,price:9000,n:7,w:13,bh:62,sp:34},
+  vanille:{name:'Vanille',h:75,t:25,sun:5,ph:[6,7],soil:'Humifère',y:0.5,mo:12,price:60000,n:5,w:11,bh:68,sp:24},
+};
+const REGIONS = {
+  analamanga:{name:'Analamanga',t:20,rain:180,sun:7},
+  alaotra:{name:'Alaotra-Mangoro',t:22,rain:170,sun:7},
+  vakinankaratra:{name:'Vakinankaratra',t:17,rain:160,sun:6},
+  itasy:{name:'Itasy',t:19,rain:190,sun:7},
+  atsinanana:{name:'Atsinanana',t:25,rain:300,sun:6},
+  sava:{name:'SAVA',t:25,rain:260,sun:6},
+  boeny:{name:'Boeny',t:27,rain:140,sun:9},
+  atsimo:{name:'Atsimo-Andrefana',t:26,rain:50,sun:10},
+  matsiatra:{name:'Haute Matsiatra',t:18,rain:150,sun:6},
+  menabe:{name:'Menabe',t:26,rain:90,sun:9},
+};
+const SOILS = ['Argileux','Limoneux','Sableux','Latéritique','Humifère'];
+const IRR = {Aucune:0,Gravitaire:10,Aspersion:14,'Goutte-à-goutte':18};
+const FERT = {Aucune:0.7,Organique:0.92,Minérale:0.93,Mixte:1};
+const DENS = {Faible:0.84,Normale:1,Élevée:0.88};
+const PROT = {Aucune:0.78,Biologique:0.95,Chimique:0.96};
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const rnd = i => { const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+const hx = h => [1,3,5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a,b,t) => { const A = hx(a), B = hx(b); return 'rgb(' + A.map((v,i) => Math.round(v + (B[i] - v) * t)).join(',') + ')'; };
+const fr = (n, d = 0) => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: d });
+const logistic = x => 1 / (1 + Math.exp(-9 * (x - 0.45)));
+function blades(P, score, seed) {
+  const t = clamp(1 - score, 0, 1) * 0.95, out = [];
+  const c1 = mix('#0F6B47', '#7A7744', t), c2 = mix('#46CF94', '#D2CC92', t);
+  for (let k = 0; k < P.n; k++) { const f = k / (P.n - 1) * 2 - 1; out.push({ l: +(30 - P.w / 2 + f * 3).toFixed(1), w: P.w, h: Math.round(P.bh * (0.78 + rnd(seed + k) * 0.35) * (1 - Math.abs(f) * 0.28)), r: Math.round(f * P.sp * 0.5 + (rnd(seed + k * 3) - 0.5) * 8), c1, c2 }); }
+  return out;
+}
+const DEFAULT = { crop:'riz', region:'alaotra', season:'pluies', surface:1, soil:'Argileux', ph:6.2, hum:70, irr:'Gravitaire', sun:7, temp:22, rain:170, fert:'Organique', dens:'Normale', prot:'Biologique' };
+
+class Component extends DCLogic {
+  state = { p: { ...DEFAULT }, w: typeof window !== 'undefined' ? innerWidth : 1280, month: 5, playing: false, running: false, progress: 0, phase: '', result: null, resultKey: '', saved: false };
+  resRef = React.createRef();
+  componentDidMount() {
+    const c = new URLSearchParams(location.search).get('crop');
+    if (c && CROPS[c]) this.setState({ p: { ...this.state.p, crop: c, soil: CROPS[c].soil }, month: CROPS[c].mo });
+    this.r = () => this.setState({ w: innerWidth }); addEventListener('resize', this.r);
+  }
+  componentWillUnmount() { removeEventListener('resize', this.r); clearInterval(this.play); clearInterval(this.run); }
+  set(k, v) {
+    const p = { ...this.state.p, [k]: v }; const extra = {};
+    if (k === 'region') { const R = REGIONS[v]; p.temp = R.t; p.rain = R.rain; p.sun = R.sun; }
+    if (k === 'crop') { extra.month = CROPS[v].mo; }
+    this.setState({ p, ...extra });
+  }
+  model(p) {
+    const P = CROPS[p.crop], rainy = p.season === 'pluies';
+    const effH = clamp(p.hum + IRR[p.irr] * (p.hum < P.h ? 1 : 0.3) + (p.rain / 500) * 18 + (rainy ? 6 : -8), 0, 100);
+    const effT = p.temp + (rainy ? 1 : -2);
+    const inPh = p.ph >= P.ph[0] && p.ph <= P.ph[1];
+    const f = {
+      'Eau du sol': clamp(1 - Math.abs(effH - P.h) / 50, 0, 1),
+      'Température': clamp(1 - Math.abs(effT - P.t) / 12, 0, 1),
+      'Ensoleillement': clamp(1 - Math.abs(p.sun - P.sun) / 6, 0, 1),
+      'pH du sol': inPh ? 1 : clamp(1 - Math.min(Math.abs(p.ph - P.ph[0]), Math.abs(p.ph - P.ph[1])) / 1.8, 0, 1),
+      'Type de sol': p.soil === P.soil ? 1 : (p.soil === 'Humifère' || p.soil === 'Limoneux') ? 0.82 : 0.66,
+      'Fertilisation': FERT[p.fert], 'Densité': DENS[p.dens], 'Protection': PROT[p.prot],
+    };
+    const W = { 'Eau du sol':.22, 'Température':.18, 'Ensoleillement':.12, 'pH du sol':.1, 'Type de sol':.1, 'Fertilisation':.12, 'Densité':.06, 'Protection':.1 };
+    const score = clamp(Object.keys(f).reduce((a, k) => a + f[k] * W[k], 0), 0.05, 1);
+    return { P, f, score, effH, effT, rainy };
+  }
+  simulate = () => {
+    if (this.state.running) return;
+    clearInterval(this.play); clearInterval(this.run);
+    const phases = ['Analyse du sol…', 'Modélisation du climat…', 'Calcul de la croissance…', 'Estimation du rendement…'];
+    const P = CROPS[this.state.p.crop];
+    this.setState({ running: true, progress: 0, phase: phases[0], playing: false, month: 1 });
+    let pr = 0;
+    this.run = setInterval(() => {
+      pr += 4; this.setState({ progress: pr, phase: phases[Math.min(3, Math.floor(pr / 25))] });
+      if (pr >= 100) {
+        clearInterval(this.run);
+        const p = this.state.p;
+        this.setState({ running: false, result: { ...p }, resultKey: JSON.stringify(p), saved: false });
+        this.startPlay(P.mo);
+        setTimeout(() => { const el = this.resRef.current; if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 100, behavior: 'smooth' }); }, 1400);
+      }
+    }, 90);
+  };
+  startPlay(max) {
+    clearInterval(this.play);
+    this.setState({ playing: true, month: 1 });
+    this.play = setInterval(() => { const m = this.state.month + 1; if (m > max) { clearInterval(this.play); this.setState({ playing: false }); } else this.setState({ month: m }); }, Math.max(220, 2600 / max));
+  }
+  renderVals() {
+    const s = this.state, p = s.p, wide = s.w >= 1000;
+    const { P, f, score } = this.model(p);
+    const mo = P.mo, month = Math.min(s.month, mo);
+    const gm = logistic(month / mo);
+    const plants = [];
+    for (let j = 0; j < 5; j++) for (let i = 0; i < 5; i++) {
+      const k = j * 5 + i;
+      plants.push({ x: 50 + i * 60, y: 72 + j * 60, s: +((0.12 + 0.88 * gm) * (0.35 + 0.65 * score) * (0.86 + rnd(k) * 0.28)).toFixed(3), dur: +(4 + rnd(k + 5) * 3).toFixed(1), delay: -(rnd(k + 2) * 4).toFixed(1), blades: blades(P, score, k * 7) });
+    }
+    const seg = (k, opts, cols) => ({ isSeg: true, cols: cols || 'repeat(' + Math.min(opts.length, 4) + ',minmax(0,1fr))', options: opts.map(o => { const [v, l] = Array.isArray(o) ? o : [o, o]; const on = p[k] === v; return { label: l, pick: () => this.set(k, v), bg: on ? '#189B67' : 'rgba(255,255,255,0.75)', color: on ? '#FCFBF5' : '#10281E', border: on ? '#189B67' : 'rgba(16,40,30,0.1)' }; }) });
+    const range = (k, min, max, step, disp, lo, hi) => ({ isRange: true, min, max, step, val: p[k], display: disp, lo, hi, onChange: e => this.set(k, +e.target.value) });
+    const R = REGIONS[p.region];
+    const cards = [
+      { n: '01', title: 'Culture et lieu', items: [
+        { icon: 'eco', label: 'Culture', ...seg('crop', Object.keys(CROPS).map(k => [k, CROPS[k].name === 'Pomme de terre' ? 'P. de terre' : CROPS[k].name]), 'repeat(4,minmax(0,1fr))') },
+        { icon: 'location_on', label: 'Région', isSelect: true, val: p.region, options: Object.keys(REGIONS).map(k => ({ value: k, label: REGIONS[k].name })), hint: 'Climat moyen : ' + R.t + ' °C · ' + R.rain + ' mm/mois · ' + R.sun + ' h de soleil', onChange: e => this.set('region', e.target.value) },
+        { icon: 'calendar_month', label: 'Saison de plantation', ...seg('season', [['pluies', 'Saison des pluies'], ['seche', 'Saison sèche']]) },
+        { icon: 'square_foot', label: 'Surface', ...range('surface', 0.1, 10, 0.1, fr(p.surface, 1) + ' ha', '0,1 ha', '10 ha') } ] },
+      { n: '02', title: 'Sol et eau', items: [
+        { icon: 'landscape', label: 'Type de sol', ...seg('soil', SOILS, 'repeat(auto-fill,minmax(96px,1fr))') },
+        { icon: 'science', label: 'pH du sol', ...range('ph', 4.5, 8.5, 0.1, fr(p.ph, 1), 'Acide 4,5', 'Basique 8,5') },
+        { icon: 'water_drop', label: "Humidité du sol", ...range('hum', 0, 100, 1, p.hum + ' %', 'Sec', 'Saturé') },
+        { icon: 'shower', label: 'Irrigation', ...seg('irr', Object.keys(IRR), 'repeat(auto-fill,minmax(110px,1fr))') } ] },
+      { n: '03', title: 'Climat et pratiques', items: [
+        { icon: 'thermostat', label: 'Température moyenne', ...range('temp', 8, 40, 1, p.temp + ' °C', '8 °C', '40 °C') },
+        { icon: 'rainy', label: 'Précipitations', ...range('rain', 0, 500, 10, p.rain + ' mm/mois', '0 mm', '500 mm') },
+        { icon: 'sunny', label: 'Ensoleillement', ...range('sun', 3, 12, 0.5, fr(p.sun, 1) + ' h/jour', '3 h', '12 h') },
+        { icon: 'compost', label: 'Fertilisation', ...seg('fert', Object.keys(FERT)) },
+        { icon: 'grid_on', label: 'Densité de plantation', ...seg('dens', Object.keys(DENS)) },
+        { icon: 'pest_control', label: 'Protection contre les ravageurs', ...seg('prot', Object.keys(PROT)) } ] },
+    ];
+    cards.forEach(c => c.items.forEach(it => { it.isSeg = !!it.isSeg; it.isRange = !!it.isRange; it.isSelect = !!it.isSelect; }));
+
+    let r = null;
+    if (s.result) {
+      const m = this.model(s.result), rp = s.result, Q = m.P;
+      const sc = Math.round(m.score * 100);
+      const yha = Q.y * (0.2 + 0.9 * Math.pow(m.score, 1.3));
+      const tot = yha * rp.surface;
+      const val = tot * 1000 * Q.price;
+      const N = Q.mo, pts = Array.from({ length: N + 1 }, (_, i) => i / N);
+      const X = i => (i / N * 400).toFixed(1), Y = v => (170 - v * 160).toFixed(1);
+      const gp = pts.map((x, i) => (i ? 'L' : 'M') + X(i) + ' ' + Y(logistic(x) * (0.3 + 0.7 * m.score))).join(' ');
+      const ip = pts.map((x, i) => (i ? 'L' : 'M') + X(i) + ' ' + Y(logistic(x))).join(' ');
+      const recos = [], risks = [];
+      const RC = { 'Eau du sol': ['water_drop', m.effH < Q.h ? 'Augmentez l\'apport en eau' : 'Améliorez le drainage', m.effH < Q.h ? 'Passez au goutte-à-goutte ou arrosez tôt le matin ; paillez pour limiter l\'évaporation.' : 'Creusez des rigoles et évitez l\'irrigation pendant les fortes pluies.'],
+        'Température': ['thermostat', 'Adaptez la date de plantation', m.effT > Q.t ? 'Plantez en saison plus fraîche ou ajoutez un ombrage léger.' : 'Plantez en saison plus chaude ou choisissez une variété tolérante au froid.'],
+        'Ensoleillement': ['sunny', 'Revoyez l\'exposition', rp.sun < Q.sun ? 'Dégagez les arbres qui font de l\'ombre ou choisissez une parcelle mieux exposée.' : 'Un ombrage partiel protégera les plants aux heures chaudes.'],
+        'pH du sol': ['science', 'Corrigez le pH du sol', rp.ph < Q.ph[0] ? 'Apportez de la dolomie ou de la chaux (1 à 2 t/ha) avant la plantation.' : 'Apportez du compost et de la matière organique pour réduire l\'alcalinité.'],
+        'Type de sol': ['landscape', 'Amendez le sol', 'Ce sol n\'est pas idéal pour ' + Q.name.toLowerCase() + ' : sol recommandé « ' + Q.soil.toLowerCase() + ' ». Ajoutez du compost.'],
+        'Fertilisation': ['compost', 'Fertilisez la parcelle', 'Un apport mixte (compost + engrais minéral) peut augmenter nettement le rendement.'],
+        'Densité': ['grid_on', 'Ajustez l\'espacement', 'Revenez à une densité normale : les plants se font moins concurrence.'],
+        'Protection': ['pest_control', 'Protégez vos cultures', 'Mettez en place une lutte biologique (neem, piégeage) dès la levée.'] };
+      Object.keys(m.f).sort((a, b) => m.f[a] - m.f[b]).forEach(k => { if (m.f[k] < 0.82 && recos.length < 4) { const [icon, t, d] = RC[k]; recos.push({ icon, t, d }); } });
+      if (!recos.length) recos.push({ icon: 'check', t: 'Rien à corriger', d: 'Vos conditions sont très proches de l\'idéal pour cette culture. Suivez le guide de culture.' });
+      const lvl = (t, l) => risks.push({ t, level: l, icon: t.icon });
+      if (rp.rain > 330) risks.push({ icon: 'flood', t: 'Inondation ou pourriture des racines', level: 'Élevé' });
+      if (m.effH < Q.h - 20) risks.push({ icon: 'wb_sunny', t: 'Stress hydrique pendant la croissance', level: 'Élevé' });
+      if (m.effT > Q.t + 5) risks.push({ icon: 'thermostat', t: 'Stress thermique à la floraison', level: 'Modéré' });
+      if (rp.prot === 'Aucune') risks.push({ icon: 'pest_control', t: 'Attaques de ravageurs non maîtrisées', level: 'Modéré' });
+      if (m.f['pH du sol'] < 0.8) risks.push({ icon: 'science', t: 'Carences nutritives liées au pH', level: 'Modéré' });
+      if (rp.season === 'pluies' && ['sava', 'atsinanana', 'boeny'].includes(rp.region)) risks.push({ icon: 'cyclone', t: 'Passage de cyclone possible (janv. – mars)', level: 'Modéré' });
+      if (!risks.length) risks.push({ icon: 'verified', t: 'Aucun risque majeur détecté', level: 'Faible' });
+      r = { score: sc, verdict: sc >= 80 ? 'Excellentes conditions' : sc >= 62 ? 'Bonnes conditions, à optimiser' : sc >= 45 ? 'Conditions moyennes' : 'Conditions défavorables',
+        headline: Q.name + ' sur ' + fr(rp.surface, 1) + ' ha : ' + (sc >= 62 ? 'une bonne saison en vue.' : 'des ajustements sont nécessaires.'),
+        kpis: [
+          { icon: 'agriculture', label: 'Rendement estimé', value: fr(yha, yha < 2 ? 2 : 1) + ' t/ha', sub: 'Moyenne régionale : ' + fr(Q.y, Q.y < 2 ? 2 : 1) + ' t/ha' },
+          { icon: 'inventory_2', label: 'Production totale', value: fr(tot, tot < 2 ? 2 : 1) + ' t', sub: 'Sur ' + fr(rp.surface, 1) + ' ha' },
+          { icon: 'payments', label: 'Valeur estimée', value: fr(val / 1e6, 1) + ' M Ar', sub: 'Prix indicatif : ' + fr(Q.price) + ' Ar/kg' } ],
+        growthPath: gp, areaPath: gp + ' L400 170 L0 170 Z', idealPath: ip,
+        midLabel: 'Mois ' + Math.round(N / 2), endLabel: (Q.mo >= 12 && (rp.crop === 'cafe' || rp.crop === 'vanille')) ? 'Mois 12 · 1re année' : 'Mois ' + N + ' · récolte',
+        factors: Object.keys(m.f).map(k => { const v = Math.round(m.f[k] * 100); return { label: k, pct: v, bg: v >= 80 ? '#189B67' : v >= 60 ? '#6FCB9F' : '#0B3D2A', color: v >= 60 ? '#0F6B47' : '#0B3D2A' }; }),
+        recos, risks: risks.slice(0, 4).map(x => ({ ...x, pillBg: x.level === 'Élevé' ? '#FCFBF5' : 'rgba(255,255,255,0.14)', pillColor: x.level === 'Élevé' ? '#0B3D2A' : '#FCFBF5' })) };
+    }
+    const lp = Math.round(score * 100);
+    return {
+      cols: wide ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)', sidePos: wide ? 'sticky' : 'relative',
+      cards, plants, sceneScale: s.w < 420 ? 0.62 : s.w < 1100 ? 0.78 : 0.88,
+      soilColor: mix('#A6A27E', '#2A3D30', clamp(p.hum + IRR[p.irr], 0, 100) / 100),
+      chanH: p.irr === 'Aucune' ? 0 : Math.round(6 + IRR[p.irr] * 0.6), chanO: p.irr === 'Aucune' ? 0 : 0.85,
+      sunLight: (p.sun / 12 * 0.26).toFixed(3),
+      cropName: P.name, surfaceLabel: fr(p.surface, 1) + ' ha',
+      stageLabel: month >= mo ? 'Maturité' : month / mo < 0.3 ? 'Levée' : month / mo < 0.65 ? 'Croissance' : 'Floraison',
+      months: mo, month, setMonth: e => { clearInterval(this.play); this.setState({ month: +e.target.value, playing: false }); },
+      playIcon: s.playing ? 'pause' : 'play_arrow',
+      togglePlay: () => { if (s.playing) { clearInterval(this.play); this.setState({ playing: false }); } else this.startPlay(mo); },
+      running: s.running, progress: s.progress, phase: s.phase,
+      livePct: lp, liveVerdict: lp >= 80 ? 'excellentes' : lp >= 62 ? 'bonnes' : lp >= 45 ? 'moyennes' : 'défavorables',
+      simulate: this.simulate,
+      stale: !!s.result && s.resultKey !== JSON.stringify(p),
+      hasResult: !!r, r: r || {}, resRef: this.resRef,
+      save: () => this.setState({ saved: !s.saved }), saveLabel: s.saved ? 'Simulation enregistrée' : 'Enregistrer', savedFill: s.saved ? 1 : 0,
+      guideHref: 'Cultures.dc.html?crop=' + (s.result ? s.result.crop : p.crop),
+    };
+  }
+}
+</script>
+</body>
+</html>

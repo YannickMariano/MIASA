@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-260px);opacity:0}}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4%,-4%) scale(1.08)}}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.6);opacity:0}}
+@keyframes rain{0%{transform:translateY(-40px);opacity:0}20%{opacity:.7}100%{transform:translateY(420px);opacity:0}}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes dash{from{stroke-dashoffset:700}to{stroke-dashoffset:0}}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes scan{0%{top:0%}50%{top:calc(100% - 3px)}100%{top:0%}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;overflow-x:clip;background:#FCFBF5;">
+
+<header style="position:sticky;top:0;z-index:60;padding:{{ navPad }};transition:padding .4s cubic-bezier(.2,.8,.2,1);">
+  <div style="max-width:1200px;margin:0 auto;height:{{ navH }}px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 10px 0 16px;border-radius:20px;background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};border:1px solid {{ navBorder }};box-shadow:{{ navShadow }};transition:all .4s cubic-bezier(.2,.8,.2,1);">
+    <a href="#accueil" style="display:flex;align-items:center;gap:10px;color:#10281E;">
+      <span style="width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#1FB077,#0F6B47);display:grid;place-items:center;color:#FCFBF5;box-shadow:0 6px 16px -6px rgba(24,155,103,0.7), inset 0 1px 0 rgba(255,255,255,0.35);"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">eco</span></span>
+      <span style="font-weight:800;font-size:21px;letter-spacing:-0.035em;">Voly</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:0.08em;color:#127A51;padding:3px 7px;border-radius:6px;background:rgba(24,155,103,0.1);">MG</span>
+    </a>
+    <sc-if value="{{ navDesktop }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:2px;">
+        <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="6">
+          <a href="{{ l.href }}" style="white-space:nowrap;padding:8px 14px;border-radius:12px;font-size:14.5px;font-weight:600;color:{{ l.color }};background:{{ l.bg }};transition:background .25s,color .25s;" style-hover="background:rgba(24,155,103,0.08);color:#10281E;">{{ l.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <sc-if value="{{ navDesktop }}" hint-placeholder-val="{{ true }}">
+        <a href="#cultures" style="white-space:nowrap;display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14.5px;box-shadow:0 10px 22px -12px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-1px);background:#14875A;color:#FCFBF5;">Explorer la plateforme<span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">arrow_forward</span></a>
+      </sc-if>
+      <sc-if value="{{ navMobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,0.9);background:rgba(255,255,255,0.6);display:grid;place-items:center;cursor:pointer;color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;">{{ menuIcon }}</span></button>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1200px;margin:8px auto 0;padding:10px;border-radius:22px;background:rgba(252,251,245,0.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 24px 48px -24px rgba(11,61,42,0.35);animation:menuIn .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:2px;">
+      <sc-for list="{{ mobileLinks }}" as="l" hint-placeholder-count="6">
+        <a href="{{ l.href }}" onClick="{{ l.onClick }}" style="display:flex;align-items:center;justify-content:space-between;padding:15px 14px;border-radius:14px;font-size:17px;font-weight:700;color:#10281E;background:{{ l.bg }};">{{ l.label }}<span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">arrow_forward</span></a>
+      </sc-for>
+      <a href="#cultures" onClick="{{ closeMenu }}" style="margin-top:6px;display:flex;justify-content:center;padding:15px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:16px;">Explorer la plateforme</a>
+    </div>
+  </sc-if>
+</header>
+
+<section id="accueil" data-screen-label="Hero" style="position:relative;margin-top:-96px;padding:clamp(120px,14vw,150px) clamp(20px,5vw,40px) clamp(64px,8vw,110px);overflow:hidden;">
+  <div style="position:absolute;inset:0;pointer-events:none;">
+    <div style="position:absolute;width:60vw;height:60vw;max-width:820px;max-height:820px;right:-12%;top:-18%;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.22), rgba(24,155,103,0) 65%);animation:drift 18s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:50vw;height:50vw;max-width:680px;max-height:680px;left:-18%;bottom:-30%;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.14), rgba(24,155,103,0) 65%);animation:drift 22s ease-in-out -6s infinite;"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(16,40,30,0.07) 1px, transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);"></div>
+    <sc-if value="{{ showFx }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;">
+        <div style="position:absolute;left:58%;bottom:12%;width:6px;height:6px;border-radius:50%;background:#189B67;opacity:0;animation:rise 9s ease-out 0s infinite;"></div>
+        <div style="position:absolute;left:66%;bottom:20%;width:4px;height:4px;border-radius:50%;background:#189B67;opacity:0;animation:rise 11s ease-out 2s infinite;"></div>
+        <div style="position:absolute;left:74%;bottom:8%;width:5px;height:5px;border-radius:50%;background:#3CC58C;opacity:0;animation:rise 10s ease-out 4s infinite;"></div>
+        <div style="position:absolute;left:82%;bottom:24%;width:3px;height:3px;border-radius:50%;background:#189B67;opacity:0;animation:rise 12s ease-out 1s infinite;"></div>
+        <div style="position:absolute;left:90%;bottom:14%;width:5px;height:5px;border-radius:50%;background:#3CC58C;opacity:0;animation:rise 9.5s ease-out 6s infinite;"></div>
+        <div style="position:absolute;left:62%;bottom:30%;width:3px;height:3px;border-radius:50%;background:#189B67;opacity:0;animation:rise 13s ease-out 3s infinite;"></div>
+        <div style="position:absolute;left:78%;bottom:36%;width:4px;height:4px;border-radius:50%;background:#189B67;opacity:0;animation:rise 10.5s ease-out 7s infinite;"></div>
+        <div style="position:absolute;left:12%;bottom:18%;width:4px;height:4px;border-radius:50%;background:#189B67;opacity:0;animation:rise 12s ease-out 5s infinite;"></div>
+      </div>
+    </sc-if>
+  </div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:clamp(32px,5vw,64px);align-items:center;">
+    <div>
+      <div data-reveal="1" style="display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 10px;border-radius:999px;background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.9);box-shadow:0 6px 18px -10px rgba(11,61,42,0.25);white-space:nowrap;max-width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#127A51;font-weight:500;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#189B67;box-shadow:0 0 0 4px rgba(24,155,103,0.15);"></span>AGRICULTURE INTELLIGENTE • MADAGASCAR
+      </div>
+      <h1 data-reveal="1" data-reveal-delay="120" style="margin:24px 0 0;font-size:clamp(40px,6vw,76px);line-height:1.0;letter-spacing:-0.045em;font-weight:800;color:#10281E;">
+        <span style="display:block;">Cultiver mieux.</span>
+        <span style="display:block;">Comprendre le climat.</span>
+        <span style="display:block;color:#189B67;">Récolter plus intelligemment.</span>
+      </h1>
+      <p data-reveal="1" data-reveal-delay="240" style="margin:24px 0 0;max-width:520px;font-size:clamp(16px,1.5vw,18.5px);line-height:1.6;color:#4B5F55;text-wrap:pretty;">Une plateforme intelligente pour apprendre, simuler, surveiller et découvrir les opportunités agricoles à Madagascar.</p>
+      <div data-reveal="1" data-reveal-delay="360" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:12px;">
+        <a href="#cultures" style="display:inline-flex;align-items:center;gap:10px;padding:16px 24px;border-radius:15px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15.5px;box-shadow:0 14px 28px -12px rgba(24,155,103,0.85), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s,box-shadow .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;box-shadow:0 20px 34px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);">Explorer la plateforme<span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">arrow_forward</span></a>
+        <a href="#fonctionnement" style="display:inline-flex;align-items:center;gap:10px;padding:16px 22px;border-radius:15px;background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.95);color:#10281E;font-weight:700;font-size:15.5px;box-shadow:0 10px 24px -16px rgba(11,61,42,0.35);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:rgba(255,255,255,0.9);color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">play_circle</span>Découvrir comment ça marche</a>
+      </div>
+      <div data-reveal="1" data-reveal-delay="480" style="margin-top:36px;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;font-weight:600;color:#4B5F55;">
+        <span style="display:inline-flex;align-items:center;gap:7px;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">view_in_ar</span>Simulation 3D</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">sensors</span>Capteurs de sol</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">map</span>Carte interactive</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">thunderstorm</span>Alertes climat</span>
+      </div>
+    </div>
+
+    <div ref="{{ heroWrap }}" data-reveal="1" data-reveal-delay="200" style="position:relative;height:clamp(420px,48vw,580px);">
+      <div style="position:absolute;inset:6% 4%;border-radius:40px;background:linear-gradient(160deg,rgba(255,255,255,0.55),rgba(255,255,255,0.12));border:1px solid rgba(255,255,255,0.8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.9), 0 40px 80px -40px rgba(11,61,42,0.35);"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="transform:scale({{ heroScale }});perspective:1600px;">
+          <div ref="{{ heroScene }}" style="position:relative;width:340px;height:340px;transform-style:preserve-3d;transform:rotateX(57deg) rotateZ(-40deg);">
+            <div style="position:absolute;inset:-40px;border-radius:60px;background:rgba(11,61,42,0.28);transform:translateZ(-70px);filter:blur(22px);"></div>
+            <div style="position:absolute;left:0;top:100%;width:100%;height:46px;transform-origin:50% 0;transform:rotateX(-90deg);background:linear-gradient(180deg,#189B67 0 7px,#3B5443 7px,#1D2E24);"></div>
+            <div style="position:absolute;left:0;bottom:100%;width:100%;height:46px;transform-origin:50% 100%;transform:rotateX(90deg);background:linear-gradient(0deg,#189B67 0 7px,#3B5443 7px,#1D2E24);"></div>
+            <div style="position:absolute;right:100%;top:0;width:46px;height:100%;transform-origin:100% 50%;transform:rotateY(-90deg);background:linear-gradient(270deg,#189B67 0 7px,#2E4536 7px,#16241C);"></div>
+            <div style="position:absolute;left:100%;top:0;width:46px;height:100%;transform-origin:0 50%;transform:rotateY(90deg);background:linear-gradient(90deg,#189B67 0 7px,#2E4536 7px,#16241C);"></div>
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 4px, transparent 4px 50px), linear-gradient(135deg,#46624D,#2C4535);box-shadow:inset 0 0 0 2px rgba(255,255,255,0.14);"></div>
+            <div style="position:absolute;left:0;right:0;top:12px;height:16px;border-radius:6px;background:linear-gradient(90deg, rgba(200,240,225,0.2), rgba(235,252,245,0.9), rgba(200,240,225,0.2));background-size:200% 100%;animation:shimmer 5s linear infinite;transform:translateZ(1px);"></div>
+            <sc-for list="{{ heroPlants }}" as="p" hint-placeholder-count="12">
+              <div data-bb="1" style="position:absolute;left:{{ p.x }}px;top:{{ p.y }}px;width:0;height:0;transform-style:preserve-3d;transform:rotateZ(40deg) rotateX(-57deg);">
+                <div style="position:absolute;left:-30px;bottom:0;width:60px;height:100px;transform-origin:50% 100%;transform:scale({{ p.s }});">
+                  <div style="position:absolute;inset:0;transform-origin:50% 100%;animation:sway {{ p.dur }}s ease-in-out {{ p.delay }}s infinite;">
+                    <sc-for list="{{ p.blades }}" as="b" hint-placeholder-count="5">
+                      <div style="position:absolute;left:{{ b.l }}px;bottom:0;width:{{ b.w }}px;height:{{ b.h }}px;border-radius:50% 50% 40% 40% / 85% 85% 15% 15%;background:linear-gradient(0deg, {{ b.c1 }}, {{ b.c2 }});transform-origin:50% 100%;transform:rotate({{ b.r }}deg);"></div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+            <div data-bb="1" style="position:absolute;left:44px;top:300px;width:0;height:0;transform-style:preserve-3d;transform:rotateZ(40deg) rotateX(-57deg);">
+              <div style="position:absolute;left:-2px;bottom:0;width:4px;height:84px;border-radius:2px;background:linear-gradient(#FCFBF5,#A9B8AE);"></div>
+              <div style="position:absolute;left:-24px;bottom:80px;width:48px;height:28px;border-radius:10px;background:#FCFBF5;box-shadow:0 8px 16px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:5px;">
+                <span style="width:7px;height:7px;border-radius:50%;background:#189B67;"></span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:#10281E;">68%</span>
+              </div>
+              <div style="position:absolute;left:-12px;bottom:112px;width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(252,251,245,0.9);animation:pulse 2.6s ease-out infinite;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-depth="-16" style="position:absolute;left:0;top:9%;z-index:3;">
+        <div style="animation:float 6s ease-in-out infinite;">
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 16px 11px 11px;border-radius:18px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 16px 36px -16px rgba(11,61,42,0.35), inset 0 1px 0 #fff;">
+            <span style="width:38px;height:38px;border-radius:12px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">water_drop</span></span>
+            <div><div style="font-size:12px;color:#51645A;font-weight:600;">Humidité</div><div style="font-size:20px;font-weight:800;letter-spacing:-0.02em;"><span data-count="68" data-suffix=" %">68 %</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div data-depth="22" style="position:absolute;right:0;top:4%;z-index:3;">
+        <div style="animation:float 7s ease-in-out -2s infinite;">
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 16px 11px 11px;border-radius:18px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 16px 36px -16px rgba(11,61,42,0.35), inset 0 1px 0 #fff;">
+            <span style="width:38px;height:38px;border-radius:12px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">potted_plant</span></span>
+            <div><div style="font-size:12px;color:#51645A;font-weight:600;">Croissance</div><div style="font-size:20px;font-weight:800;letter-spacing:-0.02em;color:#127A51;"><span data-count="24" data-prefix="+" data-suffix=" %">+24 %</span></div></div>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div data-depth="28" style="position:absolute;right:-2%;top:44%;z-index:3;">
+          <div style="animation:float 6.5s ease-in-out -4s infinite;">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 16px 11px 11px;border-radius:18px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 16px 36px -16px rgba(11,61,42,0.35), inset 0 1px 0 #fff;">
+              <span style="width:38px;height:38px;border-radius:12px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">sunny</span></span>
+              <div><div style="font-size:12px;color:#51645A;font-weight:600;">Température</div><div style="font-size:20px;font-weight:800;letter-spacing:-0.02em;"><span data-count="27" data-suffix=" °C">27 °C</span></div></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <div data-depth="-24" style="position:absolute;left:2%;bottom:6%;z-index:3;">
+        <div style="animation:float 7.5s ease-in-out -1s infinite;">
+          <div style="width:210px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 16px 36px -16px rgba(11,61,42,0.35), inset 0 1px 0 #fff;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">agriculture</span>Récolte · Antananarivo</div>
+            <div style="margin-top:6px;font-size:20px;font-weight:800;letter-spacing:-0.02em;"><span data-count="12450" data-suffix=" t">12 450 t</span> <span style="font-size:13px;font-weight:600;color:#51645A;">de riz</span></div>
+            <div style="margin-top:10px;height:6px;border-radius:3px;background:rgba(24,155,103,0.14);overflow:hidden;"><div style="width:72%;height:100%;border-radius:3px;background:linear-gradient(90deg,#3CC58C,#189B67);"></div></div>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div data-depth="14" style="position:absolute;right:4%;bottom:10%;z-index:3;">
+          <div style="animation:float 8s ease-in-out -3s infinite;">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 16px 11px 11px;border-radius:18px;background:rgba(11,61,42,0.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.14);box-shadow:0 18px 36px -16px rgba(11,61,42,0.6);color:#FCFBF5;">
+              <span style="position:relative;width:38px;height:38px;border-radius:12px;background:rgba(252,251,245,0.12);display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">warning</span><span style="position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:#3CC58C;box-shadow:0 0 0 3px rgba(11,61,42,0.86);"></span></span>
+              <div><div style="font-size:12px;color:rgba(252,251,245,0.75);font-weight:600;">Alerte climatique</div><div style="font-size:15px;font-weight:700;">Fortes pluies · 24 h</div></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<section id="cultures" data-screen-label="Cultures" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div data-reveal="1" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="max-width:640px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>01 · APPRENDRE</div>
+        <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Apprendre à cultiver, simplement.</h2>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Des fiches claires pour chaque culture : où la planter, quand, et avec combien d'eau.</p>
+      </div>
+      <a href="Cultures.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Explorer les cultures<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">arrow_forward</span></a>
+    </div>
+    <div style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px;">
+      <sc-for list="{{ crops }}" as="c" hint-placeholder-count="6">
+        <div data-reveal="1" data-reveal-delay="{{ c.delay }}">
+          <div onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="position:relative;border-radius:26px;padding:12px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:{{ c.shadow }};transform:translateY({{ c.lift }}px);transition:transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s;">
+            <div style="position:relative;height:190px;border-radius:18px;overflow:hidden;background:#EAF1E6;">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.10) 0 10px, rgba(24,155,103,0.03) 10px 20px);transform:scale({{ c.imgScale }});transition:transform .8s cubic-bezier(.2,.8,.2,1);"></div>
+              <div style="position:absolute;left:12px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3E5A4B;background:rgba(252,251,245,0.85);padding:4px 8px;border-radius:6px;">{{ c.img }}</div>
+              <div style="position:absolute;right:12px;top:12px;padding:5px 11px;border-radius:999px;background:rgba(252,251,245,0.9);font-size:12px;font-weight:700;color:#0F6B47;">{{ c.level }}</div>
+            </div>
+            <div style="padding:16px 8px 6px;">
+              <div style="font-size:23px;font-weight:800;letter-spacing:-0.03em;">{{ c.name }}</div>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4B5F55;font-weight:500;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">location_on</span>{{ c.region }}</div>
+              <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="padding:10px 12px;border-radius:14px;background:rgba(24,155,103,0.06);">
+                  <div style="font-size:11.5px;color:#51645A;font-weight:600;">Plantation</div>
+                  <div style="margin-top:3px;font-size:14px;font-weight:700;">{{ c.plant }}</div>
+                </div>
+                <div style="padding:10px 12px;border-radius:14px;background:rgba(24,155,103,0.06);">
+                  <div style="font-size:11.5px;color:#51645A;font-weight:600;">Besoin en eau</div>
+                  <div style="margin-top:5px;display:flex;align-items:center;gap:8px;">
+                    <div style="display:flex;gap:3px;">
+                      <sc-for list="{{ c.waterBars }}" as="wb" hint-placeholder-count="3">
+                        <span style="width:14px;height:6px;border-radius:3px;background:{{ wb.bg }};"></span>
+                      </sc-for>
+                    </div>
+                    <span style="font-size:13px;font-weight:700;">{{ c.waterLabel }}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="max-height:{{ c.extraH }}px;opacity:{{ c.extraO }};overflow:hidden;transition:max-height .5s cubic-bezier(.2,.8,.2,1), opacity .4s;">
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(16,40,30,0.08);display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">schedule</span>{{ c.cycle }}</div>
+                  <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;color:#4B5F55;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.2;color:#189B67;">lightbulb</span>{{ c.tip }}</div>
+                  <a href="{{ c.guideHref }}" style="display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:#127A51;">Voir le guide complet<span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;">arrow_forward</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="simulation" data-screen-label="Simulation 3D" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);background:linear-gradient(165deg,#0B3D2A 0%,#0F5A3D 55%,#127A51 100%);color:#FCFBF5;overflow:hidden;">
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 85% 10%, rgba(60,197,140,0.25), transparent 70%), radial-gradient(50% 40% at 0% 100%, rgba(24,155,103,0.35), transparent 70%);"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;">
+    <div data-reveal="1" style="max-width:680px;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#9FE3C4;font-weight:500;"><span style="width:18px;height:1.5px;background:#3CC58C;"></span>02 · SIMULER</div>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Simulez avant de cultiver.</h2>
+      <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:rgba(252,251,245,0.8);text-wrap:pretty;">Changez l'humidité, le soleil ou la saison : la parcelle réagit en direct. Testez sans risque, avant d'investir.</p>
+      <div style="margin-top:24px;"><a href="Simulation.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#FCFBF5;color:#0B3D2A;font-weight:700;font-size:15px;box-shadow:0 14px 28px -14px rgba(0,0,0,0.45);transition:transform .25s;" style-hover="transform:translateY(-2px);color:#0B3D2A;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">view_in_ar</span>Faire une simulation</a></div>
+    </div>
+    <div style="margin-top:48px;display:grid;grid-template-columns:{{ simCols }};gap:20px;">
+      <div ref="{{ simWrap }}" data-reveal="1" style="position:relative;min-height:clamp(420px,46vw,560px);border-radius:30px;overflow:hidden;background:radial-gradient(90% 80% at 88% 0%, rgba(252,251,245,{{ sunLight }}) 0%, rgba(252,251,245,0) 60%), linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.15);box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);">
+        <div style="position:absolute;right:28px;top:26px;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle, #FFFEF6 0%, #F4F3E3 55%, rgba(252,251,245,0.4) 70%);opacity:{{ sunO }};box-shadow:0 0 {{ sunGlow }}px {{ sunSpread }}px rgba(252,251,245,0.28);transition:all .6s;"></div>
+        <sc-if value="{{ isRainy }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;inset:0;pointer-events:none;">
+            <span style="position:absolute;left:8%;top:0;width:1.5px;height:26px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.7));animation:rain 1.4s linear 0s infinite;"></span>
+            <span style="position:absolute;left:17%;top:0;width:1.5px;height:22px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.6));animation:rain 1.7s linear .4s infinite;"></span>
+            <span style="position:absolute;left:26%;top:0;width:1.5px;height:28px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.7));animation:rain 1.3s linear .9s infinite;"></span>
+            <span style="position:absolute;left:35%;top:0;width:1.5px;height:20px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.6));animation:rain 1.6s linear .2s infinite;"></span>
+            <span style="position:absolute;left:44%;top:0;width:1.5px;height:26px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.7));animation:rain 1.45s linear 1.1s infinite;"></span>
+            <span style="position:absolute;left:53%;top:0;width:1.5px;height:24px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.6));animation:rain 1.55s linear .6s infinite;"></span>
+            <span style="position:absolute;left:62%;top:0;width:1.5px;height:28px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.7));animation:rain 1.35s linear .3s infinite;"></span>
+            <span style="position:absolute;left:71%;top:0;width:1.5px;height:22px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.6));animation:rain 1.65s linear 1.3s infinite;"></span>
+            <span style="position:absolute;left:80%;top:0;width:1.5px;height:26px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.7));animation:rain 1.5s linear .8s infinite;"></span>
+            <span style="position:absolute;left:89%;top:0;width:1.5px;height:20px;border-radius:1px;background:linear-gradient(transparent,rgba(220,245,235,0.6));animation:rain 1.4s linear .5s infinite;"></span>
+          </div>
+        </sc-if>
+        <div style="position:absolute;left:20px;top:20px;display:flex;flex-wrap:wrap;gap:8px;">
+          <span style="white-space:nowrap;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);font-size:12.5px;font-weight:600;"><span style="width:7px;height:7px;border-radius:50%;background:#3CC58C;box-shadow:0 0 0 3px rgba(60,197,140,0.25);"></span>Parcelle test · 1 ha</span>
+          <span style="white-space:nowrap;display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);font-size:12.5px;font-weight:600;">{{ simCropName }} · {{ seasonName }}</span>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-bottom:60px;">
+          <div style="transform:scale({{ simScale }});perspective:1500px;">
+            <div ref="{{ simScene }}" style="position:relative;width:340px;height:340px;transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-40deg);">
+              <div style="position:absolute;inset:-36px;border-radius:60px;background:rgba(0,0,0,0.35);transform:translateZ(-70px);filter:blur(22px);"></div>
+              <div style="position:absolute;left:0;top:100%;width:100%;height:46px;transform-origin:50% 0;transform:rotateX(-90deg);background:linear-gradient(180deg,#189B67 0 7px,#33483A 7px,#152219);"></div>
+              <div style="position:absolute;left:0;bottom:100%;width:100%;height:46px;transform-origin:50% 100%;transform:rotateX(90deg);background:linear-gradient(0deg,#189B67 0 7px,#33483A 7px,#152219);"></div>
+              <div style="position:absolute;right:100%;top:0;width:46px;height:100%;transform-origin:100% 50%;transform:rotateY(-90deg);background:linear-gradient(270deg,#189B67 0 7px,#283D30 7px,#111C15);"></div>
+              <div style="position:absolute;left:100%;top:0;width:46px;height:100%;transform-origin:0 50%;transform:rotateY(90deg);background:linear-gradient(90deg,#189B67 0 7px,#283D30 7px,#111C15);"></div>
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 4px, transparent 4px 60px), {{ soilColor }};transition:background-color .6s;box-shadow:inset 0 0 0 2px rgba(255,255,255,0.12);"></div>
+              <div style="position:absolute;left:0;right:0;top:10px;height:{{ chanH }}px;border-radius:6px;background:linear-gradient(90deg, rgba(200,240,225,0.2), rgba(235,252,245,0.9), rgba(200,240,225,0.2));background-size:200% 100%;animation:shimmer 4s linear infinite;opacity:{{ chanO }};transition:height .6s, opacity .6s;transform:translateZ(1px);"></div>
+              <sc-for list="{{ simPlants }}" as="p" hint-placeholder-count="25">
+                <div data-bb="1" style="position:absolute;left:{{ p.x }}px;top:{{ p.y }}px;width:0;height:0;transform-style:preserve-3d;transform:rotateZ(40deg) rotateX(-56deg);">
+                  <div style="position:absolute;left:-30px;bottom:0;width:60px;height:100px;transform-origin:50% 100%;transform:scale({{ p.s }});transition:transform .8s cubic-bezier(.2,.8,.2,1);">
+                    <div style="position:absolute;inset:0;transform-origin:50% 100%;animation:sway {{ p.dur }}s ease-in-out {{ p.delay }}s infinite;">
+                      <sc-for list="{{ p.blades }}" as="b" hint-placeholder-count="5">
+                        <div style="position:absolute;left:{{ b.l }}px;bottom:0;width:{{ b.w }}px;height:{{ b.h }}px;border-radius:50% 50% 40% 40% / 85% 85% 15% 15%;background:linear-gradient(0deg, {{ b.c1 }}, {{ b.c2 }});transform-origin:50% 100%;transform:rotate({{ b.r }}deg);"></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;left:16px;right:16px;bottom:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;border-radius:20px;overflow:hidden;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+          <div style="padding:14px 16px;background:rgba(11,61,42,0.55);">
+            <div style="font-size:12px;color:rgba(252,251,245,0.72);font-weight:600;">Croissance estimée</div>
+            <div style="margin-top:3px;font-size:26px;font-weight:800;letter-spacing:-0.03em;">{{ growthLabel }}</div>
+          </div>
+          <div style="padding:14px 16px;background:rgba(11,61,42,0.55);">
+            <div style="font-size:12px;color:rgba(252,251,245,0.72);font-weight:600;">Rendement estimé</div>
+            <div style="margin-top:3px;font-size:26px;font-weight:800;letter-spacing:-0.03em;">{{ yieldLabel }}</div>
+          </div>
+          <div style="padding:14px 16px;background:rgba(11,61,42,0.55);display:flex;align-items:center;gap:10px;">
+            <span style="flex:none;width:34px;height:34px;border-radius:11px;background:{{ statusBg }};color:{{ statusColor }};display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;font-variation-settings:'FILL' 1;">{{ statusIcon }}</span></span>
+            <div style="font-size:13.5px;font-weight:700;line-height:1.3;">{{ statusText }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal="1" data-reveal-delay="150" style="padding:24px;border-radius:30px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:24px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#9FE3C4;">eco</span>Culture</div>
+          <div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <sc-for list="{{ simCrops }}" as="sc" hint-placeholder-count="6">
+              <button onClick="{{ sc.pick }}" style="padding:11px 6px;border-radius:13px;border:1px solid {{ sc.border }};background:{{ sc.bg }};color:{{ sc.color }};font:700 13.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ sc.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;"><span style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#9FE3C4;">water_drop</span>Niveau d'humidité</span><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,0.1);">{{ hum }} %</span></div>
+          <input type="range" min="0" max="100" value="{{ hum }}" onChange="{{ setHum }}" style="margin-top:12px;width:100%;accent-color:#3CC58C;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:rgba(252,251,245,0.6);font-weight:600;"><span>Sec</span><span>Saturé</span></div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;"><span style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#9FE3C4;">sunny</span>Exposition solaire</span><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,0.1);">{{ sun }} %</span></div>
+          <input type="range" min="0" max="100" value="{{ sun }}" onChange="{{ setSun }}" style="margin-top:12px;width:100%;accent-color:#3CC58C;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:rgba(252,251,245,0.6);font-weight:600;"><span>Ombre</span><span>Plein soleil</span></div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;"><span style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#9FE3C4;">thermostat</span>Température</span><span style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,0.1);">{{ temp }} °C</span></div>
+          <input type="range" min="8" max="40" value="{{ temp }}" onChange="{{ setTemp }}" style="margin-top:12px;width:100%;accent-color:#3CC58C;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:rgba(252,251,245,0.6);font-weight:600;"><span>8 °C</span><span>40 °C</span></div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;color:#9FE3C4;">calendar_month</span>Saison</div>
+          <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;background:rgba(0,0,0,0.18);">
+            <sc-for list="{{ seasons }}" as="se" hint-placeholder-count="2">
+              <button onClick="{{ se.pick }}" style="padding:10px 6px;border-radius:11px;border:none;background:{{ se.bg }};color:{{ se.color }};font:700 13.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ se.label }}</button>
+            </sc-for>
+          </div>
+          <div style="margin-top:10px;font-size:12.5px;line-height:1.5;color:rgba(252,251,245,0.7);">{{ seasonNote }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="capteur" data-screen-label="Capteur" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);overflow:hidden;">
+  <div style="position:absolute;right:-10%;top:10%;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.13), transparent 65%);pointer-events:none;"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(32px,5vw,64px);align-items:center;">
+    <div data-reveal="1">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>03 · SURVEILLER</div>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Votre sol vous parle. Écoutez-le.</h2>
+      <p style="margin:16px 0 0;max-width:500px;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Un capteur planté dans la parcelle mesure l'humidité et la température du sol, puis envoie les données sur votre téléphone.</p>
+      <div style="margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:500px;">
+        <div style="padding:16px;border-radius:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.95);box-shadow:0 10px 26px -18px rgba(11,61,42,0.3);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">water_drop</span>Humidité</div>
+          <div style="margin-top:6px;font-size:24px;font-weight:800;letter-spacing:-0.03em;">{{ moist }} %</div>
+        </div>
+        <div style="padding:16px;border-radius:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.95);box-shadow:0 10px 26px -18px rgba(11,61,42,0.3);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">thermostat</span>Température du sol</div>
+          <div style="margin-top:6px;font-size:24px;font-weight:800;letter-spacing:-0.03em;">22 °C</div>
+        </div>
+        <div style="padding:16px;border-radius:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.95);box-shadow:0 10px 26px -18px rgba(11,61,42,0.3);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">grass</span>État du sol</div>
+          <div style="margin-top:6px;font-size:24px;font-weight:800;letter-spacing:-0.03em;color:#127A51;">Optimal</div>
+        </div>
+        <div style="padding:16px;border-radius:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.95);box-shadow:0 10px 26px -18px rgba(11,61,42,0.3);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#51645A;font-weight:600;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:#189B67;">schedule</span>Dernière mesure</div>
+          <div style="margin-top:6px;font-size:24px;font-weight:800;letter-spacing:-0.03em;">Il y a 2 min</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px;"><a href="Capteur.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Lancer une analyse<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">sensors</span></a></div>
+    </div>
+
+    <div data-reveal="1" data-reveal-delay="150" style="position:relative;">
+      <div style="padding:clamp(20px,3vw,32px);border-radius:32px;background:rgba(255,255,255,0.62);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 40px 80px -40px rgba(11,61,42,0.4), inset 0 1px 0 #fff;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:#127A51;">CAPTEUR MG-0421</div>
+            <div style="margin-top:3px;font-size:15px;font-weight:700;">Parcelle · Ambohidratrimo</div>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(24,155,103,0.1);font-size:12.5px;font-weight:700;color:#0F6B47;"><span style="position:relative;width:8px;height:8px;"><span style="position:absolute;inset:0;border-radius:50%;background:#189B67;"></span><span style="position:absolute;inset:0;border-radius:50%;background:#189B67;animation:pulse 2s ease-out infinite;"></span></span>En direct</span>
+        </div>
+        <div style="margin:24px auto 0;position:relative;width:236px;height:236px;">
+          <svg width="236" height="236" viewBox="0 0 236 236" style="display:block;transform:rotate(-90deg);">
+            <circle cx="118" cy="118" r="96" fill="none" stroke="rgba(24,155,103,0.12)" stroke-width="16"></circle>
+            <circle cx="118" cy="118" r="96" fill="none" stroke="#189B67" stroke-width="16" stroke-linecap="round" stroke-dasharray="603.2" stroke-dashoffset="{{ ringOffset }}" style="transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1);"></circle>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">water_drop</span>
+            <div style="margin-top:4px;font-size:54px;font-weight:800;letter-spacing:-0.05em;line-height:1;">{{ moist }}<span style="font-size:26px;">%</span></div>
+            <div style="margin-top:6px;font-size:13px;font-weight:600;color:#51645A;">Humidité du sol</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:11.5px;font-weight:600;color:#51645A;">
+          <span>Sec &lt; 40 %</span><span style="color:#0F6B47;">Idéal 55 – 75 %</span><span>Saturé &gt; 85 %</span>
+        </div>
+        <div style="margin-top:24px;padding:16px;border-radius:20px;background:rgba(24,155,103,0.06);">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;"><span>Dernières 24 h</span><span style="font-family:'JetBrains Mono',monospace;font-weight:400;color:#51645A;">%</span></div>
+          <svg viewBox="0 0 300 90" preserveAspectRatio="none" style="margin-top:10px;display:block;width:100%;height:90px;overflow:visible;">
+            <rect x="0" y="{{ bandY }}" width="300" height="{{ bandH }}" fill="rgba(24,155,103,0.08)"></rect>
+            <path d="{{ chartArea }}" fill="rgba(24,155,103,0.14)"></path>
+            <path d="{{ chartLine }}" fill="none" stroke="#189B67" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" stroke-dasharray="700" style="animation:dash 2.4s cubic-bezier(.2,.8,.2,1) both;"></path>
+          </svg>
+          <div style="margin-top:6px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;"><span>00 h</span><span>06 h</span><span>12 h</span><span>18 h</span><span>Maint.</span></div>
+        </div>
+      </div>
+      <div style="position:absolute;left:clamp(-28px,-2vw,0px);bottom:-22px;animation:float 7s ease-in-out infinite;">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 18px 12px 12px;border-radius:18px;background:rgba(252,251,245,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 40px -18px rgba(11,61,42,0.45);">
+          <span style="width:38px;height:38px;border-radius:12px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;font-variation-settings:'FILL' 1;">water_drop</span></span>
+          <div><div style="font-size:14.5px;font-weight:800;">Sol suffisamment humide</div><div style="font-size:12.5px;color:#51645A;font-weight:500;">Pas d'arrosage nécessaire aujourd'hui</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="carte" data-screen-label="Carte Madagascar" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);background:linear-gradient(180deg,#FCFBF5 0%,#EDF4EA 18%,#EDF4EA 82%,#FCFBF5 100%);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div data-reveal="1" style="max-width:720px;margin:0 auto;text-align:center;">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>04 · DÉCOUVRIR<span style="width:18px;height:1.5px;background:#189B67;"></span></div>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Découvrez les récoltes de Madagascar.</h2>
+      <p style="margin:16px auto 0;max-width:560px;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Survolez une région pour voir ce qui y pousse, combien, quand, et qui le produit.</p>
+      <div style="margin-top:22px;display:flex;justify-content:center;"><a href="Recoltes.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Découvrir toutes les récoltes<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">arrow_forward</span></a></div>
+    </div>
+    <div data-reveal="1" style="margin-top:32px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="7">
+        <button onClick="{{ f.pick }}" style="white-space:nowrap;padding:10px 16px;border-radius:999px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.color }};font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:{{ f.shadow }};transition:all .25s;">{{ f.label }}</button>
+      </sc-for>
+    </div>
+    <div style="margin-top:36px;display:grid;grid-template-columns:{{ mapCols }};gap:20px;align-items:start;">
+      <div data-reveal="1" style="position:relative;padding:clamp(12px,2vw,24px);border-radius:32px;background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 40px 80px -48px rgba(11,61,42,0.4), inset 0 1px 0 #fff;">
+        <x-import component-from-global-scope="mg-map" from="./mg-map.js" filter="{{ filter }}" active="{{ active }}" regions="{{ regionsJson }}" hint-size="100%,560px" style="width:100%;"></x-import>
+        <div style="position:absolute;left:24px;bottom:20px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;">Données illustratives · 2026</div>
+      </div>
+      <div data-reveal="1" data-reveal-delay="150" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="padding:18px;border-radius:22px;background:#189B67;color:#FCFBF5;box-shadow:0 20px 40px -22px rgba(24,155,103,0.9);">
+            <div style="font-size:12.5px;font-weight:600;opacity:0.85;">Récolte totale</div>
+            <div style="margin-top:4px;font-size:26px;font-weight:800;letter-spacing:-0.03em;">{{ totalTons }}</div>
+            <div style="font-size:12px;font-weight:600;opacity:0.85;">tonnes · {{ filterLabel }}</div>
+          </div>
+          <div style="padding:18px;border-radius:22px;background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.95);">
+            <div style="font-size:12.5px;font-weight:600;color:#51645A;">Producteurs</div>
+            <div style="margin-top:4px;font-size:26px;font-weight:800;letter-spacing:-0.03em;">{{ totalProd }}</div>
+            <div style="font-size:12px;font-weight:600;color:#51645A;">{{ regionCount }} régions</div>
+          </div>
+        </div>
+        <div style="padding:8px;border-radius:24px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:2px;">
+          <sc-for list="{{ regionList }}" as="r" hint-placeholder-count="6">
+            <div onMouseEnter="{{ r.enter }}" onMouseLeave="{{ r.leave }}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;background:{{ r.bg }};cursor:pointer;transition:background .25s;">
+              <span style="flex:none;width:10px;height:10px;border-radius:50%;background:{{ r.dot }};box-shadow:0 0 0 4px {{ r.ring }};transition:all .25s;"></span>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14.5px;font-weight:700;">{{ r.name }}</div>
+                <div style="font-size:12.5px;color:#51645A;font-weight:500;">{{ r.crop }} · {{ r.season }}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:14.5px;font-weight:800;">{{ r.tonsLabel }}</div>
+                <div style="font-size:11.5px;color:#51645A;">tonnes</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="climat" data-screen-label="Climat" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);background:linear-gradient(160deg,#189B67 0%,#128455 55%,#0F6B47 100%);color:#FCFBF5;overflow:hidden;">
+  <div style="position:absolute;width:700px;height:700px;left:-15%;top:-30%;border-radius:50%;background:radial-gradient(circle, rgba(252,251,245,0.16), transparent 65%);animation:drift 24s ease-in-out infinite;pointer-events:none;"></div>
+  <div style="position:absolute;width:600px;height:600px;right:-12%;bottom:-30%;border-radius:50%;background:radial-gradient(circle, rgba(11,61,42,0.35), transparent 65%);animation:drift 20s ease-in-out -8s infinite;pointer-events:none;"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;">
+    <div data-reveal="1" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;">
+      <div style="max-width:680px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#E4F6EC;font-weight:500;"><span style="width:18px;height:1.5px;background:#FCFBF5;"></span>05 · ANTICIPER</div>
+        <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Anticipez les risques. Protégez vos cultures.</h2>
+      </div>
+      <span style="white-space:nowrap;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.25);font-size:13.5px;font-weight:700;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">location_on</span>Antananarivo · Aujourd'hui</span>
+    </div>
+    <div data-reveal="1" style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;">
+      <div style="padding:20px;border-radius:24px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s,background .35s;" style-hover="transform:translateY(-4px);background:rgba(255,255,255,0.18);">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:600;"><span>Température</span><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;font-variation-settings:'FILL' 1;">sunny</span></div>
+        <div style="margin-top:14px;font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;"><span data-count="27" data-suffix=" °C">27 °C</span></div>
+        <div style="margin-top:8px;font-size:13px;color:rgba(252,251,245,0.85);">Ressenti 29 °C</div>
+      </div>
+      <div style="padding:20px;border-radius:24px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s,background .35s;" style-hover="transform:translateY(-4px);background:rgba(255,255,255,0.18);">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:600;"><span>Humidité</span><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;font-variation-settings:'FILL' 1;">water_drop</span></div>
+        <div style="margin-top:14px;font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;"><span data-count="74" data-suffix=" %">74 %</span></div>
+        <div style="margin-top:8px;font-size:13px;color:rgba(252,251,245,0.85);">Air très humide</div>
+      </div>
+      <div style="padding:20px;border-radius:24px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s,background .35s;" style-hover="transform:translateY(-4px);background:rgba(255,255,255,0.18);">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:600;"><span>Précipitations</span><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;font-variation-settings:'FILL' 1;">rainy</span></div>
+        <div style="margin-top:14px;font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;"><span data-count="42" data-suffix=" mm">42 mm</span></div>
+        <div style="margin-top:8px;font-size:13px;color:rgba(252,251,245,0.85);">Prévues sur 24 h</div>
+      </div>
+      <div style="padding:20px;border-radius:24px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s,background .35s;" style-hover="transform:translateY(-4px);background:rgba(255,255,255,0.18);">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:600;"><span>Vent</span><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;">air</span></div>
+        <div style="margin-top:14px;font-size:40px;font-weight:800;letter-spacing:-0.04em;line-height:1;"><span data-count="18" data-suffix=" km/h">18 km/h</span></div>
+        <div style="margin-top:8px;font-size:13px;color:rgba(252,251,245,0.85);">Direction Est</div>
+      </div>
+    </div>
+
+    <div data-reveal="1" style="margin-top:14px;position:relative;overflow:hidden;border-radius:28px;background:rgba(252,251,245,0.96);color:#10281E;box-shadow:0 40px 80px -40px rgba(11,61,42,0.6);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));">
+      <div style="padding:clamp(22px,3vw,34px);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="position:relative;width:44px;height:44px;border-radius:14px;background:#0B3D2A;color:#FCFBF5;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:24px;line-height:1;font-variation-settings:'FILL' 1;">warning</span><span style="position:absolute;inset:-4px;border-radius:17px;border:2px solid rgba(11,61,42,0.35);animation:pulse 2.4s ease-out infinite;"></span></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;font-weight:500;color:#0B3D2A;">ALERTE CLIMATIQUE</span>
+        </div>
+        <div style="margin-top:18px;font-size:clamp(22px,2.4vw,30px);font-weight:800;letter-spacing:-0.03em;line-height:1.2;text-wrap:balance;">Fortes précipitations prévues dans les prochaines 24 heures.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;font-size:13px;font-weight:700;">
+          <span style="padding:6px 12px;border-radius:999px;background:rgba(24,155,103,0.1);color:#0F6B47;">80 – 120 mm</span>
+          <span style="padding:6px 12px;border-radius:999px;background:rgba(24,155,103,0.1);color:#0F6B47;">Analamanga · Itasy</span>
+          <span style="padding:6px 12px;border-radius:999px;background:rgba(24,155,103,0.1);color:#0F6B47;">14 h → 06 h</span>
+        </div>
+        <div style="margin-top:18px;display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.55;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1.1;color:#189B67;">tips_and_updates</span>Vérifiez le drainage des rizières et récoltez les cultures déjà mûres.</div>
+      </div>
+      <div style="position:relative;min-height:220px;background:linear-gradient(180deg,#E3EEE3,#D2E4D6);overflow:hidden;">
+        <div style="position:absolute;inset:0;">
+          <span style="position:absolute;left:10%;top:0;width:2px;height:30px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.5));animation:rain 1.5s linear 0s infinite;"></span>
+          <span style="position:absolute;left:22%;top:0;width:2px;height:24px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.4));animation:rain 1.8s linear .5s infinite;"></span>
+          <span style="position:absolute;left:34%;top:0;width:2px;height:30px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.5));animation:rain 1.4s linear 1s infinite;"></span>
+          <span style="position:absolute;left:46%;top:0;width:2px;height:22px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.4));animation:rain 1.7s linear .2s infinite;"></span>
+          <span style="position:absolute;left:58%;top:0;width:2px;height:28px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.5));animation:rain 1.5s linear 1.2s infinite;"></span>
+          <span style="position:absolute;left:70%;top:0;width:2px;height:24px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.4));animation:rain 1.6s linear .7s infinite;"></span>
+          <span style="position:absolute;left:82%;top:0;width:2px;height:30px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.5));animation:rain 1.45s linear .3s infinite;"></span>
+          <span style="position:absolute;left:92%;top:0;width:2px;height:22px;border-radius:1px;background:linear-gradient(transparent,rgba(15,107,71,0.4));animation:rain 1.75s linear .9s infinite;"></span>
+        </div>
+        <div style="position:absolute;left:20px;right:20px;bottom:18px;padding:14px 16px 10px;border-radius:18px;background:rgba(252,251,245,0.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.9);">
+          <div style="font-size:12px;font-weight:700;color:#3E5147;">Pluie prévue (mm / h)</div>
+          <div style="margin-top:10px;height:64px;display:flex;align-items:flex-end;gap:6px;">
+            <sc-for list="{{ rainBars }}" as="rb" hint-placeholder-count="8">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                <div style="width:100%;height:{{ rb.h }}%;border-radius:5px 5px 2px 2px;background:{{ rb.bg }};"></div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#51645A;">{{ rb.t }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal="1" style="margin-top:40px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;"><div style="font-size:15px;font-weight:700;">Risques surveillés</div><a href="Risques.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#FCFBF5;color:#0B3D2A;font-weight:700;font-size:15px;box-shadow:0 14px 28px -14px rgba(0,0,0,0.45);transition:transform .25s;" style-hover="transform:translateY(-2px);color:#0B3D2A;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">warning</span>Voir tous les risques</a></div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;">
+        <sc-for list="{{ risks }}" as="rk" hint-placeholder-count="5">
+          <div style="padding:16px;border-radius:20px;background:{{ rk.bg }};border:1px solid rgba(255,255,255,0.22);transition:transform .35s;" style-hover="transform:translateY(-3px);">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">{{ rk.icon }}</span><span style="font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ rk.pillBg }};color:{{ rk.pillColor }};">{{ rk.level }}</span></div>
+            <div style="margin-top:14px;font-size:15.5px;font-weight:700;">{{ rk.name }}</div>
+            <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,0.18);overflow:hidden;"><div style="width:{{ rk.pct }}%;height:100%;border-radius:3px;background:#FCFBF5;"></div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="produits" data-screen-label="Produits" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div data-reveal="1" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div style="max-width:680px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>06 · ÉCHANGER</div>
+        <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Découvrez les produits disponibles près de chez vous.</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;max-width:340px;padding:12px 14px;border-radius:16px;background:rgba(24,155,103,0.07);font-size:13.5px;line-height:1.45;color:#3E5147;font-weight:500;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;color:#189B67;">handshake</span>Aucun paiement en ligne : vous échangez directement avec le producteur.</div>
+    </div>
+    <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,262px),1fr));gap:18px;">
+      <div data-reveal="1" style="padding:24px;border-radius:26px;border:1.5px dashed rgba(24,155,103,0.45);background:rgba(24,155,103,0.05);display:flex;flex-direction:column;">
+        <span style="width:48px;height:48px;border-radius:15px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;box-shadow:0 12px 24px -12px rgba(24,155,103,0.9);"><span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">add</span></span>
+        <div style="margin-top:18px;font-size:22px;font-weight:800;letter-spacing:-0.03em;line-height:1.2;">Vous produisez ? Publiez votre récolte.</div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px;font-size:14px;font-weight:600;color:#3E5147;">
+          <span style="display:flex;align-items:center;gap:10px;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">add_a_photo</span>Ajoutez des photos</span>
+          <span style="display:flex;align-items:center;gap:10px;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">sell</span>Indiquez votre prix</span>
+          <span style="display:flex;align-items:center;gap:10px;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">location_on</span>Précisez la localisation</span>
+        </div>
+        <div style="flex:1;min-height:20px;"></div>
+        <button onClick="{{ openPublish }}" style="margin-top:20px;display:flex;justify-content:center;align-items:center;gap:8px;padding:14px;border-radius:14px;border:none;cursor:pointer;background:#189B67;color:#FCFBF5;font:700 15px 'Plus Jakarta Sans',sans-serif;transition:background .25s;" style-hover="background:#14875A;">Publier un produit</button>
+      </div>
+      <sc-for list="{{ products }}" as="pr" hint-placeholder-count="3">
+        <div data-reveal="1" data-reveal-delay="{{ pr.delay }}">
+          <div style="height:100%;padding:12px;border-radius:26px;background:rgba(255,255,255,0.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 14px 34px -22px rgba(11,61,42,0.4), inset 0 1px 0 #fff;display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s;" style-hover="transform:translateY(-6px);box-shadow:0 30px 56px -26px rgba(24,155,103,0.55), 0 0 0 1px rgba(24,155,103,0.3), inset 0 1px 0 #fff;">
+            <div style="position:relative;height:170px;border-radius:18px;overflow:hidden;background:#EAF1E6;">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.10) 0 10px, rgba(24,155,103,0.03) 10px 20px);"></div>
+              <div style="position:absolute;left:12px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3E5A4B;background:rgba(252,251,245,0.85);padding:4px 8px;border-radius:6px;">{{ pr.img }}</div>
+              <div style="position:absolute;left:12px;top:12px;padding:5px 10px;border-radius:999px;background:rgba(252,251,245,0.9);font-size:11.5px;font-weight:700;color:#3E5147;">{{ pr.ago }}</div>
+            </div>
+            <div style="padding:16px 8px 4px;flex:1;display:flex;flex-direction:column;">
+              <div style="font-size:20px;font-weight:800;letter-spacing:-0.03em;">{{ pr.name }}</div>
+              <div style="margin-top:5px;display:flex;align-items:center;gap:6px;font-size:13.5px;color:#4B5F55;font-weight:500;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1;color:#189B67;">location_on</span>{{ pr.loc }}</div>
+              <div style="margin-top:14px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;"><span style="font-size:24px;font-weight:800;letter-spacing:-0.03em;color:#127A51;">{{ pr.price }}</span><span style="font-size:13px;color:#51645A;font-weight:600;">{{ pr.unit }}</span></div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid rgba(16,40,30,0.08);">
+                <span style="width:32px;height:32px;border-radius:50%;background:rgba(24,155,103,0.14);color:#0F6B47;display:grid;place-items:center;font-size:12px;font-weight:800;">{{ pr.init }}</span>
+                <div style="font-size:13.5px;font-weight:700;">{{ pr.seller }}</div>
+              </div>
+              <div style="flex:1;min-height:14px;"></div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:8px;">
+                <a href="Produits.dc.html" aria-label="Contacter" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;border-radius:13px;border:1px solid rgba(24,155,103,0.35);color:#0F6B47;font-weight:700;font-size:14px;background:rgba(255,255,255,0.6);transition:background .25s;" style-hover="background:rgba(24,155,103,0.08);color:#0F6B47;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">call</span>Contacter</a>
+                <a href="Produits.dc.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 10px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14px;transition:background .25s;" style-hover="background:#14875A;color:#FCFBF5;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;">chat</span>Envoyer un message</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="position:relative;max-width:1200px;margin:36px auto 0;display:flex;justify-content:center;"><a href="Produits.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Voir toutes les publications<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">arrow_forward</span></a></div>
+</section>
+
+<section id="diagnostic" data-screen-label="Diagnostic" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);background:linear-gradient(180deg,#FCFBF5,#EEF4EA);overflow:hidden;">
+  <div style="position:absolute;left:-12%;top:14%;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.14), transparent 65%);pointer-events:none;"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(32px,5vw,64px);align-items:center;">
+    <div data-reveal="1">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>07 · DIAGNOSTIQUER<span style="padding:3px 8px;border-radius:6px;background:#189B67;color:#FCFBF5;font-size:10.5px;">NOUVEAU</span></div>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Votre plante est malade ? Montrez-la.</h2>
+      <p style="margin:16px 0 0;max-width:500px;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Une photo et quelques symptômes suffisent : l'analyse identifie ce qui ne va pas et vous propose le bon traitement.</p>
+      <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;max-width:480px;">
+        <div style="display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);"><span style="flex:none;width:40px;height:40px;border-radius:13px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">photo_camera</span></span><div><div style="font-size:15px;font-weight:800;">Photographiez la plante</div><div style="font-size:13.5px;color:#51645A;">Feuille, tige, racine ou fruit.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);"><span style="flex:none;width:40px;height:40px;border-radius:13px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">troubleshoot</span></span><div><div style="font-size:15px;font-weight:800;">Identifiez le problème</div><div style="font-size:13.5px;color:#51645A;">Maladie, ravageur, carence ou manque d'eau.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);"><span style="flex:none;width:40px;height:40px;border-radius:13px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">healing</span></span><div><div style="font-size:15px;font-weight:800;">Soignez-la correctement</div><div style="font-size:13.5px;color:#51645A;">Traitement naturel d'abord, puis prévention.</div></div></div>
+      </div>
+      <div style="margin-top:28px;"><a href="Diagnostic.dc.html" style="white-space:nowrap;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Lancer un diagnostic<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">arrow_forward</span></a></div>
+    </div>
+    <div data-reveal="1" data-reveal-delay="150" style="position:relative;padding-bottom:40px;">
+      <div style="position:relative;height:clamp(340px,38vw,440px);border-radius:32px;overflow:hidden;background:repeating-linear-gradient(135deg, rgba(24,155,103,0.12) 0 12px, rgba(24,155,103,0.04) 12px 24px), #E3EDE0;box-shadow:0 40px 80px -40px rgba(11,61,42,0.45);border:1px solid rgba(255,255,255,0.9);">
+        <div style="position:absolute;left:16px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#3E5A4B;background:rgba(252,251,245,0.88);padding:5px 9px;border-radius:7px;">photo · feuille de tomate tachée</div>
+        <div style="position:absolute;left:0;right:0;height:3px;background:#3CC58C;box-shadow:0 0 24px 6px rgba(60,197,140,0.6);animation:scan 4s ease-in-out infinite;"></div>
+        <div style="position:absolute;left:34%;top:36%;width:64px;height:64px;border-radius:50%;border:2px solid #FCFBF5;box-shadow:0 0 0 4px rgba(24,155,103,0.5);"></div>
+        <div style="position:absolute;left:58%;top:52%;width:44px;height:44px;border-radius:50%;border:2px solid #FCFBF5;box-shadow:0 0 0 4px rgba(24,155,103,0.5);"></div>
+        <div style="position:absolute;left:calc(34% + 72px);top:calc(36% + 8px);padding:5px 10px;border-radius:999px;background:#0B3D2A;color:#FCFBF5;font-size:12px;font-weight:700;white-space:nowrap;">Tache brune · 87 %</div>
+      </div>
+      <div style="position:absolute;right:clamp(-12px,-1vw,0px);bottom:0;width:min(100%,330px);animation:float 7s ease-in-out infinite;">
+        <div style="padding:18px;border-radius:22px;background:rgba(252,251,245,0.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 24px 48px -20px rgba(11,61,42,0.5);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#127A51;">MALADIE FONGIQUE</span><span style="padding:3px 9px;border-radius:999px;background:#0B3D2A;color:#FCFBF5;font-size:11.5px;font-weight:700;">Gravité élevée</span></div>
+          <div style="margin-top:6px;font-size:22px;font-weight:800;letter-spacing:-0.03em;">Mildiou de la tomate</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:#3E5147;">
+            <div style="display:flex;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.2;color:#189B67;">check</span>Retirer les feuilles atteintes</div>
+            <div style="display:flex;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.2;color:#189B67;">check</span>Bouillie bordelaise tous les 7 jours</div>
+            <div style="display:flex;gap:8px;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.2;color:#189B67;">check</span>Arroser au pied uniquement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fonctionnement" data-screen-label="Comment ça marche" style="position:relative;padding:clamp(72px,10vw,128px) clamp(20px,5vw,40px);background:linear-gradient(180deg,#FCFBF5,#F1F5EC);">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(32px,6vw,80px);">
+    <div>
+      <div data-reveal="1" style="position:sticky;top:120px;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>EN 4 ÉTAPES</div>
+        <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,54px);line-height:1.04;letter-spacing:-0.04em;font-weight:800;">Comment ça marche ?</h2>
+        <p style="margin:16px 0 0;max-width:420px;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">De la première graine à la vente de la récolte, Voly vous accompagne à chaque étape.</p>
+        <a href="Cultures.dc.html" style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:15px;box-shadow:0 12px 26px -14px rgba(24,155,103,0.9);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;color:#FCFBF5;">Commencer maintenant<span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">arrow_forward</span></a>
+      </div>
+    </div>
+    <div ref="{{ tlRef }}" style="position:relative;padding-left:64px;">
+      <div style="position:absolute;left:23px;top:24px;bottom:24px;width:2px;border-radius:1px;background:rgba(24,155,103,0.15);">
+        <div style="width:100%;height:{{ tlPct }}%;border-radius:1px;background:linear-gradient(180deg,#3CC58C,#189B67);transition:height .2s linear;"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+          <div style="position:relative;">
+            <div style="position:absolute;left:-64px;top:18px;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:{{ st.nodeBg }};color:{{ st.nodeColor }};border:1px solid {{ st.nodeBorder }};box-shadow:{{ st.nodeShadow }};transition:all .5s cubic-bezier(.2,.8,.2,1);"><span style="font-family:'Material Symbols Rounded';font-size:23px;line-height:1;">{{ st.icon }}</span></div>
+            <div style="padding:22px 24px;border-radius:24px;background:rgba(255,255,255,0.62);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.95);box-shadow:{{ st.cardShadow }};opacity:{{ st.opacity }};transform:translateX({{ st.shift }}px);transition:all .6s cubic-bezier(.2,.8,.2,1);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#127A51;font-weight:500;">{{ st.num }}</div>
+              <div style="margin-top:6px;font-size:24px;font-weight:800;letter-spacing:-0.03em;">{{ st.title }}</div>
+              <div style="margin-top:6px;font-size:15.5px;line-height:1.55;color:#4B5F55;">{{ st.text }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="madagascar" data-screen-label="Madagascar" style="position:relative;min-height:clamp(600px,86vh,800px);overflow:hidden;display:flex;align-items:flex-end;color:#FCFBF5;">
+  <div ref="{{ mgBg }}" style="position:absolute;left:0;right:0;top:-12%;bottom:-12%;background:repeating-linear-gradient(135deg, rgba(252,251,245,0.06) 0 14px, rgba(252,251,245,0.015) 14px 28px), linear-gradient(170deg,#2E6B4C,#123E2B);"></div>
+  <div style="position:absolute;top:clamp(90px,12vw,120px);left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:11.5px;color:rgba(252,251,245,0.75);padding:6px 12px;border-radius:8px;background:rgba(0,0,0,0.18);white-space:nowrap;">photo plein écran · rizières en terrasses des Hautes Terres</div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(11,61,42,0) 20%, rgba(11,61,42,0.55) 60%, rgba(11,61,42,0.92) 100%);"></div>
+  <div style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding:clamp(160px,18vw,220px) clamp(20px,5vw,40px) clamp(56px,7vw,88px);">
+    <div data-reveal="1" style="max-width:760px;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#BFEBD6;font-weight:500;"><span style="width:18px;height:1.5px;background:#BFEBD6;"></span>FAIT POUR LA GRANDE ÎLE</div>
+      <h2 style="margin:14px 0 0;font-size:clamp(36px,5.4vw,68px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;text-wrap:balance;">Une technologie pensée pour Madagascar.</h2>
+    </div>
+    <div style="margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;">
+      <div data-reveal="1" data-reveal-delay="0" style="padding:22px;border-radius:24px;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25);">
+        <span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">map</span>
+        <div style="margin-top:14px;font-size:38px;font-weight:800;letter-spacing:-0.04em;line-height:1;"><span data-count="23">23</span> régions</div>
+        <div style="margin-top:8px;font-size:14px;color:rgba(252,251,245,0.85);">Couvertes, du nord au sud</div>
+      </div>
+      <div data-reveal="1" data-reveal-delay="120" style="padding:22px;border-radius:24px;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25);">
+        <span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">groups</span>
+        <div style="margin-top:14px;font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;">Des milliers de producteurs</div>
+        <div style="margin-top:8px;font-size:14px;color:rgba(252,251,245,0.85);">Connectés à une même plateforme</div>
+      </div>
+      <div data-reveal="1" data-reveal-delay="240" style="padding:22px;border-radius:24px;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25);">
+        <span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">landscape</span>
+        <div style="margin-top:14px;font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;">Des cultures adaptées à chaque territoire</div>
+        <div style="margin-top:8px;font-size:14px;color:rgba(252,251,245,0.85);">Hautes Terres, côtes, sud aride</div>
+      </div>
+    </div>
+    <div data-reveal="1" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:12px;">
+      <a href="Recoltes.dc.html" style="display:inline-flex;align-items:center;gap:10px;padding:16px 24px;border-radius:15px;background:#FCFBF5;color:#0B3D2A;font-weight:700;font-size:15.5px;transition:transform .25s;" style-hover="transform:translateY(-2px);color:#0B3D2A;">Découvrir les 23 régions<span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">arrow_forward</span></a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0B3D2A;color:#FCFBF5;padding:clamp(56px,7vw,88px) clamp(20px,5vw,40px) 28px;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px;">
+      <div style="grid-column:span 2;max-width:420px;min-width:min(100%,220px);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#1FB077,#0F6B47);display:grid;place-items:center;box-shadow:inset 0 1px 0 rgba(255,255,255,0.3);"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;font-variation-settings:'FILL' 1;">eco</span></span>
+          <span style="font-weight:800;font-size:22px;letter-spacing:-0.035em;">Voly</span>
+        </div>
+        <p style="margin:18px 0 0;font-size:clamp(20px,2vw,24px);line-height:1.3;font-weight:700;letter-spacing:-0.02em;text-wrap:balance;">La technologie au service d'une agriculture plus intelligente.</p>
+        <div style="margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;">
+          <a href="#accueil" style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#FCFBF5;font-size:13px;font-weight:600;transition:background .25s;" style-hover="background:rgba(255,255,255,0.1);color:#FCFBF5;">Facebook</a>
+          <a href="#accueil" style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#FCFBF5;font-size:13px;font-weight:600;transition:background .25s;" style-hover="background:rgba(255,255,255,0.1);color:#FCFBF5;">WhatsApp</a>
+          <a href="#accueil" style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#FCFBF5;font-size:13px;font-weight:600;transition:background .25s;" style-hover="background:rgba(255,255,255,0.1);color:#FCFBF5;">LinkedIn</a>
+          <a href="#accueil" style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#FCFBF5;font-size:13px;font-weight:600;transition:background .25s;" style-hover="background:rgba(255,255,255,0.1);color:#FCFBF5;">YouTube</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9FE3C4;">PLATEFORME</div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:11px;font-size:15px;font-weight:600;">
+          <a href="#accueil" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Accueil</a>
+          <a href="Cultures.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Cultures</a>
+          <a href="Simulation.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Simulation</a>
+          <a href="Recoltes.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Carte</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9FE3C4;">RESSOURCES</div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:11px;font-size:15px;font-weight:600;">
+          <a href="Risques.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Climat</a>
+          <a href="Produits.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Produits</a>
+          <a href="Diagnostic.dc.html" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Diagnostic</a>
+          <a href="#madagascar" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">À propos</a>
+          <a href="#accueil" style="color:rgba(252,251,245,0.85);" style-hover="color:#FCFBF5;">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:56px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:rgba(252,251,245,0.7);">
+      <span>© 2026 Voly · Fait à Madagascar</span>
+      <span style="font-family:'JetBrains Mono',monospace;">FR · MG</span>
+    </div>
+  </div>
+</footer>
+<sc-if value="{{ publishOpen }}" hint-placeholder-val="{{ false }}">
+  <dc-import name="PublishModal" on-close="{{ closePublish }}" hint-size="100%,100%" style="position:fixed;inset:0;z-index:200;"></dc-import>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Complet&quot;,&quot;Réduit&quot;],&quot;default&quot;:&quot;Complet&quot;,&quot;tsType&quot;:&quot;'Complet'|'Réduit'&quot;},&quot;showParticles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const NAV = [['accueil','Accueil'],['cultures','Cultures'],['simulation','Simulation'],['carte','Carte'],['climat','Climat'],['produits','Produits'],['diagnostic','Diagnostic']];
+const CROPS = [
+  {id:'riz',name:'Riz',region:'Alaotra-Mangoro, Analamanga',level:'Facile',plant:'Nov. – Janv.',water:3,cycle:'Cycle de 120 à 150 jours',tip:'Repiquer les plants à 20–25 jours, en lignes espacées de 20 cm.',img:'photo · rizière en repiquage'},
+  {id:'mais',name:'Maïs',region:'Atsimo-Andrefana, Menabe',level:'Facile',plant:'Oct. – Déc.',water:2,cycle:'Cycle de 90 à 120 jours',tip:'Semer juste après les premières pluies, 2 graines par poquet.',img:'photo · champ de maïs'},
+  {id:'pdt',name:'Pomme de terre',region:'Vakinankaratra',level:'Moyen',plant:'Sept. – Nov.',water:2,cycle:'Cycle de 90 à 110 jours',tip:'Butter les pieds à 25–30 cm pour protéger les tubercules.',img:'photo · récolte de pommes de terre'},
+  {id:'tomate',name:'Tomate',region:'Itasy, Analamanga',level:'Moyen',plant:'Avr. – Juin',water:2,cycle:'Cycle de 70 à 90 jours',tip:'Tuteurer dès 30 cm et arroser au pied, jamais sur les feuilles.',img:'photo · plants de tomates'},
+  {id:'cafe',name:'Café',region:'Haute Matsiatra, Vatovavy',level:'Avancé',plant:'Nov. – Déc.',water:2,cycle:'1re récolte après 3 ans',tip:'Prévoir un ombrage partiel et pailler le pied des caféiers.',img:'photo · cerises de café'},
+  {id:'vanille',name:'Vanille',region:'SAVA, Diana',level:'Avancé',plant:'Oct. – Déc.',water:2,cycle:'1re récolte après 3 ans',tip:'Polliniser chaque fleur à la main, le matin de son ouverture.',img:'photo · gousses de vanille'},
+];
+const SIM = {
+  riz:{h:82,s:70,t:27,y:4.5,n:6,w:5,bh:56,sp:30},
+  mais:{h:55,s:85,t:28,y:3.2,n:5,w:9,bh:84,sp:46},
+  pdt:{h:62,s:60,t:18,y:18,n:7,w:15,bh:32,sp:70},
+  tomate:{h:60,s:78,t:24,y:25,n:6,w:13,bh:48,sp:50},
+  cafe:{h:65,s:50,t:21,y:0.8,n:7,w:13,bh:62,sp:34},
+  vanille:{h:75,s:45,t:25,y:0.5,n:5,w:11,bh:68,sp:24},
+};
+const REGIONS = [
+  {id:'analamanga',name:'Analamanga',city:'Antananarivo',lat:-18.91,lon:47.52,cat:'riz',crop:'Riz',tons:12450,season:'Mars – Juin',avail:'Disponible',prod:3420},
+  {id:'alaotra',name:'Alaotra-Mangoro',city:'Ambatondrazaka',lat:-17.83,lon:48.42,cat:'riz',crop:'Riz',tons:18920,season:'Avril – Juillet',avail:'Disponible',prod:5140},
+  {id:'vakinankaratra',name:'Vakinankaratra',city:'Antsirabe',lat:-19.87,lon:47.03,cat:'legumes',crop:'Pomme de terre',tons:8230,season:'Janv. – Avril',avail:'Disponible',prod:2870},
+  {id:'itasy',name:'Itasy',city:'Miarinarivo',lat:-18.96,lon:46.90,cat:'legumes',crop:'Tomate',tons:5380,season:'Juin – Sept.',avail:'Stock limité',prod:1720},
+  {id:'sava',name:'SAVA',city:'Sambava',lat:-14.27,lon:50.17,cat:'vanille',crop:'Vanille',tons:1240,season:'Juin – Sept.',avail:'Sur commande',prod:1960},
+  {id:'diana',name:'Diana',city:'Ambanja',lat:-13.68,lon:48.45,cat:'vanille',crop:'Vanille',tons:420,season:'Juin – Août',avail:'Stock limité',prod:640},
+  {id:'atsinanana',name:'Atsinanana',city:'Toamasina',lat:-18.15,lon:49.40,cat:'fruits',crop:'Litchi',tons:9600,season:'Nov. – Janv.',avail:'Hors saison',prod:2310},
+  {id:'boeny',name:'Boeny',city:'Mahajanga',lat:-15.72,lon:46.32,cat:'fruits',crop:'Mangue',tons:6150,season:'Oct. – Déc.',avail:'Hors saison',prod:1480},
+  {id:'matsiatra',name:'Haute Matsiatra',city:'Fianarantsoa',lat:-21.45,lon:47.09,cat:'cafe',crop:'Café arabica',tons:2780,season:'Mai – Août',avail:'Disponible',prod:1540},
+  {id:'vatovavy',name:'Vatovavy',city:'Mananjary',lat:-21.23,lon:48.34,cat:'cafe',crop:'Café robusta',tons:1960,season:'Juin – Sept.',avail:'Disponible',prod:1180},
+  {id:'menabe',name:'Menabe',city:'Morondava',lat:-20.28,lon:44.28,cat:'mais',crop:'Maïs',tons:5260,season:'Mars – Mai',avail:'Disponible',prod:1390},
+  {id:'atsimo',name:'Atsimo-Andrefana',city:'Toliara',lat:-23.35,lon:43.67,cat:'mais',crop:'Maïs',tons:7420,season:'Mars – Mai',avail:'Stock limité',prod:2080},
+];
+const REGIONS_JSON = JSON.stringify(REGIONS);
+const FILTERS = [['all','Toutes les cultures'],['riz','Riz'],['mais','Maïs'],['fruits','Fruits'],['legumes','Légumes'],['cafe','Café'],['vanille','Vanille']];
+const PRODUCTS = [
+  {name:'Riz local',loc:'Antsirabe',price:'25 000 Ar',unit:'/ sac de 50 kg',seller:'Hery Rakoto',init:'HR',ago:'Il y a 2 h',img:'photo · sacs de riz'},
+  {name:'Tomates fraîches',loc:'Miarinarivo',price:'3 500 Ar',unit:'/ kg',seller:'Voahangy R.',init:'VR',ago:'Il y a 5 h',img:'photo · cagettes de tomates'},
+  {name:'Vanille bourbon',loc:'Sambava',price:'180 000 Ar',unit:'/ kg',seller:'Coop. Sava Mitsinjo',init:'SM',ago:'Hier',img:'photo · bottes de vanille'},
+];
+const STEPS = [
+  {icon:'school',title:'Apprendre',text:'Découvrez comment cultiver différentes plantes.'},
+  {icon:'view_in_ar',title:'Simuler',text:'Testez différentes conditions avant de cultiver.'},
+  {icon:'sensors',title:'Surveiller',text:'Utilisez les données du sol et du climat.'},
+  {icon:'explore',title:'Découvrir',text:'Explorez les récoltes et les produits disponibles à Madagascar.'},
+];
+const RISKS = [
+  {icon:'cyclone',name:'Cyclone',level:'Faible',pct:18},
+  {icon:'rainy',name:'Fortes pluies',level:'Élevé',pct:86},
+  {icon:'wb_sunny',name:'Sécheresse',level:'Faible',pct:12},
+  {icon:'flood',name:'Inondation',level:'Modéré',pct:54},
+  {icon:'air',name:'Vents forts',level:'Modéré',pct:38},
+];
+const RAIN = [[14,20],[16,38],[18,62],[20,88],[22,100],[0,78],[2,52],[4,30]];
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const rnd = i => { const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+const hx = h => [1,3,5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a,b,t) => { const A = hx(a), B = hx(b); return 'rgb(' + A.map((v,i) => Math.round(v + (B[i] - v) * t)).join(',') + ')'; };
+const fr = n => Math.round(n).toLocaleString('fr-FR');
+function blades(P, score, seed) {
+  const t = clamp(1 - score, 0, 1) * 0.95, out = [];
+  const c1 = mix('#0F6B47', '#7A7744', t), c2 = mix('#46CF94', '#D2CC92', t);
+  for (let k = 0; k < P.n; k++) {
+    const f = P.n === 1 ? 0 : k / (P.n - 1) * 2 - 1;
+    out.push({ l: +(30 - P.w / 2 + f * 3).toFixed(1), w: P.w, h: Math.round(P.bh * (0.78 + rnd(seed + k) * 0.35) * (1 - Math.abs(f) * 0.28)), r: Math.round(f * P.sp * 0.5 + (rnd(seed + k * 3) - 0.5) * 8), c1, c2 });
+  }
+  return out;
+}
+const HERO_PLANTS = (() => {
+  const out = []; let i = 0;
+  for (let j = 0; j < 3; j++) for (let k = 0; k < 4; k++) {
+    const x = 60 + k * 74, y = 80 + j * 92;
+    if (x < 100 && y > 250) continue;
+    const P = j === 0 ? SIM.mais : SIM.riz;
+    out.push({ x, y, s: +(0.95 + rnd(i) * 0.25).toFixed(2), dur: +(4 + rnd(i + 9) * 3).toFixed(1), delay: -(rnd(i + 4) * 4).toFixed(1), blades: blades(P, 1, i * 11) });
+    i++;
+  }
+  return out;
+})();
+
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menu: false, section: 'accueil', hoverCrop: -1, crop: 'riz', hum: 70, sun: 65, temp: 26, season: 'pluies', filter: 'all', active: '', moist: 68, tl: 0, publish: false };
+  rootRef = React.createRef(); heroScene = React.createRef(); heroWrap = React.createRef(); simScene = React.createRef(); simWrap = React.createRef(); tlRef = React.createRef(); mgBg = React.createRef();
+
+  get reduced() {
+    return (this.props.motion ?? 'Complet') === 'Réduit' || (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  componentDidMount() {
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onScroll = () => { if (this.sRaf) return; this.sRaf = requestAnimationFrame(() => { this.sRaf = 0; this.handleScroll(); }); };
+    this.onMapHover = e => this.setState({ active: e.detail || '' });
+    this.mouse = { x: 0, y: 0 }; this.cur = { x: 0, y: 0 };
+    this.onMove = e => { this.mouse.x = e.clientX / innerWidth * 2 - 1; this.mouse.y = e.clientY / innerHeight * 2 - 1; };
+    addEventListener('resize', this.onResize);
+    addEventListener('scroll', this.onScroll, { passive: true });
+    addEventListener('mgmap:hover', this.onMapHover);
+    addEventListener('mousemove', this.onMove, { passive: true });
+    this.onResize(); this.handleScroll();
+    if (!this.reduced) { this.setupReveal(); this.setupCounters(); this.raf = requestAnimationFrame(this.loop); }
+    this.tick = setInterval(() => this.setState(s => ({ moist: clamp(s.moist + (Math.random() < 0.5 ? -1 : 1), 66, 70) })), 3200);
+  }
+  componentWillUnmount() {
+    removeEventListener('resize', this.onResize); removeEventListener('scroll', this.onScroll);
+    removeEventListener('mgmap:hover', this.onMapHover); removeEventListener('mousemove', this.onMove);
+    cancelAnimationFrame(this.raf); clearInterval(this.tick);
+    this.io && this.io.disconnect(); this.cio && this.cio.disconnect();
+  }
+  handleScroll() {
+    const root = this.rootRef.current; if (!root) return;
+    const scrolled = scrollY > 16;
+    let section = 'accueil';
+    for (const [id] of NAV) { const el = root.querySelector('#' + id); if (el && el.getBoundingClientRect().top < 160) section = id; }
+    let tl = this.state.tl; const t = this.tlRef.current;
+    if (t) { const r = t.getBoundingClientRect(); tl = Math.round(clamp((innerHeight * 0.6 - r.top) / r.height, 0, 1) * 100) / 100; }
+    if (scrolled !== this.state.scrolled || section !== this.state.section || tl !== this.state.tl) this.setState({ scrolled, section, tl });
+    const bg = this.mgBg.current;
+    if (bg && !this.reduced) { const r = bg.parentElement.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) bg.style.transform = 'translate3d(0,' + (r.top * -0.12).toFixed(1) + 'px,0)'; }
+  }
+  setupReveal() {
+    const root = this.rootRef.current; if (!root || !('IntersectionObserver' in window)) return;
+    this.io = new IntersectionObserver(ents => ents.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target; this.io.unobserve(el);
+      setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, +el.dataset.revealDelay || 0);
+    }), { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+    root.querySelectorAll('[data-reveal]').forEach(el => {
+      el.style.opacity = '0'; el.style.transform = 'translateY(28px)';
+      el.style.transition = 'opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)';
+      this.io.observe(el);
+    });
+  }
+  setupCounters() {
+    const root = this.rootRef.current; if (!root || !('IntersectionObserver' in window)) return;
+    const fmt = (el, v) => (el.dataset.prefix || '') + fr(v) + (el.dataset.suffix || '');
+    this.cio = new IntersectionObserver(ents => ents.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target, target = +el.dataset.count, t0 = performance.now(); this.cio.unobserve(el);
+      const step = now => { const p = clamp((now - t0) / 1800, 0, 1), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(el, target * e); if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }), { threshold: 0.4 });
+    root.querySelectorAll('[data-count]').forEach(el => { el.textContent = fmt(el, 0); this.cio.observe(el); });
+  }
+  loop = t => {
+    this.raf = requestAnimationFrame(this.loop);
+    if (this.state.w < 760) return;
+    const c = this.cur, m = this.mouse;
+    c.x += (m.x - c.x) * 0.05; c.y += (m.y - c.y) * 0.05;
+    this.orient(this.heroScene.current, -40 + c.x * 8 + Math.sin(t / 3200) * 3, 57 - c.y * 4);
+    this.orient(this.simScene.current, -40 + c.x * 10 + Math.sin(t / 4200) * 5, 56 - c.y * 5);
+    const hw = this.heroWrap.current;
+    if (hw && scrollY < innerHeight * 1.3) hw.querySelectorAll('[data-depth]').forEach(el => { const d = +el.dataset.depth; el.style.transform = 'translate3d(' + (c.x * d).toFixed(1) + 'px,' + (c.y * d).toFixed(1) + 'px,0)'; });
+  };
+  orient(el, rz, rx) {
+    if (!el) return;
+    const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > innerHeight + 200) return;
+    el.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg)';
+    const inv = 'rotateZ(' + (-rz).toFixed(2) + 'deg) rotateX(' + (-rx).toFixed(2) + 'deg)';
+    el.querySelectorAll('[data-bb]').forEach(b => { b.style.transform = inv; });
+  }
+  renderVals() {
+    const s = this.state, w = s.w, isMobile = w < 900, isDesktop = !isMobile;
+    const showFx = !this.reduced && w >= 760 && (this.props.showParticles ?? true);
+    const sc = s.scrolled;
+
+    const crops = CROPS.map((c, i) => {
+      const h = s.hoverCrop === i, open = h || isMobile;
+      return { ...c, delay: (i % 3) * 110, guideHref: 'Cultures.dc.html?crop=' + c.id,
+        enter: () => this.setState({ hoverCrop: i }), leave: () => this.setState({ hoverCrop: -1 }),
+        lift: h ? -8 : 0, imgScale: h ? 1.07 : 1, extraH: open ? 210 : 0, extraO: open ? 1 : 0,
+        shadow: h ? '0 34px 64px -26px rgba(24,155,103,0.6), 0 0 0 1px rgba(24,155,103,0.4), 0 0 40px -8px rgba(24,155,103,0.35), inset 0 1px 0 #fff' : '0 14px 34px -22px rgba(11,61,42,0.35), inset 0 1px 0 #fff',
+        waterBars: [1,2,3].map(k => ({ bg: k <= c.water ? '#189B67' : 'rgba(24,155,103,0.16)' })),
+        waterLabel: ['', 'Faible', 'Moyen', 'Élevé'][c.water] };
+    });
+
+    const P = SIM[s.crop], rainy = s.season === 'pluies';
+    const effH = clamp(s.hum + (rainy ? 12 : -10), 0, 100), effT = s.temp + (rainy ? 1 : -3);
+    const dev = Math.abs(effH - P.h) / 45 * 0.45 + Math.abs(s.sun - P.s) / 55 * 0.3 + Math.abs(effT - P.t) / 11 * 0.25;
+    const score = clamp(1 - dev, 0.1, 1);
+    let statusText, statusIcon, good = false;
+    if (effH < P.h - 18) { statusText = 'Sol trop sec — irrigation recommandée'; statusIcon = 'water_drop'; }
+    else if (effH > P.h + 18) { statusText = "Excès d'eau — risque de pourriture"; statusIcon = 'flood'; }
+    else if (effT > P.t + 5) { statusText = 'Stress thermique — ombrager la parcelle'; statusIcon = 'thermostat'; }
+    else if (effT < P.t - 5) { statusText = 'Trop froid pour cette culture'; statusIcon = 'ac_unit'; }
+    else if (s.sun < P.s - 28) { statusText = 'Manque de lumière'; statusIcon = 'wb_twilight'; }
+    else { good = true; statusText = score > 0.78 ? 'Conditions optimales' : 'Conditions correctes'; statusIcon = 'check_circle'; }
+    const growth = Math.round(score * 38 - 6);
+    const yv = P.y * (0.3 + 0.7 * score);
+    const simPlants = [];
+    for (let j = 0; j < 5; j++) for (let i = 0; i < 5; i++) {
+      const k = j * 5 + i;
+      simPlants.push({ x: 50 + i * 60, y: 72 + j * 60, s: +((0.3 + 0.7 * score) * (0.86 + rnd(k) * 0.28)).toFixed(3), dur: +(4 + rnd(k + 5) * 3).toFixed(1), delay: -(rnd(k + 2) * 4).toFixed(1), blades: blades(P, score, k * 7) });
+    }
+
+    const C = 603.2;
+    const pts = Array.from({ length: 24 }, (_, i) => i === 23 ? s.moist : 66 + Math.sin(i / 3.2) * 5 + (rnd(i + 40) - 0.5) * 4 - (i > 8 && i < 15 ? 4 : 0));
+    const yOf = v => (90 - (v - 40) / 50 * 90).toFixed(1);
+    const line = pts.map((v, i) => (i ? 'L' : 'M') + (i / 23 * 300).toFixed(1) + ' ' + yOf(v)).join(' ');
+
+    const fl = REGIONS.filter(r => s.filter === 'all' || r.cat === s.filter);
+    const wide = w >= 980;
+
+    return {
+      openPublish: () => this.setState({ publish: true }), closePublish: () => this.setState({ publish: false }), publishOpen: s.publish,
+      rootRef: this.rootRef, heroScene: this.heroScene, heroWrap: this.heroWrap, simScene: this.simScene, simWrap: this.simWrap, tlRef: this.tlRef, mgBg: this.mgBg,
+      isMobile, isDesktop, navDesktop: w >= 1240, navMobile: w < 1240, showFx, menuOpen: w < 1240 && s.menu, menuIcon: s.menu ? 'close' : 'menu',
+      toggleMenu: () => this.setState({ menu: !s.menu }), closeMenu: () => this.setState({ menu: false }),
+      navPad: sc ? '10px clamp(12px,3vw,24px)' : '16px clamp(12px,3vw,24px)', navH: sc ? 60 : 70,
+      navBg: sc || s.menu ? 'rgba(252,251,245,0.74)' : 'rgba(252,251,245,0)',
+      navBlur: sc || s.menu ? 'blur(18px) saturate(150%)' : 'none',
+      navBorder: sc || s.menu ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0)',
+      navShadow: sc ? '0 14px 34px -20px rgba(11,61,42,0.35), inset 0 1px 0 #fff' : 'none',
+      navLinks: NAV.map(([id, label]) => ({ href: '#' + id, label, color: s.section === id ? '#10281E' : '#51645A', bg: s.section === id ? 'rgba(24,155,103,0.10)' : 'transparent' })),
+      mobileLinks: NAV.map(([id, label]) => ({ href: '#' + id, label, bg: s.section === id ? 'rgba(24,155,103,0.08)' : 'transparent', onClick: () => this.setState({ menu: false }) })),
+      heroScale: w < 420 ? 0.7 : w < 900 ? 0.82 : w < 1100 ? 0.9 : 1,
+      heroPlants: HERO_PLANTS,
+      crops,
+      simCols: w >= 1000 ? 'minmax(0,1.55fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      simScale: w < 420 ? 0.66 : w < 700 ? 0.8 : 1,
+      simPlants, soilColor: mix('#A6A27E', '#2A3D30', effH / 100),
+      chanH: Math.round(4 + effH / 100 * 18), chanO: (0.15 + effH / 100 * 0.85).toFixed(2),
+      sunO: (0.3 + s.sun / 100 * 0.7).toFixed(2), sunGlow: Math.round(20 + s.sun * 1.2), sunSpread: Math.round(s.sun / 8), sunLight: (s.sun / 100 * 0.24).toFixed(3),
+      isRainy: rainy,
+      simCropName: CROPS.find(c => c.id === s.crop).name, seasonName: rainy ? 'Saison des pluies' : 'Saison sèche',
+      seasonNote: rainy ? 'Saison des pluies (nov. – avr.) : +12 % d\'humidité naturelle du sol.' : 'Saison sèche (mai – oct.) : −10 % d\'humidité, températures plus fraîches.',
+      growthLabel: (growth >= 0 ? '+' : '−') + Math.abs(growth) + ' %',
+      yieldLabel: yv.toLocaleString('fr-FR', { maximumFractionDigits: yv < 2 ? 2 : 1 }) + ' t/ha',
+      statusText, statusIcon, statusBg: good ? '#3CC58C' : 'rgba(252,251,245,0.16)', statusColor: good ? '#0B3D2A' : '#FCFBF5',
+      hum: s.hum, sun: s.sun, temp: s.temp,
+      setHum: e => this.setState({ hum: +e.target.value }), setSun: e => this.setState({ sun: +e.target.value }), setTemp: e => this.setState({ temp: +e.target.value }),
+      simCrops: CROPS.map(c => { const on = c.id === s.crop; return { name: c.name === 'Pomme de terre' ? 'P. de terre' : c.name, pick: () => this.setState({ crop: c.id }), bg: on ? '#FCFBF5' : 'rgba(255,255,255,0.06)', color: on ? '#0B3D2A' : '#FCFBF5', border: on ? '#FCFBF5' : 'rgba(255,255,255,0.16)' }; }),
+      seasons: [['pluies', 'Pluies'], ['seche', 'Sèche']].map(([id, label]) => { const on = s.season === id; return { label, pick: () => this.setState({ season: id }), bg: on ? '#FCFBF5' : 'transparent', color: on ? '#0B3D2A' : '#FCFBF5' }; }),
+      moist: s.moist, ringOffset: (C * (1 - s.moist / 100)).toFixed(1),
+      chartLine: line, chartArea: line + ' L300 90 L0 90 Z', bandY: yOf(75), bandH: (+yOf(55) - +yOf(75)).toFixed(1),
+      filter: s.filter, active: s.active, regionsJson: REGIONS_JSON,
+      filters: FILTERS.map(([id, label]) => { const on = s.filter === id; return { label, pick: () => this.setState({ filter: id, active: '' }), bg: on ? '#189B67' : 'rgba(255,255,255,0.65)', color: on ? '#FCFBF5' : '#10281E', border: on ? '#189B67' : 'rgba(255,255,255,0.95)', shadow: on ? '0 10px 22px -12px rgba(24,155,103,0.9)' : '0 6px 16px -12px rgba(11,61,42,0.3)' }; }),
+      mapCols: wide ? 'minmax(0,1.35fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      totalTons: fr(fl.reduce((a, r) => a + r.tons, 0)), totalProd: fr(fl.reduce((a, r) => a + r.prod, 0)), regionCount: fl.length,
+      filterLabel: s.filter === 'all' ? 'toutes cultures' : FILTERS.find(f => f[0] === s.filter)[1].toLowerCase(),
+      regionList: fl.slice().sort((a, b) => b.tons - a.tons).map(r => { const on = s.active === r.id; return { ...r, tonsLabel: fr(r.tons), enter: () => this.setState({ active: r.id }), leave: () => this.setState({ active: '' }), bg: on ? 'rgba(24,155,103,0.1)' : 'transparent', dot: on ? '#189B67' : 'rgba(24,155,103,0.45)', ring: on ? 'rgba(24,155,103,0.2)' : 'rgba(24,155,103,0)' }; }),
+      rainBars: RAIN.map(([h, v]) => ({ t: String(h).padStart(2, '0') + 'h', h: v, bg: v >= 80 ? '#0F6B47' : v >= 50 ? '#189B67' : 'rgba(24,155,103,0.4)' })),
+      risks: RISKS.map(r => { const hi = r.level === 'Élevé'; return { ...r, bg: hi ? 'rgba(11,61,42,0.45)' : 'rgba(255,255,255,0.1)', pillBg: hi ? '#FCFBF5' : 'rgba(255,255,255,0.16)', pillColor: hi ? '#0B3D2A' : '#FCFBF5' }; }),
+      products: PRODUCTS.map((p, i) => ({ ...p, delay: (i + 1) * 110 })),
+      tlPct: Math.round(s.tl * 100),
+      steps: STEPS.map((st, i) => { const on = s.tl >= i * 0.25 + 0.04; return { ...st, num: '0' + (i + 1),
+        nodeBg: on ? '#189B67' : '#FCFBF5', nodeColor: on ? '#FCFBF5' : '#189B67', nodeBorder: on ? '#189B67' : 'rgba(24,155,103,0.25)',
+        nodeShadow: on ? '0 0 0 6px rgba(24,155,103,0.14), 0 12px 24px -10px rgba(24,155,103,0.8)' : 'none',
+        cardShadow: on ? '0 24px 48px -28px rgba(11,61,42,0.45), inset 0 1px 0 #fff' : '0 8px 20px -18px rgba(11,61,42,0.3)',
+        opacity: on ? 1 : 0.55, shift: on ? 0 : 10 }; }),
+    };
+  }
+}
+</script>
+</body>
+</html>

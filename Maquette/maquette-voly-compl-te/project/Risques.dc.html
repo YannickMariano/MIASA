@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.4);opacity:0}}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4%,-4%) scale(1.08)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <dc-import name="SiteNav" current="risques" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <section style="position:relative;margin-top:12px;padding:clamp(28px,4vw,48px) clamp(20px,5vw,40px) clamp(40px,5vw,64px);">
+    <div style="position:absolute;inset:0 clamp(8px,2vw,24px);border-radius:36px;overflow:hidden;background:linear-gradient(160deg,#189B67 0%,#128455 55%,#0F6B47 100%);">
+      <div style="position:absolute;width:700px;height:700px;left:-15%;top:-40%;border-radius:50%;background:radial-gradient(circle, rgba(252,251,245,0.16), transparent 65%);animation:drift 24s ease-in-out infinite;"></div>
+    </div>
+    <div style="position:relative;max-width:1200px;margin:0 auto;color:#FCFBF5;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:rgba(252,251,245,0.8);"><a href="Voly%20Site%20Vitrine.dc.html#climat" style="color:rgba(252,251,245,0.8);">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#FCFBF5;">Risques climatiques</span></div>
+      <div style="margin-top:20px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;">
+        <div style="max-width:700px;">
+          <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#E4F6EC;font-weight:500;"><span style="width:18px;height:1.5px;background:#FCFBF5;"></span>CENTRE DES RISQUES</div>
+          <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Tous les risques, expliqués.</h1>
+          <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:rgba(252,251,245,0.88);text-wrap:pretty;">Alertes en cours, prévisions sur 7 jours et gestes à adopter avant, pendant et après chaque aléa.</p>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:700;color:rgba(252,251,245,0.85);">Votre zone
+          <select value="{{ city }}" onChange="{{ setCity }}" style="min-width:220px;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.14);font:700 15px 'Plus Jakarta Sans',sans-serif;color:#FCFBF5;outline:none;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
+            <sc-for list="{{ cities }}" as="c" hint-placeholder-count="5"><option value="{{ c.id }}" style="color:#10281E;">{{ c.name }}</option></sc-for>
+          </select>
+        </label>
+      </div>
+      <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));gap:8px;">
+        <sc-for list="{{ forecast }}" as="f" hint-placeholder-count="7">
+          <div style="padding:14px 12px;border-radius:20px;background:{{ f.bg }};border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);text-align:center;">
+            <div style="font-size:13px;font-weight:700;">{{ f.day }}</div>
+            <span style="display:block;margin-top:8px;font-family:'Material Symbols Rounded';font-size:30px;line-height:1;font-variation-settings:'FILL' 1;">{{ f.icon }}</span>
+            <div style="margin-top:8px;font-size:17px;font-weight:800;">{{ f.tmax }}° <span style="font-weight:600;opacity:0.75;font-size:14px;">{{ f.tmin }}°</span></div>
+            <div style="margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:11.5px;opacity:0.9;">{{ f.rain }} mm</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(32px,4vw,48px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">Alertes en cours · {{ cityName }}</div>
+      <span style="white-space:nowrap;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#51645A;"><span style="position:relative;width:8px;height:8px;"><span style="position:absolute;inset:0;border-radius:50%;background:#189B67;"></span><span style="position:absolute;inset:0;border-radius:50%;background:#189B67;animation:pulse 2s ease-out infinite;"></span></span>Mis à jour il y a 12 min</span>
+    </div>
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px;">
+      <sc-for list="{{ alerts }}" as="al" hint-placeholder-count="2">
+        <div style="display:flex;gap:16px;padding:20px;border-radius:24px;background:{{ al.bg }};color:{{ al.color }};box-shadow:0 20px 40px -28px rgba(11,61,42,0.55);">
+          <span style="flex:none;width:48px;height:48px;border-radius:15px;background:{{ al.iconBg }};display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;font-variation-settings:'FILL' 1;">{{ al.icon }}</span></span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;">{{ al.tag }}</span><span style="padding:3px 9px;border-radius:999px;background:{{ al.pillBg }};color:{{ al.pillColor }};font-size:11.5px;font-weight:700;">{{ al.level }}</span></div>
+            <div style="margin-top:6px;font-size:17px;font-weight:800;line-height:1.3;">{{ al.msg }}</div>
+            <div style="margin-top:6px;font-size:13.5px;line-height:1.5;opacity:0.85;">{{ al.advice }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div style="font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-0.035em;">Les 5 risques naturels</div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.pick }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:16px;border-radius:20px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }};cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:{{ t.shadow }};transition:all .3s cubic-bezier(.2,.8,.2,1);">
+            <span style="display:flex;width:100%;align-items:center;justify-content:space-between;"><span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">{{ t.icon }}</span><span style="font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ t.pillBg }};">{{ t.level }}</span></span>
+            <span style="font-size:15.5px;font-weight:800;">{{ t.name }}</span>
+            <span style="width:100%;height:5px;border-radius:3px;background:{{ t.track }};overflow:hidden;"><span style="display:block;width:{{ t.pct }}%;height:100%;border-radius:3px;background:{{ t.fill }};"></span></span>
+          </button>
+        </sc-for>
+      </div>
+
+      <article key="{{ r.id }}" style="margin-top:14px;padding:clamp(20px,3vw,32px);border-radius:30px;background:rgba(255,255,255,0.66);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 30px 60px -40px rgba(11,61,42,0.45), inset 0 1px 0 #fff;animation:panelIn .45s cubic-bezier(.2,.8,.2,1);">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:28px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:52px;height:52px;border-radius:16px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:28px;line-height:1;">{{ r.icon }}</span></span><div style="font-size:30px;font-weight:800;letter-spacing:-0.035em;">{{ r.name }}</div></div>
+            <p style="margin:16px 0 0;font-size:16px;line-height:1.6;color:#3E5147;">{{ r.desc }}</p>
+            <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Période à risque</div><div style="margin-top:3px;font-size:14px;font-weight:700;">{{ r.period }}</div></div>
+              <div style="padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Niveau · {{ cityName }}</div><div style="margin-top:3px;font-size:14px;font-weight:700;">{{ r.level }} ({{ r.pct }} %)</div></div>
+              <div style="grid-column:1/-1;padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Régions les plus exposées</div><div style="margin-top:3px;font-size:14px;font-weight:700;">{{ r.regions }}</div></div>
+              <div style="grid-column:1/-1;padding:12px;border-radius:14px;background:rgba(24,155,103,0.06);"><div style="font-size:11.5px;color:#51645A;font-weight:600;">Cultures sensibles</div><div style="margin-top:3px;font-size:14px;font-weight:700;">{{ r.crops }}</div></div>
+            </div>
+            <div style="margin-top:18px;font-size:14.5px;font-weight:800;">Signes avant-coureurs</div>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+              <sc-for list="{{ r.signs }}" as="sg" hint-placeholder-count="3"><div style="display:flex;gap:8px;font-size:14px;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1.1;color:#189B67;">visibility</span>{{ sg }}</div></sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:15px;background:rgba(24,155,103,0.08);">
+              <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+                <button onClick="{{ ph.pick }}" style="padding:11px 6px;border-radius:12px;border:none;background:{{ ph.bg }};color:{{ ph.color }};font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:{{ ph.shadow }};transition:all .25s;">{{ ph.label }}</button>
+              </sc-for>
+            </div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ actions }}" as="ac" hint-placeholder-count="3">
+                <div style="display:flex;gap:14px;padding:16px;border-radius:18px;background:rgba(255,255,255,0.75);border:1px solid rgba(16,40,30,0.06);animation:panelIn .4s cubic-bezier(.2,.8,.2,1);">
+                  <span style="flex:none;width:32px;height:32px;border-radius:10px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;">{{ ac.n }}</span>
+                  <div style="font-size:14.5px;line-height:1.55;color:#10281E;font-weight:500;">{{ ac.t }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:16px;align-items:start;">
+      <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -34px rgba(11,61,42,0.45);">
+        <div style="font-size:17px;font-weight:800;">Calendrier des risques</div>
+        <div style="margin-top:4px;font-size:13px;color:#51645A;">Intensité moyenne par mois, à l'échelle nationale</div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:104px repeat(12,minmax(0,1fr));gap:4px;align-items:center;font-size:12.5px;">
+          <span></span>
+          <sc-for list="{{ monthLabels }}" as="ml" hint-placeholder-count="12"><span style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#51645A;">{{ ml }}</span></sc-for>
+          <sc-for list="{{ heat }}" as="hr" hint-placeholder-count="5">
+            <span style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ hr.name }}</span>
+            <sc-for list="{{ hr.cells }}" as="hc" hint-placeholder-count="12"><span style="height:26px;border-radius:7px;background:{{ hc }};"></span></sc-for>
+          </sc-for>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:600;color:#51645A;">
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:rgba(24,155,103,0.1);"></span>Faible</span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:#8CD8B3;"></span>Modéré</span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:#189B67;"></span>Élevé</span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:4px;background:#0B3D2A;"></span>Très élevé</span>
+        </div>
+      </div>
+
+      <div style="padding:24px;border-radius:28px;background:#0B3D2A;color:#FCFBF5;">
+        <sc-if value="{{ notSubscribed }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <span style="width:48px;height:48px;border-radius:15px;background:rgba(252,251,245,0.12);display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:26px;line-height:1;">sms</span></span>
+            <div style="margin-top:16px;font-size:24px;font-weight:800;letter-spacing:-0.03em;line-height:1.2;">Recevez les alertes par SMS.</div>
+            <div style="margin-top:6px;font-size:14px;line-height:1.55;color:rgba(252,251,245,0.8);">Gratuit, sans smartphone. Un message dès qu'un risque devient élevé dans votre zone.</div>
+            <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px;">
+              <input value="{{ phone }}" onChange="{{ setPhone }}" inputmode="tel" placeholder="Numéro : 034 00 000 00" style="width:100%;padding:14px;border-radius:14px;border:1px solid {{ phoneBorder }};background:rgba(255,255,255,0.1);font:600 15px 'Plus Jakarta Sans',sans-serif;color:#FCFBF5;outline:none;">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ subRisks }}" as="sr" hint-placeholder-count="5">
+                  <button onClick="{{ sr.toggle }}" style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:{{ sr.bg }};color:{{ sr.color }};font:700 13px 'Plus Jakarta Sans',sans-serif;cursor:pointer;"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">{{ sr.mark }}</span>{{ sr.name }}</button>
+                </sc-for>
+              </div>
+              <button onClick="{{ subscribe }}" style="padding:15px;border-radius:14px;border:none;background:#FCFBF5;color:#0B3D2A;font:800 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer;">Activer les alertes pour {{ cityName }}</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:panelIn .4s ease;">
+            <span style="width:52px;height:52px;border-radius:16px;background:#3CC58C;color:#0B3D2A;display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:28px;line-height:1;font-variation-settings:'FILL' 1;">check</span></span>
+            <div style="margin-top:16px;font-size:24px;font-weight:800;letter-spacing:-0.03em;">Alertes activées.</div>
+            <div style="margin-top:6px;font-size:14px;line-height:1.55;color:rgba(252,251,245,0.8);">Vous recevrez les alertes « {{ subList }} » pour {{ cityName }} au {{ phone }}.</div>
+            <button onClick="{{ unsubscribe }}" style="margin-top:18px;padding:12px 16px;border-radius:13px;border:1px solid rgba(255,255,255,0.25);background:transparent;color:#FCFBF5;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;">Modifier</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RISKS = [
+  {id:'cyclone',name:'Cyclone',icon:'cyclone',desc:'Dépression tropicale aux vents supérieurs à 118 km/h, accompagnée de pluies torrentielles et de fortes houles.',period:'Janvier – mars',regions:'SAVA, Analanjirofo, Atsinanana, Boeny',crops:'Vanille, girofle, banane, riz de bas-fonds',
+   signs:['Houle forte et ciel cuivré','Baisse rapide de la pression','Bulletins de la Météo Madagascar'],cal:[3,3,2,1,0,0,0,0,0,0,1,2],
+   avant:['Récoltez ce qui est mûr et mettez les semences à l\'abri.','Attachez les lianes de vanille et renforcez les tuteurs.','Dégagez les canaux de drainage.'],
+   pendant:['Restez à l\'abri, ne sortez pas dans les champs.','Coupez l\'alimentation des pompes et équipements.','Suivez les bulletins à la radio.'],
+   apres:['Évacuez l\'eau stagnante des parcelles.','Relevez et replantez les plants couchés.','Signalez les dégâts pour accéder aux aides.']},
+  {id:'pluies',name:'Fortes pluies',icon:'rainy',desc:'Cumuls supérieurs à 50 mm en 24 h qui noient les semis, font verser le riz et lessivent les sols.',period:'Décembre – mars',regions:'Hautes Terres, côte Est',crops:'Riz, tomate, haricot, pomme de terre',
+   signs:['Nuages très sombres et bas','Averses répétées depuis plusieurs jours','Sol déjà saturé'],cal:[3,3,2,1,0,0,0,0,0,1,2,3],
+   avant:['Vérifiez le drainage des rizières et des planches.','Récoltez les cultures déjà mûres.','Couvrez les semis fragiles.'],
+   pendant:['Ne travaillez pas un sol détrempé.','Ouvrez les exutoires des rizières.','Protégez les récoltes stockées de l\'humidité.'],
+   apres:['Surveillez l\'apparition du mildiou.','Refaites les buttes lessivées.','Apportez du compost pour compenser les pertes.']},
+  {id:'secheresse',name:'Sécheresse',icon:'wb_sunny',desc:'Déficit de pluie prolongé (le kere dans le Grand Sud) qui assèche les sols et fait chuter les rendements.',period:'Mai – novembre',regions:'Atsimo-Andrefana, Androy, Anosy',crops:'Maïs, riz pluvial, légumes',
+   signs:['Retard des premières pluies','Feuilles qui s\'enroulent en milieu de journée','Baisse du niveau des puits'],cal:[0,0,0,1,2,2,2,3,3,3,2,1],
+   avant:['Choisissez des cultures résistantes (manioc, sorgho).','Paillez pour garder l\'humidité.','Stockez l\'eau de pluie.'],
+   pendant:['Arrosez tôt le matin, au pied des plants.','Priorisez les cultures vivrières.','Réduisez la densité de semis.'],
+   apres:['Semez dès les premières pluies utiles.','Reconstituez les stocks de semences.','Enrichissez le sol en matière organique.']},
+  {id:'inondation',name:'Inondation',icon:'flood',desc:'Débordement des rivières et remontée des nappes après de fortes pluies ou le passage d\'un cyclone.',period:'Janvier – mars',regions:'Plaine d\'Antananarivo, Alaotra, Betsiboka',crops:'Riz, cultures maraîchères',
+   signs:['Montée rapide du niveau des rivières','Eau trouble et chargée','Alertes du BNGRC'],cal:[3,3,2,1,0,0,0,0,0,0,1,2],
+   avant:['Surélevez les stocks de récolte et de semences.','Renforcez les diguettes.','Préparez un plan d\'évacuation du bétail.'],
+   pendant:['Mettez-vous en sécurité en hauteur.','Ne traversez pas les zones inondées.','Protégez l\'eau potable.'],
+   apres:['Évaluez les dégâts avant de replanter.','Nettoyez les canaux d\'irrigation.','Replantez des variétés à cycle court.']},
+  {id:'vent',name:'Vents forts',icon:'air',desc:'Rafales supérieures à 60 km/h qui cassent les tiges et font tomber fleurs et fruits.',period:'Août – octobre et saison cyclonique',regions:'Sud, Sud-Ouest, côte Est',crops:'Maïs, banane, papaye, arbres fruitiers',
+   signs:['Rafales qui soulèvent la poussière','Arbres qui ploient fortement','Bulletins de vent fort'],cal:[2,2,1,0,0,1,1,2,3,2,1,1],
+   avant:['Plantez des haies brise-vent.','Tuteurez les jeunes plants.','Récoltez les fruits presque mûrs.'],
+   pendant:['Évitez les traitements par pulvérisation.','Mettez les outils légers à l\'abri.','Restez loin des grands arbres.'],
+   apres:['Taillez les branches cassées.','Relevez et buttez les plants couchés.','Vérifiez les abris et serres.']},
+];
+const CITIES = {
+  tana:{name:'Antananarivo',lv:[18,86,12,54,38],t:[26,19],rain:[42,28,18,6,2,0,4]},
+  tamatave:{name:'Toamasina',lv:[58,80,8,72,70],t:[30,23],rain:[56,64,40,22,12,8,10]},
+  majunga:{name:'Mahajanga',lv:[46,50,40,44,42],t:[33,24],rain:[20,12,6,0,0,2,8]},
+  tulear:{name:'Toliara',lv:[20,14,88,10,48],t:[34,21],rain:[0,0,0,2,0,0,0]},
+  sambava:{name:'Sambava',lv:[76,78,6,58,74],t:[29,22],rain:[62,70,48,30,20,14,18]},
+};
+const MSG = {
+  cyclone:['Système dépressionnaire sous surveillance à l\'est.','Préparez vos parcelles : attachez les lianes, dégagez les drains.'],
+  pluies:['Fortes précipitations prévues dans les prochaines 24 heures.','Vérifiez le drainage des rizières et récoltez les cultures mûres.'],
+  secheresse:['Aucune pluie significative attendue avant 3 semaines.','Paillez vos cultures et arrosez tôt le matin.'],
+  inondation:['Risque de débordement des cours d\'eau.','Surélevez vos stocks et évitez les zones basses.'],
+  vent:['Rafales jusqu\'à 70 km/h attendues.','Tuteurez les jeunes plants et reportez les traitements.'],
+};
+const DAYS = ['Auj.','Ven.','Sam.','Dim.','Lun.','Mar.','Mer.'];
+const HEAT = ['rgba(24,155,103,0.1)','#8CD8B3','#189B67','#0B3D2A'];
+const lvl = p => p >= 70 ? 'Élevé' : p >= 35 ? 'Modéré' : 'Faible';
+class Component extends DCLogic {
+  state = { city: 'tana', risk: 'pluies', phase: 'avant', phone: '', subs: { pluies: true, cyclone: true }, subscribed: false, tried: false };
+  renderVals() {
+    const s = this.state, C = CITIES[s.city];
+    const r = RISKS.find(x => x.id === s.risk), ri = RISKS.indexOf(r);
+    const alerts = RISKS.map((x, i) => ({ x, p: C.lv[i] })).filter(a => a.p >= 50).sort((a, b) => b.p - a.p).map(({ x, p }) => { const hi = p >= 70; return { icon: x.icon, tag: hi ? 'ALERTE · ' + x.name.toUpperCase() : 'VIGILANCE · ' + x.name.toUpperCase(), level: lvl(p), msg: MSG[x.id][0], advice: MSG[x.id][1],
+      bg: hi ? '#0B3D2A' : 'rgba(255,255,255,0.7)', color: hi ? '#FCFBF5' : '#10281E', iconBg: hi ? 'rgba(252,251,245,0.12)' : 'rgba(24,155,103,0.12)', pillBg: hi ? '#FCFBF5' : 'rgba(24,155,103,0.12)', pillColor: hi ? '#0B3D2A' : '#0F6B47' }; });
+    if (!alerts.length) alerts.push({ icon: 'verified', tag: 'AUCUNE ALERTE', level: 'Faible', msg: 'Pas de risque élevé prévu cette semaine.', advice: 'Profitez-en pour entretenir vos parcelles.', bg: 'rgba(255,255,255,0.7)', color: '#10281E', iconBg: 'rgba(24,155,103,0.12)', pillBg: 'rgba(24,155,103,0.12)', pillColor: '#0F6B47' });
+    const digits = s.phone.replace(/\D/g, '');
+    return {
+      city: s.city, setCity: e => this.setState({ city: e.target.value }), cityName: C.name,
+      cities: Object.keys(CITIES).map(id => ({ id, name: CITIES[id].name })),
+      forecast: DAYS.map((day, i) => { const rain = C.rain[i]; const t = C.t[0] - (rain > 30 ? 2 : 0) + (i % 3 === 2 ? 1 : 0); return { day, rain, tmax: t, tmin: C.t[1] - (i % 2), icon: rain > 40 ? 'thunderstorm' : rain > 10 ? 'rainy' : rain > 0 ? 'partly_cloudy_day' : 'sunny', bg: i === 0 ? 'rgba(252,251,245,0.24)' : 'rgba(255,255,255,0.1)' }; }),
+      alerts,
+      tabs: RISKS.map((x, i) => { const on = x.id === s.risk, p = C.lv[i]; return { ...x, pct: p, level: lvl(p), pick: () => this.setState({ risk: x.id }),
+        bg: on ? '#189B67' : 'rgba(255,255,255,0.62)', color: on ? '#FCFBF5' : '#10281E', border: on ? '#189B67' : 'rgba(255,255,255,0.95)', shadow: on ? '0 18px 36px -18px rgba(24,155,103,0.9)' : '0 10px 24px -20px rgba(11,61,42,0.4)',
+        pillBg: on ? 'rgba(252,251,245,0.2)' : 'rgba(24,155,103,0.1)', track: on ? 'rgba(252,251,245,0.25)' : 'rgba(24,155,103,0.12)', fill: on ? '#FCFBF5' : '#189B67' }; }),
+      r: { ...r, pct: C.lv[ri], level: lvl(C.lv[ri]) },
+      phases: [['avant', 'Avant'], ['pendant', 'Pendant'], ['apres', 'Après']].map(([id, label]) => { const on = s.phase === id; return { label, pick: () => this.setState({ phase: id }), bg: on ? '#FCFBF5' : 'transparent', color: on ? '#0B3D2A' : '#3E5147', shadow: on ? '0 6px 14px -8px rgba(11,61,42,0.4)' : 'none' }; }),
+      actions: r[s.phase].map((t, i) => ({ n: '0' + (i + 1), t })),
+      monthLabels: ['J','F','M','A','M','J','J','A','S','O','N','D'],
+      heat: RISKS.map(x => ({ name: x.name, cells: x.cal.map(v => HEAT[v]) })),
+      notSubscribed: !s.subscribed, subscribed: s.subscribed,
+      phone: s.phone, setPhone: e => this.setState({ phone: e.target.value }),
+      phoneBorder: s.tried && digits.length < 9 ? '#FCFBF5' : 'rgba(255,255,255,0.25)',
+      subRisks: RISKS.map(x => { const on = !!s.subs[x.id]; return { name: x.name, mark: on ? 'check' : 'add', bg: on ? '#FCFBF5' : 'transparent', color: on ? '#0B3D2A' : '#FCFBF5', toggle: () => this.setState({ subs: { ...s.subs, [x.id]: !on } }) }; }),
+      subList: RISKS.filter(x => s.subs[x.id]).map(x => x.name.toLowerCase()).join(', ') || 'toutes',
+      subscribe: () => { if (digits.length < 9) return this.setState({ tried: true }); this.setState({ subscribed: true }); },
+      unsubscribe: () => this.setState({ subscribed: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

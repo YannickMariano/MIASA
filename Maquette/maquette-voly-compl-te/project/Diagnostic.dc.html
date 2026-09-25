@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:#FCFBF5;color:#10281E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#127A51;text-decoration:none}
+a:hover{color:#0F6B47}
+::selection{background:#189B67;color:#FCFBF5}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes scan{0%{top:0%}50%{top:calc(100% - 3px)}100%{top:0%}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.4);opacity:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background:#FCFBF5;overflow-x:clip;">
+  <div style="position:absolute;left:-10%;top:-6%;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle, rgba(24,155,103,0.15), transparent 65%);pointer-events:none;"></div>
+  <dc-import name="SiteNav" current="diagnostic" hint-size="100%,96px" style="position:sticky;top:0;z-index:60;"></dc-import>
+  <main style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(20px,5vw,40px) clamp(72px,9vw,112px);">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#51645A;"><a href="Voly%20Site%20Vitrine.dc.html#diagnostic" style="color:#51645A;">Accueil</a><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">chevron_right</span><span style="color:#10281E;">Diagnostic des plantes</span></div>
+    <div style="margin-top:22px;max-width:720px;">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#127A51;font-weight:500;"><span style="width:18px;height:1.5px;background:#189B67;"></span>DIAGNOSTIC DES PLANTES</div>
+      <h1 style="margin:14px 0 0;font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-0.045em;font-weight:800;">Qu'est-ce qui ne va pas avec votre plante ?</h1>
+      <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#4B5F55;text-wrap:pretty;">Prenez une photo, décrivez les symptômes : l'analyse identifie le problème et vous propose un traitement adapté, en commençant par les solutions naturelles.</p>
+    </div>
+
+    <div style="margin-top:36px;display:grid;grid-template-columns:{{ cols }};gap:20px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -32px rgba(11,61,42,0.45), inset 0 1px 0 #fff;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:34px;height:34px;border-radius:11px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;">01</span><div style="font-size:17px;font-weight:800;">Photo de la plante</div></div>
+          <div onClick="{{ pick }}" onDragOver="{{ dragOver }}" onDragLeave="{{ dragLeave }}" onDrop="{{ drop }}" style="position:relative;margin-top:16px;height:clamp(220px,26vw,300px);border-radius:22px;overflow:hidden;border:1.5px dashed {{ dropBorder }};background:{{ dropBg }};cursor:pointer;transition:all .25s;">
+            <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ photo }}" alt="Photo de la plante" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+              <button onClick="{{ clearPhoto }}" aria-label="Retirer la photo" style="position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:12px;border:none;background:rgba(252,251,245,0.92);display:grid;place-items:center;cursor:pointer;color:#10281E;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">close</span></button>
+            </sc-if>
+            <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;">
+                <span style="width:60px;height:60px;border-radius:20px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;box-shadow:0 14px 28px -12px rgba(24,155,103,0.9);"><span style="font-family:'Material Symbols Rounded';font-size:30px;line-height:1;">photo_camera</span></span>
+                <div style="font-size:16px;font-weight:800;">Prendre ou déposer une photo</div>
+                <div style="font-size:13.5px;color:#51645A;max-width:280px;line-height:1.5;">Photographiez la partie malade de près, en pleine lumière. JPG ou PNG.</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ analyzing }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;inset:0;background:rgba(11,61,42,0.35);"></div>
+              <div style="position:absolute;left:0;right:0;height:3px;background:#3CC58C;box-shadow:0 0 24px 6px rgba(60,197,140,0.7);animation:scan 2.2s ease-in-out infinite;"></div>
+            </sc-if>
+          </div>
+          <input ref="{{ fileRef }}" type="file" accept="image/*" capture="environment" onChange="{{ onFile }}" style="display:none;">
+        </div>
+
+        <div style="padding:22px;border-radius:28px;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 44px -32px rgba(11,61,42,0.45), inset 0 1px 0 #fff;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:34px;height:34px;border-radius:11px;background:rgba(24,155,103,0.12);color:#189B67;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;">02</span><div style="font-size:17px;font-weight:800;">Culture et symptômes</div></div>
+          <div>
+            <div style="font-size:13.5px;font-weight:700;">Culture</div>
+            <div style="margin-top:10px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
+              <sc-for list="{{ crops }}" as="c" hint-placeholder-count="8">
+                <button onClick="{{ c.pick }}" style="padding:10px 4px;border-radius:12px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:700 13px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13.5px;font-weight:700;">Partie touchée</div>
+            <div style="margin-top:10px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
+              <sc-for list="{{ parts }}" as="p" hint-placeholder-count="4">
+                <button onClick="{{ p.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }};font:700 12.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .25s;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">{{ p.icon }}</span>{{ p.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13.5px;font-weight:700;">Symptômes observés <span style="font-weight:500;color:#51645A;">· plusieurs choix possibles</span></div>
+            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ symptoms }}" as="sy" hint-placeholder-count="11">
+                <button onClick="{{ sy.toggle }}" style="display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border-radius:999px;border:1px solid {{ sy.border }};background:{{ sy.bg }};color:{{ sy.color }};font:700 13px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;">{{ sy.mark }}</span>{{ sy.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;">
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:700;">Depuis quand ?
+              <select value="{{ since }}" onChange="{{ setSince }}" style="padding:12px 14px;border-radius:13px;border:1px solid rgba(16,40,30,0.12);background:rgba(255,255,255,0.85);font:600 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;">
+                <option>Quelques jours</option><option>1 à 2 semaines</option><option>Plus d'un mois</option>
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:700;">Plants touchés
+              <select value="{{ spread }}" onChange="{{ setSpread }}" style="padding:12px 14px;border-radius:13px;border:1px solid rgba(16,40,30,0.12);background:rgba(255,255,255,0.85);font:600 14px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;">
+                <option>Quelques plants</option><option>Environ la moitié</option><option>Toute la parcelle</option>
+              </select>
+            </label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:700;">Décrivez ce que vous voyez
+            <textarea value="{{ desc }}" onChange="{{ setDesc }}" rows="3" placeholder="Ex. Les feuilles du bas jaunissent puis sèchent, surtout après les pluies…" style="width:100%;padding:12px 14px;border-radius:13px;border:1px solid rgba(16,40,30,0.12);background:rgba(255,255,255,0.85);font:500 14.5px 'Plus Jakarta Sans',sans-serif;color:#10281E;outline:none;resize:vertical;" style-focus="border-color:#189B67;box-shadow:0 0 0 4px rgba(24,155,103,0.15);"></textarea>
+          </label>
+          <sc-if value="{{ hasFormError }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#0B3D2A;padding:10px 14px;border-radius:12px;background:rgba(11,61,42,0.08);"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1;">error</span>Ajoutez une photo ou au moins un symptôme.</div>
+          </sc-if>
+          <button onClick="{{ analyze }}" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:17px;border-radius:16px;border:none;background:#189B67;color:#FCFBF5;font:800 16.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 16px 30px -14px rgba(24,155,103,0.9), inset 0 1px 0 rgba(255,255,255,0.25);transition:transform .25s,background .25s;" style-hover="transform:translateY(-2px);background:#14875A;"><span style="font-family:'Material Symbols Rounded';font-size:22px;line-height:1;">{{ analyzeIcon }}</span>{{ analyzeLabel }}</button>
+        </div>
+      </div>
+
+      <div ref="{{ resRef }}" style="position:{{ sidePos }};top:100px;">
+        <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:26px;border-radius:30px;background:linear-gradient(165deg,#0B3D2A 0%,#0F5A3D 60%,#127A51 100%);color:#FCFBF5;box-shadow:0 40px 80px -40px rgba(11,61,42,0.6);">
+            <span style="width:52px;height:52px;border-radius:16px;background:rgba(252,251,245,0.12);display:grid;place-items:center;"><span style="font-family:'Material Symbols Rounded';font-size:28px;line-height:1;">troubleshoot</span></span>
+            <div style="margin-top:18px;font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1.2;">Le résultat s'affichera ici.</div>
+            <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:#FCFBF5;color:#0B3D2A;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;">1</span><div style="font-size:14.5px;line-height:1.5;"><b>Identification</b> du problème : maladie, ravageur, carence ou stress.</div></div>
+              <div style="display:flex;gap:12px;align-items:flex-start;"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:#FCFBF5;color:#0B3D2A;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;">2</span><div style="font-size:14.5px;line-height:1.5;"><b>Explication</b> de la cause et du niveau de gravité.</div></div>
+              <div style="display:flex;gap:12px;align-items:flex-start;"><span style="flex:none;width:30px;height:30px;border-radius:10px;background:#FCFBF5;color:#0B3D2A;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;">3</span><div style="font-size:14.5px;line-height:1.5;"><b>Traitement</b> naturel d'abord, puis conventionnel si besoin, et prévention.</div></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ analyzing }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:26px;border-radius:30px;background:rgba(255,255,255,0.66);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 30px 60px -40px rgba(11,61,42,0.45);display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;min-height:340px;justify-content:center;">
+            <span style="width:56px;height:56px;border-radius:50%;border:3px solid rgba(24,155,103,0.18);border-top-color:#189B67;animation:spin .9s linear infinite;"></span>
+            <div style="font-size:19px;font-weight:800;">{{ stepLabel }}</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:{{ st.color }};"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;font-variation-settings:'FILL' 1;">{{ st.icon }}</span>{{ st.label }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+          <article style="border-radius:30px;background:rgba(255,255,255,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);box-shadow:0 30px 60px -40px rgba(11,61,42,0.45), inset 0 1px 0 #fff;overflow:hidden;animation:panelIn .5s cubic-bezier(.2,.8,.2,1);">
+            <div style="padding:24px;background:#0B3D2A;color:#FCFBF5;">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9FE3C4;">{{ res.typeUpper }}</span>
+                <span style="white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(252,251,245,0.12);font-size:11.5px;font-weight:700;"><span style="font-family:'Material Symbols Rounded';font-size:15px;line-height:1;">{{ res.srcIcon }}</span>{{ res.source }}</span>
+              </div>
+              <div style="margin-top:10px;font-size:clamp(26px,3vw,32px);font-weight:800;letter-spacing:-0.035em;line-height:1.1;">{{ res.name }}</div>
+              <div style="margin-top:4px;font-size:14px;font-style:italic;color:rgba(252,251,245,0.75);">{{ res.sci }}</div>
+              <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="padding:12px;border-radius:14px;background:rgba(252,251,245,0.1);">
+                  <div style="font-size:11.5px;font-weight:600;color:rgba(252,251,245,0.75);">Confiance</div>
+                  <div style="margin-top:4px;font-size:22px;font-weight:800;">{{ res.confidence }} %</div>
+                  <div style="margin-top:6px;height:5px;border-radius:3px;background:rgba(252,251,245,0.18);overflow:hidden;"><div style="width:{{ res.confidence }}%;height:100%;background:#3CC58C;"></div></div>
+                </div>
+                <div style="padding:12px;border-radius:14px;background:rgba(252,251,245,0.1);">
+                  <div style="font-size:11.5px;font-weight:600;color:rgba(252,251,245,0.75);">Gravité</div>
+                  <div style="margin-top:4px;font-size:22px;font-weight:800;">{{ res.severity }}</div>
+                  <div style="margin-top:6px;display:flex;gap:3px;"><sc-for list="{{ res.sevBars }}" as="sb" hint-placeholder-count="3"><span style="flex:1;height:5px;border-radius:3px;background:{{ sb }};"></span></sc-for></div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+              <div>
+                <div style="font-size:15.5px;font-weight:800;">Ce qui ne va pas</div>
+                <p style="margin:6px 0 0;font-size:14.5px;line-height:1.6;color:#3E5147;">{{ res.what }}</p>
+                <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:#3E5147;"><b style="color:#10281E;">Cause :</b> {{ res.cause }}</p>
+              </div>
+              <div style="padding:16px;border-radius:18px;background:rgba(24,155,103,0.08);">
+                <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;font-variation-settings:'FILL' 1;">eco</span>Traitement naturel · à faire en premier</div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ res.natural }}" as="n" hint-placeholder-count="3"><div style="display:flex;gap:10px;font-size:14px;line-height:1.5;"><span style="flex:none;width:22px;height:22px;border-radius:7px;background:#189B67;color:#FCFBF5;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;">{{ n.i }}</span>{{ n.t }}</div></sc-for>
+                </div>
+              </div>
+              <sc-if value="{{ res.hasChem }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:16px;border-radius:18px;background:rgba(11,61,42,0.05);border:1px solid rgba(11,61,42,0.08);">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#0B3D2A;">science</span>Si le problème persiste</div>
+                  <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+                    <sc-for list="{{ res.chemical }}" as="c" hint-placeholder-count="2"><div style="display:flex;gap:10px;font-size:14px;line-height:1.5;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:17px;line-height:1.3;color:#0B3D2A;">arrow_right</span>{{ c }}</div></sc-for>
+                  </div>
+                  <div style="margin-top:10px;font-size:12.5px;color:#51645A;line-height:1.5;">Portez des gants et respectez les doses et délais avant récolte indiqués sur l'emballage.</div>
+                </div>
+              </sc-if>
+              <div>
+                <div style="font-size:15px;font-weight:800;">Prévention</div>
+                <div style="margin-top:8px;display:flex;flex-direction:column;gap:7px;">
+                  <sc-for list="{{ res.prevention }}" as="pv" hint-placeholder-count="3"><div style="display:flex;gap:8px;font-size:14px;line-height:1.5;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1.2;color:#189B67;">shield</span>{{ pv }}</div></sc-for>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:14px;border-radius:16px;background:rgba(24,155,103,0.06);font-size:13.5px;line-height:1.5;color:#3E5147;"><span style="font-family:'Material Symbols Rounded';font-size:19px;line-height:1.2;color:#189B67;">event_repeat</span><span><b style="color:#10281E;">Suivi :</b> {{ res.followup }}</span></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <button onClick="{{ reset }}" style="padding:13px;border-radius:13px;border:1px solid rgba(24,155,103,0.35);background:rgba(255,255,255,0.7);color:#0F6B47;font:700 14px 'Plus Jakarta Sans',sans-serif;cursor:pointer;">Nouvelle analyse</button>
+                <a href="{{ guideHref }}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px;border-radius:13px;background:#189B67;color:#FCFBF5;font-weight:700;font-size:14px;">Guide de culture</a>
+              </div>
+              <div style="font-size:12px;line-height:1.5;color:#51645A;">Diagnostic indicatif. En cas de doute ou de forte propagation, contactez un technicien agricole de votre district.</div>
+            </div>
+          </article>
+        </sc-if>
+        <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:14px;font-weight:800;">Analyses précédentes</div>
+            <sc-for list="{{ history }}" as="h" hint-placeholder-count="1">
+              <button onClick="{{ h.open }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,0.95);background:rgba(255,255,255,0.62);cursor:pointer;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;color:#10281E;">
+                <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:#189B67;">history</span>
+                <span style="flex:1;font-size:13.5px;font-weight:700;">{{ h.label }}</span>
+                <span style="font-size:12px;color:#51645A;">{{ h.time }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,240px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CROPS = [['riz','Riz'],['mais','Maïs'],['manioc','Manioc'],['pdt','P. de terre'],['tomate','Tomate'],['haricot','Haricot'],['cafe','Café'],['vanille','Vanille']];
+const PARTS = [['feuille','Feuilles','eco'],['tige','Tige','park'],['racine','Racines','psychiatry'],['fruit','Fruits','nutrition']];
+const SYM = ['Feuilles jaunes','Taches brunes','Taches orangées','Feuilles enroulées','Mosaïque / déformation','Trous dans les feuilles','Poudre blanche','Flétrissement','Pourriture','Insectes visibles','Croissance lente'];
+const KB = [
+  {name:'Mildiou',sci:'Phytophthora infestans',type:'Maladie fongique',sev:3,crops:['tomate','pdt'],sym:{'Taches brunes':3,'Pourriture':2,'Flétrissement':1},parts:['feuille','fruit'],
+   what:'Des taches brunes huileuses apparaissent sur les feuilles puis s\'étendent aux tiges et aux fruits. La maladie progresse très vite par temps humide.',cause:'Un champignon favorisé par l\'humidité, les nuits fraîches et l\'eau sur le feuillage.',
+   natural:['Retirez et brûlez immédiatement les feuilles et fruits atteints.','Pulvérisez de la bouillie bordelaise maison (cuivre) ou une décoction de prêle tous les 7 jours.','Espacez les plants pour que l\'air circule et arrosez uniquement au pied.'],
+   chemical:['Fongicide à base de mancozèbe ou de cuivre homologué, selon l\'étiquette.'],prevention:['Rotation : pas de tomate ni de pomme de terre au même endroit pendant 3 ans.','Paillez le sol pour éviter les éclaboussures.','Choisissez des variétés tolérantes.'],followup:'observez la parcelle tous les 2 jours ; reprenez une photo dans 5 jours.'},
+  {name:'Pyriculariose du riz',sci:'Magnaporthe oryzae',type:'Maladie fongique',sev:3,crops:['riz'],sym:{'Taches brunes':3,'Feuilles jaunes':1,'Croissance lente':1},parts:['feuille','tige','fruit'],
+   what:'Des taches en forme de losange, grises au centre et brunes sur le bord, apparaissent sur les feuilles et peuvent atteindre le cou de la panicule.',cause:'Un champignon favorisé par un excès d\'engrais azoté, les rosées longues et les semis trop denses.',
+   natural:['Réduisez les apports d\'azote et fractionnez-les.','Maintenez une lame d\'eau régulière dans la rizière.','Retirez les pailles et résidus infectés après la récolte.'],
+   chemical:['Fongicide à base de tricyclazole homologué, au stade montaison si l\'attaque est forte.'],prevention:['Utilisez des semences saines de variétés résistantes.','Respectez un repiquage espacé (20 × 20 cm).','Évitez les semis tardifs.'],followup:'surveillez surtout le cou des panicules à l\'épiaison.'},
+  {name:'Chenille légionnaire d\'automne',sci:'Spodoptera frugiperda',type:'Ravageur',sev:3,crops:['mais'],sym:{'Trous dans les feuilles':3,'Insectes visibles':2,'Croissance lente':1},parts:['feuille'],
+   what:'Des chenilles dévorent le cœur du plant et laissent des trous irréguliers et des excréments dans le cornet.',cause:'Un papillon ravageur arrivé en Afrique et à Madagascar, très actif en début de saison des pluies.',
+   natural:['Inspectez les cornets et écrasez les chenilles à la main tôt le matin.','Versez un peu de cendre ou de sable mêlé de chaux dans le cornet.','Pulvérisez un extrait de feuilles de neem (50 g/L) tous les 5 jours.'],
+   chemical:['Insecticide homologué (émamectine benzoate) seulement si plus de 20 % des plants sont touchés.'],prevention:['Semez tôt et en même temps que vos voisins.','Associez le maïs au desmodium et bordez la parcelle de brachiaria.','Désherbez autour de la parcelle.'],followup:'comptez les plants touchés sur 20 plants chaque semaine.'},
+  {name:'Flétrissement bactérien',sci:'Ralstonia solanacearum',type:'Maladie bactérienne',sev:3,crops:['tomate','pdt'],sym:{'Flétrissement':3,'Croissance lente':1,'Pourriture':1},parts:['tige','racine'],
+   what:'Le plant flétrit brutalement en journée alors que le sol est humide ; la tige coupée laisse s\'écouler un liquide blanchâtre dans l\'eau.',cause:'Une bactérie du sol qui bouche les vaisseaux de la plante, transmise par l\'eau et les outils.',
+   natural:['Arrachez et brûlez les plants malades avec leur motte, loin de la parcelle.','Désinfectez les outils à l\'eau de Javel diluée.','Apportez beaucoup de compost mûr pour stimuler les micro-organismes utiles.'],
+   chemical:[],prevention:['Rotation de 3 ans avec céréales ou légumineuses.','Évitez les parcelles mal drainées.','Utilisez des plants et des tubercules certifiés.'],followup:'aucun traitement ne guérit la plante : protégez surtout les plants voisins.'},
+  {name:'Carence en azote',sci:'Déficit en N',type:'Carence nutritive',sev:1,crops:'all',sym:{'Feuilles jaunes':3,'Croissance lente':2},parts:['feuille'],
+   what:'Les feuilles les plus anciennes, en bas du plant, jaunissent uniformément et la croissance ralentit.',cause:'Un sol pauvre en azote, souvent après plusieurs cultures sans apport ou après de fortes pluies qui lessivent le sol.',
+   natural:['Apportez 5 à 10 t/ha de compost ou de fumier bien décomposé.','Arrosez au pied avec du purin d\'ortie ou de consoude dilué à 10 %.','Associez ou faites précéder la culture d\'une légumineuse (haricot, niébé).'],
+   chemical:['Engrais azoté (urée) en petites doses fractionnées, au pied des plants.'],prevention:['Faites analyser votre sol avec le capteur avant chaque saison.','Pratiquez la rotation avec des légumineuses.','Paillez pour limiter le lessivage.'],followup:'les nouvelles feuilles doivent reverdir en 10 à 15 jours.'},
+  {name:'Oïdium',sci:'Erysiphales',type:'Maladie fongique',sev:2,crops:'all',sym:{'Poudre blanche':3,'Feuilles enroulées':1},parts:['feuille','fruit'],
+   what:'Un feutrage blanc poudreux recouvre les feuilles, qui se dessèchent et s\'enroulent.',cause:'Un champignon favorisé par un temps chaud et sec le jour, avec des nuits humides.',
+   natural:['Pulvérisez du lait écrémé dilué (1 volume pour 9 d\'eau) ou du bicarbonate (5 g/L).','Supprimez les feuilles les plus atteintes.','Aérez le feuillage en taillant.'],
+   chemical:['Soufre mouillable, hors des heures chaudes.'],prevention:['Évitez l\'excès d\'azote.','Arrosez le matin, au pied.','Espacez davantage les plants.'],followup:'renouvelez le traitement naturel après chaque pluie.'},
+  {name:'Rouille orangée du caféier',sci:'Hemileia vastatrix',type:'Maladie fongique',sev:2,crops:['cafe'],sym:{'Taches orangées':3,'Feuilles jaunes':1},parts:['feuille'],
+   what:'Des taches jaunes sur le dessus des feuilles et une poudre orangée dessous ; les feuilles tombent prématurément.',cause:'Un champignon favorisé par l\'humidité et un ombrage trop dense ou absent.',
+   natural:['Ramassez et enterrez les feuilles tombées.','Taillez pour aérer l\'intérieur des caféiers.','Pulvérisez une bouillie bordelaise légère en début de saison des pluies.'],
+   chemical:['Fongicide cuprique homologué, 2 à 3 passages en saison des pluies.'],prevention:['Replantez avec des variétés résistantes.','Gardez un ombrage régulier et modéré.','Fertilisez avec du compost pour renforcer les arbres.'],followup:'comptez les feuilles tachées sur 10 branches chaque mois.'},
+  {name:'Mosaïque du manioc',sci:'Begomovirus (CMD)',type:'Maladie virale',sev:2,crops:['manioc'],sym:{'Mosaïque / déformation':3,'Feuilles jaunes':1,'Croissance lente':2},parts:['feuille'],
+   what:'Les feuilles présentent des marbrures jaunes et vertes, se déforment et restent petites ; les racines grossissent peu.',cause:'Un virus transmis par la mouche blanche et par des boutures prélevées sur des plants malades.',
+   natural:['Arrachez les plants très atteints et remplacez-les.','Ne prélevez jamais de boutures sur un plant marbré.','Pulvérisez un extrait de neem contre la mouche blanche.'],
+   chemical:[],prevention:['Plantez des boutures saines de variétés tolérantes.','Désherbez autour de la parcelle.','Plantez en début de saison des pluies.'],followup:'aucun traitement ne guérit le virus : sélectionnez vos boutures avec soin.'},
+  {name:'Fusariose de la vanille',sci:'Fusarium oxysporum',type:'Maladie fongique',sev:3,crops:['vanille'],sym:{'Pourriture':3,'Flétrissement':2,'Feuilles jaunes':1},parts:['tige','racine'],
+   what:'Les racines et la base de la liane pourrissent, la liane jaunit puis se dessèche.',cause:'Un champignon du sol favorisé par l\'excès d\'eau, le manque de matière organique et les blessures.',
+   natural:['Coupez les parties pourries avec un outil désinfecté et brûlez-les.','Apportez un paillis épais de feuilles et de compost au pied.','Améliorez le drainage autour des tuteurs.'],
+   chemical:['Fongicide homologué à base de thiophanate-méthyl en cas d\'attaque forte.'],prevention:['Plantez des boutures saines.','Évitez de blesser les racines lors du désherbage.','Renouvelez régulièrement le paillis.'],followup:'observez les racines aériennes toutes les semaines.'},
+  {name:'Pucerons',sci:'Aphididae',type:'Ravageur',sev:1,crops:'all',sym:{'Insectes visibles':3,'Feuilles enroulées':2,'Mosaïque / déformation':1},parts:['feuille','tige'],
+   what:'De petits insectes verts ou noirs se regroupent sous les feuilles et sur les jeunes pousses, qui s\'enroulent et collent.',cause:'Des insectes piqueurs-suceurs favorisés par l\'excès d\'azote et le temps sec.',
+   natural:['Pulvérisez de l\'eau savonneuse (savon noir 20 g/L).','Utilisez une décoction de piment et d\'ail.','Favorisez les coccinelles, prédatrices des pucerons.'],
+   chemical:[],prevention:['Évitez les excès d\'engrais azoté.','Installez des fleurs en bordure pour attirer les auxiliaires.','Surveillez le dessous des feuilles.'],followup:'répétez le traitement après 3 jours.'},
+  {name:'Stress hydrique',sci:'Manque d\'eau',type:'Stress environnemental',sev:2,crops:'all',sym:{'Feuilles enroulées':3,'Flétrissement':2,'Croissance lente':1},parts:['feuille'],
+   what:'Les feuilles s\'enroulent ou pendent aux heures chaudes et reprennent leur forme le soir.',cause:'Le sol manque d\'eau ou les racines n\'arrivent plus à puiser assez d\'eau.',
+   natural:['Arrosez tôt le matin, au pied, en profondeur.','Paillez avec de la paille ou des feuilles sèches.','Vérifiez l\'humidité du sol avec le capteur.'],
+   chemical:[],prevention:['Installez un goutte-à-goutte simple.','Plantez des haies brise-vent.','Choisissez des variétés résistantes à la sécheresse.'],followup:'les plants doivent se redresser en 24 à 48 h.'},
+];
+const SEV = ['', 'Faible', 'Modérée', 'Élevée'];
+const STEPS = ['Lecture de la photo','Analyse des symptômes','Recherche des causes probables','Préparation du traitement'];
+function ruleDiagnose(crop, part, sym) {
+  let best = null, bs = -1;
+  KB.forEach(d => {
+    if (d.crops !== 'all' && !d.crops.includes(crop)) return;
+    let sc = sym.reduce((a, s) => a + (d.sym[s] || 0), 0);
+    if (d.parts.includes(part)) sc += 1;
+    if (d.crops !== 'all') sc += 0.5;
+    if (sc > bs) { bs = sc; best = d; }
+  });
+  const conf = Math.round(Math.min(94, 52 + bs * 7));
+  return { ...best, severity: SEV[best.sev], confidence: conf, source: 'Base agronomique' };
+}
+function resize(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => { const m = 900, k = Math.min(1, m / Math.max(img.width, img.height)); const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); res({ url, b64: c.toDataURL('image/jpeg', 0.82).split(',')[1] }); };
+    img.onerror = rej; img.src = url;
+  });
+}
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? innerWidth : 1280, photo: null, b64: null, drag: false, crop: 'tomate', part: 'feuille', sym: ['Taches brunes'], since: 'Quelques jours', spread: 'Quelques plants', desc: '', status: 'idle', step: 0, res: null, tried: false, history: [] };
+  fileRef = React.createRef(); resRef = React.createRef();
+  componentDidMount() { this.r = () => this.setState({ w: innerWidth }); addEventListener('resize', this.r); }
+  componentWillUnmount() { removeEventListener('resize', this.r); clearInterval(this.iv); }
+  async setFile(f) { if (!f || !f.type.startsWith('image/')) return; try { const { url, b64 } = await resize(f); this.setState({ photo: url, b64 }); } catch (e) {} }
+  analyze = async () => {
+    const s = this.state;
+    if (!s.photo && !s.sym.length && !s.desc.trim()) return this.setState({ tried: true });
+    this.setState({ status: 'analyzing', step: 0, tried: false });
+    if (this.state.w < 1000) setTimeout(() => { const el = this.resRef.current; el && scrollTo({ top: el.getBoundingClientRect().top + scrollY - 90, behavior: 'smooth' }); }, 50);
+    clearInterval(this.iv); this.iv = setInterval(() => this.setState(st => ({ step: Math.min(3, st.step + 1) })), 900);
+    const cropName = CROPS.find(c => c[0] === s.crop)[1], partName = PARTS.find(p => p[0] === s.part)[1];
+    let res = null;
+    if (window.claude && window.claude.complete) {
+      try {
+        const text = 'Culture : ' + cropName + '. Partie touchée : ' + partName + '. Symptômes : ' + (s.sym.join(', ') || 'non précisés') + '. Depuis : ' + s.since + '. Étendue : ' + s.spread + '. Description : ' + (s.desc || 'aucune') + '.';
+        const content = [];
+        if (s.b64) content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: s.b64 } });
+        content.push({ type: 'text', text: text + '\nRéponds UNIQUEMENT par un objet JSON avec les clés : name, sci, type (Maladie fongique | Maladie bactérienne | Maladie virale | Ravageur | Carence nutritive | Stress environnemental), severity (Faible | Modérée | Élevée), confidence (entier 0-100), what (2 phrases), cause (1 phrase), natural (3 actions courtes), chemical (0 à 2 actions, produits homologués génériques), prevention (3 actions), followup (1 phrase).' });
+        const out = await window.claude.complete({ system: 'Tu es un agronome expert des cultures de Madagascar. Tu diagnostiques les problèmes des plantes à partir de photos et de symptômes et tu proposes d\'abord des solutions naturelles, simples et accessibles aux petits producteurs malgaches. Réponds en français.', max_tokens: 1200, messages: [{ role: 'user', content }] });
+        const j = JSON.parse(out.slice(out.indexOf('{'), out.lastIndexOf('}') + 1));
+        if (j && j.name && Array.isArray(j.natural)) res = { ...j, chemical: j.chemical || [], prevention: j.prevention || [], confidence: Math.round(+j.confidence || 70), source: 'Analyse IA' };
+      } catch (e) { res = null; }
+    }
+    if (!res) { await new Promise(r => setTimeout(r, 3200)); res = ruleDiagnose(s.crop, s.part, s.sym); }
+    clearInterval(this.iv);
+    const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    this.setState({ status: 'done', step: 4, res, history: [{ res, label: res.name + ' · ' + cropName, time }, ...this.state.history].slice(0, 5) });
+  };
+  renderVals() {
+    const s = this.state, wide = s.w >= 1000;
+    const on = (a, b) => a === b;
+    const r = s.res;
+    const sevN = r ? Math.max(1, SEV.indexOf(r.severity)) : 0;
+    return {
+      cols: wide ? 'minmax(0,1.05fr) minmax(0,1fr)' : 'minmax(0,1fr)', sidePos: wide ? 'sticky' : 'relative',
+      fileRef: this.fileRef, resRef: this.resRef,
+      pick: () => this.fileRef.current && this.fileRef.current.click(),
+      onFile: e => { this.setFile(e.target.files[0]); e.target.value = ''; },
+      dragOver: e => { e.preventDefault(); if (!s.drag) this.setState({ drag: true }); }, dragLeave: () => this.setState({ drag: false }),
+      drop: e => { e.preventDefault(); this.setState({ drag: false }); this.setFile(e.dataTransfer.files[0]); },
+      dropBorder: s.drag ? '#189B67' : 'rgba(24,155,103,0.4)', dropBg: s.drag ? 'rgba(24,155,103,0.12)' : 'repeating-linear-gradient(135deg, rgba(24,155,103,0.08) 0 12px, rgba(24,155,103,0.02) 12px 24px), rgba(255,255,255,0.5)',
+      hasPhoto: !!s.photo, noPhoto: !s.photo, photo: s.photo,
+      clearPhoto: e => { e.stopPropagation(); this.setState({ photo: null, b64: null }); },
+      crops: CROPS.map(([id, label]) => ({ label, pick: () => this.setState({ crop: id }), bg: on(s.crop, id) ? '#189B67' : 'rgba(255,255,255,0.75)', color: on(s.crop, id) ? '#FCFBF5' : '#10281E', border: on(s.crop, id) ? '#189B67' : 'rgba(16,40,30,0.1)' })),
+      parts: PARTS.map(([id, label, icon]) => ({ label, icon, pick: () => this.setState({ part: id }), bg: on(s.part, id) ? '#189B67' : 'rgba(255,255,255,0.75)', color: on(s.part, id) ? '#FCFBF5' : '#10281E', border: on(s.part, id) ? '#189B67' : 'rgba(16,40,30,0.1)' })),
+      symptoms: SYM.map(label => { const a = s.sym.includes(label); return { label, mark: a ? 'check' : 'add', toggle: () => this.setState({ sym: a ? s.sym.filter(x => x !== label) : [...s.sym, label] }), bg: a ? '#189B67' : 'rgba(255,255,255,0.75)', color: a ? '#FCFBF5' : '#10281E', border: a ? '#189B67' : 'rgba(16,40,30,0.1)' }; }),
+      since: s.since, setSince: e => this.setState({ since: e.target.value }), spread: s.spread, setSpread: e => this.setState({ spread: e.target.value }),
+      desc: s.desc, setDesc: e => this.setState({ desc: e.target.value }),
+      hasFormError: s.tried, analyze: this.analyze,
+      analyzeLabel: s.status === 'analyzing' ? 'Analyse en cours…' : 'Analyser la plante', analyzeIcon: s.status === 'analyzing' ? 'hourglass_top' : 'troubleshoot',
+      isIdle: s.status === 'idle', analyzing: s.status === 'analyzing', hasResult: s.status === 'done' && !!r,
+      stepLabel: STEPS[Math.min(3, s.step)] + '…',
+      steps: STEPS.map((label, i) => ({ label, icon: i < s.step ? 'check_circle' : i === s.step ? 'radio_button_checked' : 'radio_button_unchecked', color: i <= s.step ? '#10281E' : '#8A9A91' })),
+      res: r ? { ...r, typeUpper: (r.type || '').toUpperCase(), srcIcon: r.source === 'Analyse IA' ? 'auto_awesome' : 'menu_book',
+        natural: r.natural.map((t, i) => ({ i: i + 1, t })), hasChem: r.chemical && r.chemical.length > 0,
+        sevBars: [1, 2, 3].map(k => k <= sevN ? '#3CC58C' : 'rgba(252,251,245,0.18)') } : {},
+      reset: () => this.setState({ status: 'idle', res: null, photo: null, b64: null, sym: [], desc: '' }),
+      guideHref: 'Cultures.dc.html?crop=' + s.crop,
+      hasHistory: s.history.length > 1, history: s.history.slice(1).map(h => ({ ...h, open: () => this.setState({ status: 'done', res: h.res }) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

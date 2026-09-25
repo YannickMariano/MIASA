@@ -1,5 +1,5 @@
-import { ArrowUpRight } from 'lucide-react'
+import { Icon } from './Icon'
 
-export function StatCard({ icon: Icon, label, value, unit, detail, tone = 'green' }) {
-  return <article className="glass stat-card"><div className={`stat-icon ${tone}`}><Icon size={22}/></div><div><p>{label}</p><h3>{value}<small>{unit}</small></h3><span>{detail}</span></div><ArrowUpRight className="stat-arrow" size={17}/></article>
+export function StatCard({ icon, label, value, unit, detail, tone = 'green' }) {
+  return <article className={`stat-card tone-${tone}`}><div className="stat-top"><span className="stat-label"><span className="stat-icon"><Icon name={icon}/></span>{label}</span><Icon name="north_east" className="stat-arrow"/></div><h3>{value}<small>{unit}</small></h3><span className="stat-detail">{detail}</span></article>
 }
