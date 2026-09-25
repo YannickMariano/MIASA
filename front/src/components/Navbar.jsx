@@ -1,0 +1,5 @@
+import {useState} from 'react'
+import {Activity,BookOpen,ChevronDown,CloudSun,LayoutDashboard,Map,Menu,Radio,Sprout,X} from 'lucide-react'
+import {Logo} from './Logo'
+const items=[['dashboard',LayoutDashboard,'Accueil'],['learn',BookOpen,'Leçons'],['lab',Sprout,'Laboratoire 3D'],['map',Map,'Carte'],['insights',CloudSun,'Climat & marché'],['diagnosis',Activity,'Diagnostic IA'],['sensors',Radio,'Capteurs']]
+export function Navbar({page,setPage}){const[open,setOpen]=useState(false);const go=id=>{setPage(id);setOpen(false)};return <header className="top-navigation"><button className="nav-logo" onClick={()=>go('dashboard')}><Logo/></button><nav className={open?'open':''}>{items.map(([id,Icon,label])=><button key={id} className={page===id?'active':''} onClick={()=>go(id)}><Icon size={16}/>{label}{id==='diagnosis'&&<i>IA</i>}</button>)}</nav><div className="nav-user"><span>RA</span><div><b>Rado Andria</b><small>Agriculteur</small></div><ChevronDown size={14}/></div><button className="mobile-nav" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></header>}

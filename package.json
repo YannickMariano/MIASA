@@ -1,0 +1,13 @@
+{
+  "name": "tanimboly-smart-platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix front && npm install --prefix back",
+    "dev": "concurrently \"npm run dev --prefix back\" \"npm run dev --prefix front\"",
+    "build": "npm run build --prefix front",
+    "test": "npm test --prefix back"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
