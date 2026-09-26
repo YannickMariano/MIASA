@@ -35,3 +35,10 @@ ai-service/.venv/
 ai-service/.pip-temp/
 ai-service/datasets/
 ai-service/runs/
+ai-service/models/*.pt
+
+# Mosquitto et configuration Wi-Fi/MQTT locale
+mqtt/config/password.txt
+mqtt/data/
+mqtt/log/
+esp32/include/config.h

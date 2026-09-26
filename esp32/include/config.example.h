@@ -4,6 +4,16 @@
 // Sans config.h, le firmware utilise les valeurs ci-dessous.
 #define DEVICE_ID "ESP32-PARCELLE-01"
 
+// Wi-Fi et MQTT : copiez ce fichier vers config.h, puis remplacez les valeurs.
+#define MQTT_ENABLED 1
+#define WIFI_SSID "VOTRE_WIFI"
+#define WIFI_PASSWORD "VOTRE_MOT_DE_PASSE_WIFI"
+#define MQTT_HOST "192.168.1.47"
+#define MQTT_PORT 1883
+#define MQTT_USER "tanimboly"
+#define MQTT_PASSWORD "VOTRE_MOT_DE_PASSE_MQTT"
+#define MQTT_BASE_TOPIC "tanimboly"
+
 // Câblage
 #define SOIL_SENSOR_PIN 32      // AOUT du capteur d'humidité
 #define RELAY_PIN 26            // IN du module relais
