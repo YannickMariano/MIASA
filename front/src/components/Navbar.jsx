@@ -45,15 +45,16 @@ export function Navbar({ page, setPage }) {
             </button>
           ))}
         </nav>
-        {/* <div className="nav-end">
-          <div className="nav-user">
+        <div className="nav-end">
+          {/* <div className="nav-user">
             <span>RA</span>
             <div>
               <b>Rado Andria</b>
               <small>Agriculteur</small>
             </div>
             <Icon name="expand_more" size={18} />
-          </div>
+          </div> */}
+          {/* Bouton du menu mobile : indispensable sous 1240 px, où les liens du haut sont masqués. */}
           <button
             className="mobile-nav"
             aria-label="Menu"
@@ -61,9 +62,9 @@ export function Navbar({ page, setPage }) {
           >
             <Icon name={open ? "close" : "menu"} />
           </button>
-        </div> */}
+        </div>
       </div>
-      {/* {open && (
+      {open && (
         <nav className="nav-menu">
           {items.map(([id, icon, label]) => (
             <button
@@ -79,15 +80,15 @@ export function Navbar({ page, setPage }) {
               <Icon name="arrow_forward" className="arrow" />
             </button>
           ))}
-          <div className="nav-menu-user">
+          {/* <div className="nav-menu-user">
             <span>RA</span>
             <div>
               <b>Rado Andria</b>
               <small>Agriculteur</small>
             </div>
-          </div>
+          </div> */}
         </nav>
-      )} */}
+      )}
     </header>
   );
 }
