@@ -21,4 +21,16 @@ export const api = {
   },
   weatherInsights: (place, crop) => request(`/insights/weather?place=${encodeURIComponent(place)}&crop=${encodeURIComponent(crop)}`),
   marketInsights: () => request('/insights/market'),
+  listings: () => request('/listings'),
+  listingOptions: () => request('/listings/options'),
+  publishListing: async (data) => {
+    const response = await fetch(`${API_URL}/listings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+    const body = await response.json().catch(() => ({}))
+    if (!response.ok) throw new Error(body.message || 'Publication impossible')
+    return body
+  },
+  removeListing: async (id, token) => {
+    const response = await fetch(`${API_URL}/listings/${encodeURIComponent(id)}`, { method: 'DELETE', headers: { 'X-Delete-Token': token } })
+    if (!response.ok) throw new Error((await response.json().catch(() => ({}))).message || 'Suppression impossible')
+  },
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "../Icon";
 import { Kicker } from "../PageHeader";
-import { steps } from "../../data/homeData";
+import { sectionImages, steps } from "../../data/homeData";
 
 function Step({ icon, n, title, text, active }) {
   return (
@@ -57,6 +57,9 @@ export function TimelineSection({ onNavigate }) {
             >
               Commencer à apprendre <Icon name="arrow_forward" />
             </button>
+            <figure className="how-photo">
+              <img src={sectionImages.timeline.src} alt={sectionImages.timeline.alt} loading="lazy" />
+            </figure>
           </div>
         </div>
 

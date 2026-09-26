@@ -8,6 +8,8 @@ const links = [
   ["lab", "Laboratoire 3D"],
   ["sensors", "Capteurs"],
   ["map", "Carte"],
+  ["market", "Publications"],
+  ["library", "Littérature"],
 ];
 
 export function Footer({ onNavigate }) {

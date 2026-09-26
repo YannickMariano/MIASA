@@ -147,3 +147,7 @@ if (tomatoCourse) {
   }]
  ]
 }
+
+// Photo de chaque culture (copies optimisées dans front/public/images).
+const CROP_PHOTOS = { coffee: 'cafe.jpg', tomato: 'tomate.jpg', vanilla: 'vanille.jpg', rice: 'riz.jpg', maize: 'mais.jpg', cassava: 'manioc.jpg' }
+export const cropPhoto = id => CROP_PHOTOS[id] && `${import.meta.env.BASE_URL}images/${CROP_PHOTOS[id]}`

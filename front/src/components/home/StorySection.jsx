@@ -10,6 +10,7 @@ function StoryImage({ item, label }) {
         src={item.src}
         style={{ objectPosition: item.position }}
         alt={item.alt}
+        loading="lazy"
       />
       <figcaption>
         {label}
@@ -26,10 +27,10 @@ export function StorySection({ onNavigate }) {
       <section className="home-section editorial-story story-chapter-1">
         <div className="container story-grid">
           <div className="story-collage" data-reveal>
-            <StoryImage item={storyImages.knowledge} label="Territoire" />
-            <StoryImage item={storyImages.technician} label="Expertise" />
-            <StoryImage item={storyImages.coffee} label="Cultures" />
-            <StoryImage item={storyImages.sensor} label="Données" />
+            <StoryImage item={storyImages.territory} label="Territoire" />
+            <StoryImage item={storyImages.expertise} label="Expertise" />
+            <StoryImage item={storyImages.crops} label="Cultures" />
+            <StoryImage item={storyImages.data} label="Données" />
           </div>
           <div className="story-copy" data-reveal style={{ "--d": "150ms" }}>
             <Kicker>01 · DE LA CONNAISSANCE AUX RÉSULTATS</Kicker>
@@ -79,10 +80,10 @@ export function StorySection({ onNavigate }) {
             data-reveal
             style={{ "--d": "150ms" }}
           >
-            <StoryImage item={storyImages.technician} label="Accompagner" />
-            <StoryImage item={storyImages.vanilla} label="Valoriser" />
-            <StoryImage item={storyImages.farmers} label="Transmettre" />
-            <StoryImage item={storyImages.field} label="Produire" />
+            <StoryImage item={storyImages.support} label="Accompagner" />
+            <StoryImage item={storyImages.value} label="Valoriser" />
+            <StoryImage item={storyImages.transmit} label="Transmettre" />
+            <StoryImage item={storyImages.produce} label="Produire" />
           </div>
         </div>
       </section>

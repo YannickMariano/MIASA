@@ -34,8 +34,8 @@
 /* Fil de connexion / Timeline interactive */
 .steps-line i {
   transition: height 0.2s ease-out;
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+  background: linear-gradient(180deg, var(--green) 0%, var(--sun) 70%, var(--sunset) 100%);
+  box-shadow: 0 0 12px rgba(252, 179, 0, 0.55);
 }
 
 .timeline-step {
@@ -66,5 +66,5 @@
 
 .feature-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(31, 61, 12, 0.12);
 }

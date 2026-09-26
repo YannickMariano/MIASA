@@ -1,5 +1,6 @@
 import React from "react";
 import { Kicker } from "../PageHeader";
+import { sectionImages } from "../../data/homeData";
 
 export function MissionSection() {
   return (
@@ -10,6 +11,9 @@ export function MissionSection() {
           <h2>
             La connaissance agricole au service de la souveraineté alimentaire
           </h2>
+          <figure className="mission-photo">
+            <img src={sectionImages.mission.src} alt={sectionImages.mission.alt} loading="lazy" />
+          </figure>
         </div>
         <div className="mission-text" data-reveal style={{ "--d": "150ms" }}>
           <p className="highlight-text">
@@ -18,12 +22,12 @@ export function MissionSection() {
             outils de mesure reste inégal.
           </p>
           <p>
-            <b>Voly est un levier économique important.</b> Notre ambition est
+            <b>M'IASA est un levier économique important.</b> Notre ambition est
             d’aider à produire davantage et mieux, réduire la dépendance aux
             importations et viser l'autosuffisance alimentaire.
           </p>
           <p>
-            <b>Voly, plus qu'une idée :</b> Rapprocher la science et la
+            <b>M'IASA, plus qu'une idée :</b> Rapprocher la science et la
             technologie du terrain, tout en maintenant l'employabilité et
             fournissant de l'enseignement compatible avec les besoins réels.
           </p>

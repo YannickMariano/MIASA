@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Icon } from "./Icon";
+import { Crown, PREMIUM_PAGES } from "./Crown";
 const items = [
   ["dashboard", "home", "Accueil"],
   ["learn", "menu_book", "Apprentissage"],
@@ -9,6 +10,8 @@ const items = [
   ["insights", "partly_cloudy_day", "Climat & Marché"],
   ["sensors", "sensors", "Diagnostic par capteur"],
   ["diagnosis", "troubleshoot", "Diagnostic IA"],
+  ["market", "storefront", "Publications"],
+  ["library", "local_library", "Littérature"],
 ];
 export function Navbar({ page, setPage }) {
   const [open, setOpen] = useState(false),
@@ -42,6 +45,7 @@ export function Navbar({ page, setPage }) {
             >
               {label}
               {id === "diagnosis" && <i>IA</i>}
+              {PREMIUM_PAGES.includes(id) && <Crown />}
             </button>
           ))}
         </nav>
@@ -76,6 +80,7 @@ export function Navbar({ page, setPage }) {
                 <Icon name={icon} />
                 {label}
                 {id === "diagnosis" && <i>IA</i>}
+                {PREMIUM_PAGES.includes(id) && <Crown />}
               </span>
               <Icon name="arrow_forward" className="arrow" />
             </button>

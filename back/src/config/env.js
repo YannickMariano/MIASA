@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import {fileURLToPath} from 'node:url'
 
 export const env = {
   port: Number(process.env.PORT) || 4000,
@@ -11,4 +12,6 @@ export const env = {
   mqttUsername: process.env.MQTT_USERNAME || '',
   mqttPassword: process.env.MQTT_PASSWORD || '',
   mqttBaseTopic: process.env.MQTT_BASE_TOPIC || 'tanimboly',
+  // Annonces de récoltes publiées (fichier JSON local, hors Git).
+  listingsFile: process.env.LISTINGS_FILE || fileURLToPath(new URL('../../data/listings.json', import.meta.url)),
 }

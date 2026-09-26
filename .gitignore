@@ -42,3 +42,6 @@ mqtt/config/password.txt
 mqtt/data/
 mqtt/log/
 esp32/include/config.h
+
+# Annonces de récoltes publiées (données locales du backend)
+back/data/

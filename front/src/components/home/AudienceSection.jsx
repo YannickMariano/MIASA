@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "../Icon";
+import { sectionImages } from "../../data/homeData";
 
 function AudienceCard({ number, icon, title, text, delay }) {
   return (
@@ -22,14 +23,14 @@ function AudienceCard({ number, icon, title, text, delay }) {
 
 export function AudienceSection() {
   return (
-    <section className="home-section audience-section">
+    <section className="home-section audience-section" style={{ "--audience-img": `url(${sectionImages.audience.src})` }}>
       <div className="section-glow" aria-hidden="true" />
       <div className="container audience-grid">
         <div className="audience-visual" data-reveal>
           <span className="audience-icon">
             <Icon name="groups" />
           </span>
-          3<h3>Une plateforme pensée pour celles et ceux qui font pousser Madagascar</h3>
+          <h3>Une plateforme pensée pour celles et ceux qui font pousser Madagascar</h3>
         </div>
         <div className="audience-list">
           <AudienceCard
