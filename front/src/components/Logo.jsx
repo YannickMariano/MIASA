@@ -6,7 +6,7 @@ export function Logo({ compact = false, badge = true }) {
       <span className="logo-mark">
         <Icon name="eco" fill />
       </span>
-      {!compact && <span className="logo-name">Voly</span>}
+      {!compact && <span className="logo-name">M'IASA</span>}
       {/* {!compact && badge && <span className="logo-badge">MG</span>} */}
     </div>
   );

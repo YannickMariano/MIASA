@@ -122,7 +122,7 @@ export function Dashboard({ data, onNavigate }) {
               <span className="accent">Mieux produire pour demain.</span>
             </h1>
             <p data-reveal style={{ "--d": "240ms" }}>
-              Voly rassemble apprentissage, expérimentation et données de
+              M'IASA rassemble apprentissage, expérimentation et données de
               terrain pour aider tout acteur agricole à prendre de meilleures
               décisions, augmenter les rendements et apporter sa contribution au
               développement de Madagascar.
@@ -192,13 +192,13 @@ export function Dashboard({ data, onNavigate }) {
               ainsi qu'aux outils de mesure reste inégal.
             </p>
             <p>
-              <b>Voly est un levier économique important.</b> Notre ambition est d’aider à produire
+              <b>M'IASA est un levier économique important.</b> Notre ambition est d’aider à produire
               davantage et mieux, réduire la dépendance aux importations et viser 
               l'autosuffisance alimentaire  alimentaires au niveau national.
             </p>
             <p>
-              <b> Voly, plus qu'une idée </b>
-              Voly rapproche la science et la technologie du terrain. Son impact est aussi social : 
+              <b> M'IASA, plus qu'une idée </b>
+              M'IASA rapproche la science et la technologie du terrain. Son impact est aussi social : 
               il permet de maintenir l'employabilité des personnes appartenant au domaine tout en 
               fournissant de l'enseignement et l'innovation compatibles aux besoins réels.
             </p>

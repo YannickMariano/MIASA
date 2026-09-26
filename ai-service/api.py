@@ -15,7 +15,7 @@ CONFIDENCE = float(os.getenv("YOLO_CONFIDENCE", "0.25"))
 # Carte graphique NVIDIA si disponible, sinon processeur (device=0 seul échoue sur un PC sans GPU).
 DEVICE = 0 if torch.cuda.is_available() else "cpu"
 
-app = FastAPI(title="Tanimboly YOLO API", version="1.0.0")
+app = FastAPI(title="M'IASA YOLO API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4000", "http://127.0.0.1:4000"],

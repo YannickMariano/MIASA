@@ -16,12 +16,12 @@ test('le pont série détecte l’ESP32, transmet les mesures, l’état de la p
  try{
   for(let i=0;i<50&&!bridge.port?.isOpen;i++)await wait(20)
   assert.ok(bridge.port?.isOpen,'port ouvert automatiquement')
-  bridge.port.port.emitData('Voly ESP32 prêt\n{"type":"reading","deviceId":"ESP32-USB","soilMoisture":28,"soilMoistureRaw":2900,"pump":true,"pumpLocked":false,"threshold":40}\n')
+  bridge.port.port.emitData('M\'IASA ESP32 prêt\n{"type":"reading","deviceId":"ESP32-USB","soilMoisture":28,"soilMoistureRaw":2900,"pump":true,"pumpLocked":false,"threshold":40}\n')
   await wait(80)
   assert.equal(sensorStore.latest().soilMoisture,28);assert.equal(sensorStore.device().online,true);assert.deepEqual(sensorStore.device().link,{type:'usb',port:'COM9'})
   assert.equal(sensorStore.irrigation().pumpOn,true);assert.ok(sensorStore.irrigation().lastRun)
   assert.match(bridge.port.port.recording.toString(),/"cmd":"config","threshold":35/,'seuil de l’application renvoyé à l’ESP32')
-  assert.ok(logs.some(l=>String(l).includes('Voly ESP32 prêt')))
+  assert.ok(logs.some(l=>String(l).includes('M\'IASA ESP32 prêt')))
   bridge.port.close();await wait(80)
   assert.equal(sensorStore.device().online,false);assert.equal(sensorStore.irrigation().pumpOn,false)
  }finally{bridge.stop()}
