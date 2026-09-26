@@ -37,7 +37,7 @@ export function MadagascarMap({full=false,onNavigate}){
  const regionNames=useMemo(()=>geo?geo.features.map(f=>f.properties.shapeName):[],[geo])
  const valueOf=useCallback(n=>dataset?.byRegion[n]?.values[crop],[dataset,crop])
  const nationalValue=dataset?.national?.values[crop]
- const style=useCallback(feature=>{const n=feature.properties.shapeName,v=valueOf(n),focus=n===hovered||n===selected;return{color:focus?'#0B3D2A':'#FCFBF5',weight:focus?2.4:1.2,fillColor:Number.isFinite(v)?colorFor(v):'#E4EAE1',fillOpacity:focus?1:.9}},[valueOf,hovered,selected])
+ const style=useCallback(feature=>{const n=feature.properties.shapeName,v=valueOf(n),focus=n===hovered||n===selected;return{color:focus?'#1F3D0C':'#FBF4E6',weight:focus?2.4:1.2,fillColor:Number.isFinite(v)?colorFor(v):'#EAE2CC',fillOpacity:focus?1:.9}},[valueOf,hovered,selected])
  const focusRegion=useCallback(name=>{setSelected(name);const layer=layersRef.current[name],map=mapRef.current;if(layer&&map){map.closePopup();map.once('moveend',()=>layer.openPopup(layer.getBounds().getCenter()));map.flyToBounds(layer.getBounds(),{padding:[40,40],maxZoom:7.5,duration:.8})}},[])
  const resetView=()=>{setSelected(null);const map=mapRef.current;if(map&&bounds){map.closePopup();map.flyToBounds(bounds,{padding:[16,16],duration:.8})}}
  const onEachFeature=useCallback((feature,layer)=>{const n=feature.properties.shapeName;layersRef.current[n]=layer

@@ -15,11 +15,11 @@ export const CROP_TYPES = [
 
 // Échelle de couleurs : part des ménages (%) pratiquant la culture choisie.
 export const SCALE = [
-  { min: 0, max: 20, color: '#E4F2EA' },
-  { min: 20, max: 40, color: '#B7E0C8' },
-  { min: 40, max: 60, color: '#7CC9A2' },
-  { min: 60, max: 80, color: '#2FA673' },
-  { min: 80, max: 100, color: '#0F6B47' },
+  { min: 0, max: 20, color: '#F6EFD2' },
+  { min: 20, max: 40, color: '#E9DC96' },
+  { min: 40, max: 60, color: '#BACF63' },
+  { min: 60, max: 80, color: '#76A82C' },
+  { min: 80, max: 100, color: '#3A6814' },
 ]
 export const colorFor = value => (SCALE.find(s => value < s.max) || SCALE.at(-1)).color
 
