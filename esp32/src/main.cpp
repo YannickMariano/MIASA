@@ -1,6 +1,7 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
 
-// Réglages facultatifs : copiez include/config.example.h en include/config.h pour les modifier.
 #if __has_include("config.h")
 #include "config.h"
 #endif
@@ -8,35 +9,59 @@
 #ifndef DEVICE_ID
 #define DEVICE_ID "ESP32-PARCELLE-01"
 #endif
+#ifndef MQTT_ENABLED
+#define MQTT_ENABLED 0
+#endif
+#ifndef WIFI_SSID
+#define WIFI_SSID ""
+#endif
+#ifndef WIFI_PASSWORD
+#define WIFI_PASSWORD ""
+#endif
+#ifndef MQTT_HOST
+#define MQTT_HOST "192.168.1.47"
+#endif
+#ifndef MQTT_PORT
+#define MQTT_PORT 1883
+#endif
+#ifndef MQTT_USER
+#define MQTT_USER ""
+#endif
+#ifndef MQTT_PASSWORD
+#define MQTT_PASSWORD ""
+#endif
+#ifndef MQTT_BASE_TOPIC
+#define MQTT_BASE_TOPIC "tanimboly"
+#endif
 #ifndef SOIL_SENSOR_PIN
-#define SOIL_SENSOR_PIN 32          // AOUT du capteur d'humidité
+#define SOIL_SENSOR_PIN 32
 #endif
 #ifndef RELAY_PIN
-#define RELAY_PIN 26                // IN du module relais
+#define RELAY_PIN 26
 #endif
 #ifndef RELAY_ACTIVE_LOW
-#define RELAY_ACTIVE_LOW true       // la plupart des modules relais s'activent avec un niveau BAS
+#define RELAY_ACTIVE_LOW true
 #endif
 #ifndef DRY_VALUE
-#define DRY_VALUE 3300              // valeur brute capteur dans un sol sec (à calibrer)
+#define DRY_VALUE 3300
 #endif
 #ifndef WET_VALUE
-#define WET_VALUE 1250              // valeur brute capteur dans un sol saturé d'eau (à calibrer)
+#define WET_VALUE 1250
 #endif
 #ifndef MOISTURE_THRESHOLD
-#define MOISTURE_THRESHOLD 35       // % sous lequel on arrose (synchronisé avec l'application)
+#define MOISTURE_THRESHOLD 35
 #endif
 #ifndef READ_INTERVAL_MS
-#define READ_INTERVAL_MS 5000       // une mesure toutes les 5 s
+#define READ_INTERVAL_MS 5000
 #endif
 #ifndef PUMP_PULSE_MS
-#define PUMP_PULSE_MS 5000          // durée d'une impulsion d'arrosage
+#define PUMP_PULSE_MS 5000
 #endif
 #ifndef PUMP_COOLDOWN_MS
-#define PUMP_COOLDOWN_MS 30000      // pause entre deux impulsions, le temps que l'eau diffuse
+#define PUMP_COOLDOWN_MS 30000
 #endif
 #ifndef PUMP_MAX_PULSES
-#define PUMP_MAX_PULSES 6           // sécurité : impulsions consécutives sans effet avant blocage
+#define PUMP_MAX_PULSES 6
 #endif
 
 constexpr uint8_t SAMPLE_COUNT = 20;
@@ -51,6 +76,15 @@ uint8_t consecutivePulses = 0;
 int moistureBeforePulses = -1;
 int lastMoisture = -1;
 String inputLine;
+
+#if MQTT_ENABLED
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+unsigned long lastConnectionAttemptAt = 0;
+char telemetryTopic[100];
+char statusTopic[100];
+char commandsTopic[100];
+#endif
 
 void setPump(bool on) {
   pumpOn = on;
@@ -71,13 +105,57 @@ int moisturePercent(int raw) {
   return constrain(map(raw, DRY_VALUE, WET_VALUE, 0, 100), 0, 100);
 }
 
-// Une ligne JSON par mesure : c'est ce que lit le serveur via le câble USB.
-void sendReading(int raw, int moisture) {
-  Serial.printf("{\"type\":\"reading\",\"deviceId\":\"%s\",\"soilMoisture\":%d,\"soilMoistureRaw\":%d,\"pump\":%s,\"pumpLocked\":%s,\"threshold\":%d}\n",
-                DEVICE_ID, moisture, raw, pumpOn ? "true" : "false", pumpLocked ? "true" : "false", threshold);
+void applyConfig(const String &message) {
+  const int key = message.indexOf("\"threshold\":");
+  if (message.indexOf("\"config\"") < 0 || key < 0) return;
+  const int value = message.substring(key + 12).toInt();
+  if (value >= 10 && value <= 80) {
+    threshold = value;
+    Serial.printf("Seuil d'arrosage réglé à %d%%.\n", threshold);
+  }
 }
 
-// Décide s'il faut arroser : impulsions courtes, pause entre deux, blocage si l'arrosage reste sans effet.
+#if MQTT_ENABLED
+void onMqttMessage(char *, byte *payload, unsigned int length) {
+  String message;
+  message.reserve(length);
+  for (unsigned int i = 0; i < length; i++) message += static_cast<char>(payload[i]);
+  applyConfig(message);
+}
+
+void connectNetwork() {
+  if (millis() - lastConnectionAttemptAt < 5000) return;
+  lastConnectionAttemptAt = millis();
+
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wi-Fi : tentative de connexion…");
+    WiFi.disconnect();
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    return;
+  }
+  if (mqttClient.connected()) return;
+
+  const String clientId = String("tanimboly-") + DEVICE_ID + "-" + String((uint32_t)ESP.getEfuseMac(), HEX);
+  if (mqttClient.connect(clientId.c_str(), MQTT_USER, MQTT_PASSWORD, statusTopic, 1, true, "offline")) {
+    mqttClient.subscribe(commandsTopic, 1);
+    mqttClient.publish(statusTopic, "online", true);
+    Serial.printf("MQTT connecté à %s:%d.\n", MQTT_HOST, MQTT_PORT);
+  } else {
+    Serial.printf("MQTT connexion refusée, code %d.\n", mqttClient.state());
+  }
+}
+#endif
+
+void sendReading(int raw, int moisture) {
+  char payload[256];
+  snprintf(payload, sizeof(payload), "{\"type\":\"reading\",\"deviceId\":\"%s\",\"soilMoisture\":%d,\"soilMoistureRaw\":%d,\"pump\":%s,\"pumpLocked\":%s,\"threshold\":%d}",
+           DEVICE_ID, moisture, raw, pumpOn ? "true" : "false", pumpLocked ? "true" : "false", threshold);
+  Serial.println(payload);
+#if MQTT_ENABLED
+  if (mqttClient.connected()) mqttClient.publish(telemetryTopic, payload, true);
+#endif
+}
+
 void manageIrrigation(int moisture) {
   if (moisture >= threshold) {
     consecutivePulses = 0;
@@ -89,7 +167,7 @@ void manageIrrigation(int moisture) {
   if (consecutivePulses == 0) moistureBeforePulses = moisture;
   if (consecutivePulses >= PUMP_MAX_PULSES && moisture <= moistureBeforePulses + 2) {
     pumpLocked = true;
-    Serial.println("ALERTE : l'arrosage n'augmente pas l'humidité. Pompe bloquée par sécurité (réservoir vide ? capteur hors du sol ?). Redémarrez l'ESP32 après vérification.");
+    Serial.println("ALERTE : pompe bloquée, l'humidité n'augmente pas.");
     return;
   }
   consecutivePulses++;
@@ -98,19 +176,14 @@ void manageIrrigation(int moisture) {
   Serial.printf("Pompe en marche (humidité %d%% < seuil %d%%).\n", moisture, threshold);
 }
 
-// Commandes envoyées par le serveur, ex. {"cmd":"config","threshold":40}
 void readCommands() {
   while (Serial.available()) {
     const char c = Serial.read();
-    if (c != '\n') { if (inputLine.length() < 120) inputLine += c; continue; }
-    const int key = inputLine.indexOf("\"threshold\":");
-    if (inputLine.indexOf("\"config\"") >= 0 && key >= 0) {
-      const int value = inputLine.substring(key + 12).toInt();
-      if (value >= 10 && value <= 80) {
-        threshold = value;
-        Serial.printf("Seuil d'arrosage réglé à %d%%.\n", threshold);
-      }
+    if (c != '\n') {
+      if (inputLine.length() < 120) inputLine += c;
+      continue;
     }
+    applyConfig(inputLine);
     inputLine = "";
   }
 }
@@ -123,7 +196,6 @@ void measure() {
 }
 
 void setup() {
-  // Relais coupé AVANT de passer la broche en sortie, pour que la pompe ne démarre jamais au boot.
   digitalWrite(RELAY_PIN, RELAY_ACTIVE_LOW ? HIGH : LOW);
   pinMode(RELAY_PIN, OUTPUT);
   setPump(false);
@@ -131,13 +203,29 @@ void setup() {
   analogReadResolution(12);
   analogSetPinAttenuation(SOIL_SENSOR_PIN, ADC_11db);
   delay(300);
-  Serial.println("Voly ESP32 prêt : mesure de l'humidité toutes les 5 s, arrosage automatique.");
+
+#if MQTT_ENABLED
+  snprintf(telemetryTopic, sizeof(telemetryTopic), "%s/%s/telemetry", MQTT_BASE_TOPIC, DEVICE_ID);
+  snprintf(statusTopic, sizeof(statusTopic), "%s/%s/status", MQTT_BASE_TOPIC, DEVICE_ID);
+  snprintf(commandsTopic, sizeof(commandsTopic), "%s/%s/commands", MQTT_BASE_TOPIC, DEVICE_ID);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+  mqttClient.setCallback(onMqttMessage);
+  mqttClient.setBufferSize(512);
+#endif
+
+  Serial.println("Voly ESP32 prêt : mesure toutes les 5 s et arrosage automatique.");
   measure();
   lastReadAt = millis();
 }
 
 void loop() {
   readCommands();
+#if MQTT_ENABLED
+  connectNetwork();
+  mqttClient.loop();
+#endif
   if (pumpOn && millis() - pumpStartedAt >= PUMP_PULSE_MS) {
     setPump(false);
     lastPumpStopAt = millis();
