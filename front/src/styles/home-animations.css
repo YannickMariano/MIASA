@@ -1,0 +1,70 @@
+/* Animation au défilement - Transitions Storytelling */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animations d'images et de collages */
+.story-collage .story-img {
+  transition: transform 0.5s ease, filter 0.5s ease;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.story-collage .story-img:hover {
+  transform: scale(1.03) translateY(-4px);
+}
+
+.story-collage .story-img img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-collage .story-img:hover img {
+  transform: scale(1.08);
+}
+
+/* Fil de connexion / Timeline interactive */
+.steps-line i {
+  transition: height 0.2s ease-out;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
+.timeline-step {
+  opacity: 0.4;
+  transform: scale(0.96);
+  transition: all 0.4s ease;
+}
+
+.timeline-step.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Badge Flottant Animé */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.floating-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Effets d'interaction cartes */
+.feature-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
