@@ -35,4 +35,3 @@ ai-service/.venv/
 ai-service/.pip-temp/
 ai-service/datasets/
 ai-service/runs/
-ai-service/models/*.pt

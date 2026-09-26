@@ -12,6 +12,8 @@ from ultralytics import YOLO
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = Path(os.getenv("YOLO_MODEL_PATH", BASE_DIR / "models" / "best.pt")).resolve()
 CONFIDENCE = float(os.getenv("YOLO_CONFIDENCE", "0.25"))
+# Carte graphique NVIDIA si disponible, sinon processeur (device=0 seul échoue sur un PC sans GPU).
+DEVICE = 0 if torch.cuda.is_available() else "cpu"
 
 app = FastAPI(title="Tanimboly YOLO API", version="1.0.0")
 app.add_middleware(
@@ -60,7 +62,7 @@ async def predict(file: UploadFile = File(...)):
     try:
         model = get_model()
         with _model_lock:
-            result = model.predict(image, conf=CONFIDENCE, device=0, verbose=False)[0]
+            result = model.predict(image, conf=CONFIDENCE, device=DEVICE, verbose=False)[0]
     except RuntimeError as error:
         raise HTTPException(503, str(error))
     except Exception as error:
