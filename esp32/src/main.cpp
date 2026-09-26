@@ -215,7 +215,7 @@ void setup() {
   mqttClient.setBufferSize(512);
 #endif
 
-  Serial.println("Voly ESP32 prêt : mesure toutes les 5 s et arrosage automatique.");
+  Serial.println("M'IASA ESP32 prêt : mesure toutes les 5 s et arrosage automatique.");
   measure();
   lastReadAt = millis();
 }

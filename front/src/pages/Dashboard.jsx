@@ -97,43 +97,33 @@ export function Dashboard({ data, onNavigate }) {
           <div className="blob one" />
           <div className="blob two" />
           <div className="dot-grid" />
-          <div className="particles">
-            {[58, 66, 74, 82, 90, 62, 78, 12].map((x, i) => (
-              <i
-                key={i}
-                style={{
-                  left: `${x}%`,
-                  bottom: `${[12, 20, 8, 24, 14, 30, 36, 18][i]}%`,
-                  animationDelay: `${[0, 2, 4, 1, 6, 3, 7, 5][i]}s`,
-                  animationDuration: `${9 + (i % 4) * 1.2}s`,
-                }}
-              />
-            ))}
-          </div>
         </div>
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <div className="hero-pill" data-reveal>
-              <span className="dot" />
-              POUR UNE AGRICULTURE INTELLIGENTE ET INNOVANTE
-            </div>
-            <h1 data-reveal style={{ "--d": "120ms" }}>
+        <div className="hero-stage">
+          <div className="hero-pill" data-reveal>
+            <span className="dot" />
+            POUR UNE AGRICULTURE INTELLIGENTE ET INNOVANTE
+          </div>
+          <HeroWord />
+          <div className="hero-photo" data-reveal style={{ "--d": "200ms" }}>
+            <img
+              src={heroImage}
+              alt="Producteurs repiquant le riz dans une rizière de Madagascar"
+            />
+            <div className="hero-grade" aria-hidden="true" />
+            <div className="hero-copy">
+            <h1>
               <span>Maîtriser le sujet,</span>
               <span className="accent">Mieux produire pour demain.</span>
             </h1>
-            <p data-reveal style={{ "--d": "240ms" }}>
-              Voly rassemble apprentissage, expérimentation et données de
+            <p>
+              M'IASA rassemble apprentissage, expérimentation et données de
               terrain pour aider tout acteur agricole à prendre de meilleures
               décisions, augmenter les rendements et apporter sa contribution au
               développement de Madagascar.
             </p>
-            <div
-              className="hero-actions"
-              data-reveal
-              style={{ "--d": "360ms" }}
-            >
+            <div className="hero-actions">
               <button
-                className="btn btn-primary btn-lg"
+                className="btn btn-sun btn-lg"
                 onClick={() => onNavigate("learn")}
               >
                 Découvrir les formations <Icon name="arrow_forward" />
@@ -154,14 +144,6 @@ export function Dashboard({ data, onNavigate }) {
                 </span>
               ))}
             </div> */}
-          </div>
-          <div className="hero-visual" data-reveal style={{ "--d": "200ms" }}>
-            <div className="hero-frame">
-              <img
-                src={heroImage}
-                alt="Technicienne agronome et producteurs utilisant un capteur dans une exploitation malgache"
-              />
-              <div className="hero-shade" />
             </div>
             {/* <div className="float-card hero-floating">
               <span className={`float-icon ${online ? "online" : ""}`}>
@@ -192,13 +174,13 @@ export function Dashboard({ data, onNavigate }) {
               ainsi qu'aux outils de mesure reste inégal.
             </p>
             <p>
-              <b>Voly est un levier économique important.</b> Notre ambition est d’aider à produire
+              <b>M'IASA est un levier économique important.</b> Notre ambition est d’aider à produire
               davantage et mieux, réduire la dépendance aux importations et viser 
               l'autosuffisance alimentaire  alimentaires au niveau national.
             </p>
             <p>
-              <b> Voly, plus qu'une idée </b>
-              Voly rapproche la science et la technologie du terrain. Son impact est aussi social : 
+              <b> M'IASA, plus qu'une idée </b>
+              M'IASA rapproche la science et la technologie du terrain. Son impact est aussi social : 
               il permet de maintenir l'employabilité des personnes appartenant au domaine tout en 
               fournissant de l'enseignement et l'innovation compatibles aux besoins réels.
             </p>
@@ -390,6 +372,49 @@ export function Dashboard({ data, onNavigate }) {
         </div>
       </section> */}
     </div>
+  );
+}
+
+// Grand titre « AGRIC-CULTURE » rempli d'un dégradé de coucher de soleil, les deux lignes justifiées sur toute la largeur.
+function HeroWord() {
+  const line = { x: 0, textLength: 1200, lengthAdjust: "spacingAndGlyphs" };
+  const rays = [-150, -120, -90, -60, -30, 0, 30];
+  return (
+    <svg className="hero-word" viewBox="0 0 1200 430" aria-hidden="true" data-reveal style={{ "--d": "100ms" }}>
+      <defs>
+        <linearGradient id="hero-sunset" x1="0" y1="0" x2="1" y2="0.35">
+          <stop offset="0" stopColor="#4A8B1F" />
+          <stop offset="0.3" stopColor="#8FA51C" />
+          <stop offset="0.58" stopColor="#E6A51A" />
+          <stop offset="0.8" stopColor="#F4B63A" />
+          <stop offset="1" stopColor="#E8731E" />
+        </linearGradient>
+        <linearGradient id="hero-glow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" stopColor="#FFE9A8" stopOpacity="0.3" />
+        </linearGradient>
+        <pattern id="hero-texture" patternUnits="userSpaceOnUse" width="1200" height="430">
+          <image href={heroImage} width="1200" height="430" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+      </defs>
+      <g className="hero-word-text">
+        {[["AGRIC-", 196], ["CULTURE", 412]].map(([word, y]) => (
+          <g key={word}>
+            <text {...line} y={y} fill="url(#hero-sunset)">{word}</text>
+            <text {...line} y={y} fill="url(#hero-texture)" className="texture">{word}</text>
+            <text {...line} y={y} fill="url(#hero-glow)">{word}</text>
+          </g>
+        ))}
+      </g>
+      <g className="hero-sun" transform="translate(1050 396)">
+        <g className="rays">
+          {rays.map((a) => (
+            <rect key={a} x="70" y="-6" width="40" height="12" rx="6" transform={`rotate(${a})`} />
+          ))}
+        </g>
+        <circle r="54" />
+      </g>
+    </svg>
   );
 }
 

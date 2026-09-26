@@ -1,4 +1,4 @@
-# Tanimboly — agriculture intelligente à Madagascar
+# M'IASA — agriculture intelligente à Madagascar
 
 Monorepo composé de trois applications indépendantes :
 

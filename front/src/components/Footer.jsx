@@ -30,7 +30,7 @@ export function Footer({ onNavigate }) {
           </nav>
         </div>
         <div className="footer-bottom">
-          <span>Conçu pour les agriculteurs de Madagascar · Voly 2026</span>
+          <span>Conçu pour les agriculteurs de Madagascar · M'IASA 2026</span>
           <span className="mono">FR · MG</span>
         </div>
       </div>
