@@ -398,7 +398,6 @@ h1,h2,h3,p{margin:0}
 .reader-block ul{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .reader-block li{display:flex;gap:8px;font-size:14px;line-height:1.5;color:var(--text-3)}
 .reader-block li .ms{font-size:18px;color:var(--green)}
-<<<<<<< HEAD
 .lesson-table-wrap{margin-top:18px;overflow-x:auto;border:1px solid rgba(16,40,30,.1);border-radius:18px;background:rgba(255,255,255,.74)}
 .lesson-table{width:100%;min-width:680px;border-collapse:collapse;font-size:13.5px;line-height:1.45}
 .lesson-table th,.lesson-table td{padding:13px 15px;text-align:left;vertical-align:top;border-bottom:1px solid rgba(16,40,30,.08)}
@@ -406,10 +405,7 @@ h1,h2,h3,p{margin:0}
 .lesson-table tbody tr:last-child td{border-bottom:0}
 .lesson-table tbody tr:nth-child(even){background:rgba(24,155,103,.05)}
 .lesson-table td:first-child{font-weight:750;color:var(--navy)}
-.field-note{margin-top:18px;display:flex;gap:12px;padding:16px 18px;border-radius:20px;background:rgba(24,155,103,.07)}
-=======
 .field-note{margin-top:18px;display:flex;gap:12px;padding:16px 18px;border-radius:20px;background:rgba(74,139,31,.07)}
->>>>>>> 1e1c124011a58afa416e6b23d9db9f9de00570d3
 .field-note>.ms{font-size:22px;color:var(--green)}
 .field-note strong{font-size:14.5px;font-weight:800}
 .field-note p{margin-top:3px;font-size:14px;line-height:1.55;color:var(--text-3)}
