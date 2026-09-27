@@ -1048,3 +1048,37 @@ h1,h2,h3,p{margin:0}
 .feature-visual>.feature-icon,.feature-visual>small,.feature-visual>.premium-badge{position:relative;z-index:1}
 .feature-visual>small,.feature-visual>.premium-badge{position:absolute}
 .feature-card.featured .feature-visual>img+.feature-icon{background:var(--bg);color:var(--forest)}
+
+/* ==========================================================================
+   Diagnostic IA : solutions recommandées selon le résultat de l'analyse
+   ========================================================================== */
+.care-plan{margin:clamp(16px,2.5vw,24px) clamp(20px,3vw,28px) 0;padding:clamp(18px,2.5vw,24px);border-radius:24px;background:rgba(74,139,31,.07);border:1px solid rgba(74,139,31,.18)}
+.care-plan.type-fungal,.care-plan.type-bacterial,.care-plan.type-pest{background:rgba(252,179,0,.08);border-color:rgba(232,115,30,.22)}
+.care-plan.type-viral{background:rgba(232,115,30,.08);border-color:rgba(232,115,30,.3)}
+.care-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px}
+.care-head .mono-label .ms{font-size:16px}
+.care-head h3{margin-top:8px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.03em}
+.care-head p{margin-top:6px;max-width:720px;font-size:14.5px;line-height:1.55;color:var(--text-2)}
+.care-badges{display:flex;flex-wrap:wrap;gap:8px}
+.care-type,.care-urgency{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:800}
+.care-type{background:rgba(31,61,12,.08);color:var(--forest)}
+.care-type.healthy{background:rgba(74,139,31,.15);color:var(--green-700)}
+.care-type.viral{background:rgba(232,115,30,.15);color:#8A3D0A}
+.care-urgency .ms{font-size:17px}
+.care-urgency.low{background:rgba(74,139,31,.15);color:var(--green-700)}
+.care-urgency.medium{background:rgba(252,179,0,.22);color:#7A4A06}
+.care-urgency.high{background:var(--sunset);color:#fff}
+.care-urgency-text{margin-top:12px;font-size:14px;font-weight:700;color:var(--text-3)}
+.care-notes{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.care-notes p{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.7);font-size:13.5px;line-height:1.5;color:var(--text-2)}
+.care-notes .ms{font-size:18px;color:var(--sunset);flex:none}
+.care-groups{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.care-group{padding:16px;border-radius:18px;background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9)}
+.care-group h4{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800}
+.care-group h4 .ms{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:18px;background:var(--tint-2);color:var(--green-700)}
+.care-group.now h4 .ms{background:rgba(232,115,30,.14);color:var(--sunset)}
+.care-group.treat h4 .ms{background:rgba(252,179,0,.2);color:#7A4A06}
+.care-group ol{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5;color:var(--text-2)}
+.care-group li::marker{font-weight:800;color:var(--green)}
+.care-group small{margin-top:10px;display:flex;gap:6px;align-items:flex-start;font-size:12px;line-height:1.45;color:var(--muted)}
+.care-group small .ms{font-size:15px;flex:none}
