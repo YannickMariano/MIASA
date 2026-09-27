@@ -22,8 +22,8 @@ export function HeroSection({ onNavigate }) {
             </div>
 
             <h1>
-              <span>Maîtriser le sujet,</span>
-              <span className="accent">Mieux produire pour demain.</span>
+              <span>Avant de bâtir grand,</span>
+              <span className="accent">il faut renforcer l’essentiel.</span>
             </h1>
 
             <p>

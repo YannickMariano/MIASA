@@ -2,7 +2,7 @@
 export const photo = name => `${import.meta.env.BASE_URL}images/${name}`;
 
 export const heroImage = {
-  src: photo("12.jpg"),
+  src: photo("12.png"),
   alt: "Coucher de soleil sur les collines et les champs des hautes terres",
 };
 

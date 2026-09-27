@@ -92,11 +92,10 @@ h1,h2,h3,p{margin:0}
 .scrolled .nav-bar{height:60px;box-shadow:0 14px 34px -20px rgba(31,61,12,.35),inset 0 1px 0 #fff}
 .nav-logo{display:flex;align-items:center;position:relative;z-index:2;}
 .logo{display:flex;align-items:center;gap:10px;color:var(--ink)}
-.logo-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#5FA22A,#2E5C12);display:grid;place-items:center;color:var(--bg);box-shadow:0 6px 16px -6px rgba(74,139,31,.7),inset 0 1px 0 rgba(255,255,255,.35)}
-.logo-mark .ms{font-size:21px}
-.logo-name{font-weight:800;font-size:21px;letter-spacing:-.035em}
-.logo-badge{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.08em;color:var(--green-600);padding:3px 7px;border-radius:6px;background:var(--tint-2)}
-.nav-links{display:none;gap:2px;margin-left:auto;align-items:center}
+.logo-image{display:block;width:58px;height:58px;object-fit:contain;border-radius:12px;transition:width .4s var(--ease),height .4s var(--ease)}
+.logo-compact .logo-image{width:40px;height:40px}
+.scrolled .logo-image{width:50px;height:50px}
+.nav-links{display:none;gap:2px;position:absolute;right:8%}
 .nav-links button{white-space:nowrap;display:inline-flex;align-items:center;gap:5px;padding:8px 10px;border-radius:12px;font-size:14px;font-weight:600;color:var(--muted);transition:background .25s,color .25s}
 .nav-links button:hover{background:rgba(74,139,31,.08);color:var(--ink)}
 .nav-links button.active{background:var(--tint-2);color:var(--ink)}
@@ -132,7 +131,7 @@ h1,h2,h3,p{margin:0}
 .footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
 .footer-brand{max-width:380px}
 .footer-brand .logo{color:var(--bg)}
-.footer-brand .logo-mark{box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.footer-brand .logo-image{width:88px;height:88px;border-radius:18px}
 .footer-brand p{margin-top:16px;font-size:19px;line-height:1.35;font-weight:700;letter-spacing:-.02em}
 .footer-links{display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:10px 40px;align-content:start}
 .footer-links button{text-align:left;font-size:14.5px;font-weight:600;color:rgba(251,244,230,.85);transition:color .2s}

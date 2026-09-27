@@ -1,13 +1,11 @@
-import { Icon } from "./Icon";
-
-export function Logo({ compact = false, badge = true }) {
+export function Logo({ compact = false }) {
   return (
-    <div className="logo">
-      <span className="logo-mark">
-        <Icon name="eco" fill />
-      </span>
-      {!compact && <span className="logo-name">M'IASA</span>}
-      {/* {!compact && badge && <span className="logo-badge">MG</span>} */}
+    <div className={`logo ${compact ? "logo-compact" : ""}`}>
+      <img
+        className="logo-image"
+        src="/images/logo.png"
+        alt="M'IASA"
+      />
     </div>
   );
 }
