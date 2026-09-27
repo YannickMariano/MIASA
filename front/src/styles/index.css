@@ -126,17 +126,26 @@ h1,h2,h3,p{margin:0}
 /* ==========================================================================
    Pied de page
    ========================================================================== */
-.site-footer{background:var(--forest);color:var(--bg);padding:clamp(20px,6vw,30px) clamp(5px,5vw,10px) 5px}
-.footer-inner{max-width:var(--content);margin:0 auto}
-.footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
-.footer-brand{max-width:380px}
+.site-footer{position:relative;overflow:hidden;background:var(--forest);color:var(--bg);padding:clamp(20px,6vw,30px) var(--gutter) 10px}
+.site-footer::before{content:"";position:absolute;right:-160px;top:-240px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.045);pointer-events:none}
+.footer-inner{position:relative;max-width:var(--content);margin:0 auto}
+.footer-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(36px,6vw,88px);align-items:start}
+.footer-brand{max-width:none}
 .footer-brand .logo{color:var(--bg)}
-.footer-brand .logo-image{width:88px;height:88px;border-radius:18px}
-.footer-brand p{margin-top:16px;font-size:19px;line-height:1.35;font-weight:700;letter-spacing:-.02em}
-.footer-links{display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:10px 40px;align-content:start}
-.footer-links button{text-align:left;font-size:14.5px;font-weight:600;color:rgba(251,244,230,.85);transition:color .2s}
-.footer-links button:hover{color:var(--bg)}
-.footer-bottom{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:rgba(251,244,230,.7)}
+.footer-brand .logo-image{width:108px;height:108px;border-radius:22px}
+.footer-tagline{margin-top:20px;max-width:430px;font-size:clamp(21px,2vw,28px);line-height:1.2;font-weight:800;letter-spacing:-.035em}
+.footer-description{margin-top:12px;max-width:440px;font-size:14.5px;line-height:1.65;color:rgba(251,244,230,.7)}
+.footer-cta{margin-top:22px;display:inline-flex;align-items:center;gap:14px;padding:11px 15px;border-radius:12px;background:var(--bg);color:var(--forest);font-size:13.5px;font-weight:800;transition:transform .2s var(--ease),background .2s}
+.footer-cta:hover{transform:translateY(-2px);background:#fff}
+.footer-column{display:flex;flex-direction:column;align-items:stretch;padding-top:10px}
+.footer-column h3{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.14);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(251,244,230,.55)}
+.footer-column button{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 0;text-align:left;font-size:14.5px;font-weight:650;color:rgba(251,244,230,.82);transition:color .2s,padding-left .2s var(--ease)}
+.footer-column button span:last-child{opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+.footer-column button:hover{padding-left:4px;color:var(--bg)}
+.footer-column button:hover span:last-child{opacity:1;transform:none}
+.footer-bottom{margin-top:clamp(20px,7vw,30px);padding-top:20px;border-top:1px solid rgba(255,255,255,.13);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;font-size:12.5px;color:rgba(251,244,230,.58)}
+.footer-bottom .mono{justify-self:end}
+.footer-values{color:rgba(251,244,230,.72)}
 
 /* ==========================================================================
    Éléments communs
@@ -911,7 +920,10 @@ h1,h2,h3,p{margin:0}
   .course-nav{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory}
   .course-nav .mono-label{display:none}
   .course-nav button{flex:0 0 min(78%,260px);scroll-snap-align:start;background:rgba(255,255,255,.6)}
-  .footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
+  .footer-top{grid-template-columns:1fr;gap:42px}
+  .footer-bottom{grid-template-columns:1fr;gap:8px}
+  .footer-bottom .mono{justify-self:start}
+  .footer-values{order:3}
 }
 @media (max-width:420px){
   .page-header h1{font-size:32px}

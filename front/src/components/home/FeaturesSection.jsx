@@ -27,9 +27,6 @@ export function FeaturesSection({ onNavigate }) {
               >
                 <span className="feature-visual">
                   {f.image && <img src={f.image} style={{ objectPosition: f.position }} alt="" loading="lazy" />}
-                  <span className="feature-icon">
-                    <Icon name={f.icon} />
-                  </span>
                   <small>0{i + 1}</small>
                   {PREMIUM_PAGES.includes(f.id) && <span className="premium-badge"><Crown size={14} />Premium</span>}
                 </span>

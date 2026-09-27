@@ -1,16 +1,33 @@
 import { Logo } from "./Logo";
 
-const links = [
+const platformLinks = [
   ["dashboard", "Accueil"],
-  ["insights", "Climat & marché"],
   ["learn", "Leçons"],
-  ["diagnosis", "Diagnostic IA"],
   ["lab", "Laboratoire 3D"],
-  ["sensors", "Capteurs"],
   ["map", "Carte"],
-  ["market", "Publications"],
   ["library", "Littérature"],
 ];
+
+const smartToolLinks = [
+  ["insights", "Climat & marché"],
+  ["diagnosis", "Diagnostic IA"],
+  ["sensors", "Capteurs connectés"],
+  ["market", "Publications"],
+];
+
+function FooterLinks({ title, links, onNavigate }) {
+  return (
+    <nav className="footer-column" aria-label={title}>
+      <h3>{title}</h3>
+      {links.map(([id, label]) => (
+        <button key={id} onClick={() => onNavigate(id)}>
+          <span>{label}</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
 
 export function Footer({ onNavigate }) {
   return (
@@ -19,21 +36,35 @@ export function Footer({ onNavigate }) {
         <div className="footer-top">
           <div className="footer-brand">
             <Logo badge={false} />
-            <p>
+            <p className="footer-tagline">
               La technologie au service d’une agriculture plus intelligente.
             </p>
+            <p className="footer-description">
+              Apprendre, observer et décider grâce aux données agricoles
+              adaptées aux réalités de Madagascar.
+            </p>
+            <button
+              className="footer-cta"
+              onClick={() => onNavigate("learn")}
+            >
+              Explorer les leçons <span aria-hidden="true">→</span>
+            </button>
           </div>
-          <nav className="footer-links">
-            {links.map(([id, label]) => (
-              <button key={id} onClick={() => onNavigate(id)}>
-                {label}
-              </button>
-            ))}
-          </nav>
+          <FooterLinks
+            title="Découvrir"
+            links={platformLinks}
+            onNavigate={onNavigate}
+          />
+          <FooterLinks
+            title="Outils intelligents"
+            links={smartToolLinks}
+            onNavigate={onNavigate}
+          />
         </div>
         <div className="footer-bottom">
-          <span>Conçu pour les agriculteurs de Madagascar · M'IASA 2026</span>
-          <span className="mono">FR · MG</span>
+          <span>© 2026 M'IASA · Conçu pour l’agriculture à Madagascar</span>
+          <span className="footer-values">Apprendre · Expérimenter · Cultiver</span>
+          <span className="mono">FR / MG</span>
         </div>
       </div>
     </footer>
