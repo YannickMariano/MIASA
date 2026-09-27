@@ -25,6 +25,8 @@
 
 // Arrosage automatique
 #define MOISTURE_THRESHOLD 35   // % sous lequel on arrose
-#define PUMP_PULSE_MS 5000      // durée d'une impulsion
-#define PUMP_COOLDOWN_MS 30000  // pause entre deux impulsions
-#define PUMP_MAX_PULSES 6       // impulsions sans effet avant blocage de sécurité
+#define MEASURE_INTERVAL_MS 1000  // mesure chaque seconde : la pompe réagit en 1 s au plus
+#define PUMP_PULSE_MS 10000       // durée MAXIMALE d'une impulsion (arrêt dès que le seuil est atteint)
+#define PUMP_COOLDOWN_MS 10000    // pause entre deux impulsions (l'eau doit atteindre le capteur)
+#define PUMP_MAX_PULSES 6         // impulsions sans effet avant blocage de sécurité
+#define PUMP_LOCK_RETRY_MS 60000  // nouvel essai automatique 60 s après un blocage

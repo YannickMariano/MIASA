@@ -52,10 +52,19 @@ La valeur brute (`Valeur brute ADC` dans l'application) dépend de chaque capteu
 
 ## Arrosage automatique et sécurités
 
-- Sous le seuil (35 % par défaut, synchronisé avec l'application), la pompe tourne par **impulsions de 5 s**,
-  séparées de **30 s** de pause pour laisser l'eau pénétrer.
+- L'humidité est mesurée **chaque seconde** : la pompe démarre au plus 1 s après le passage sous le seuil
+  (35 % par défaut, synchronisé avec l'application) et s'arrête **dès que le seuil est de nouveau atteint**.
+- Une impulsion dure au maximum **10 s**, suivie de **10 s** de pause pour laisser l'eau atteindre le capteur.
+- L'application reçoit l'état de la pompe immédiatement à chaque démarrage ou arrêt (sinon toutes les 5 s).
 - Au démarrage, le relais est coupé avant toute autre action : la pompe ne se déclenche jamais au branchement.
 - Si 6 impulsions de suite n'augmentent pas l'humidité (réservoir vide, capteur sorti du sol…), la pompe est
-  **bloquée par sécurité** ; l'application affiche « Pompe bloquée ». Débrancher/rebrancher l'ESP32 après vérification.
-- Si la pompe tourne alors qu'elle devrait être arrêtée (ou l'inverse), votre relais est « actif à l'état haut » :
-  mettre `RELAY_ACTIVE_LOW false` dans `include/config.h`.
+  **bloquée par sécurité** ; l'application affiche « Pompe bloquée ». Nouvel essai automatique après **60 s**
+  (ou dès que le sol redevient humide) : inutile de débrancher l'ESP32.
+- Les reconnexions Wi-Fi/MQTT ne sont jamais tentées pendant que la pompe tourne et durent 2 s au maximum,
+  pour ne pas retarder l'arrêt de la pompe.
+- Tous ces délais sont réglables dans `include/config.h` (`MEASURE_INTERVAL_MS`, `PUMP_PULSE_MS`,
+  `PUMP_COOLDOWN_MS`, `PUMP_LOCK_RETRY_MS`).
+- Module relais 5 V « actif à l'état bas » (cas le plus courant, `RELAY_ACTIVE_LOW true`) : pour l'arrêt,
+  l'ESP32 relâche la broche au lieu d'envoyer 3,3 V, qui ne suffisent pas à couper un relais 5 V (il resterait collé).
+- Si la pompe tourne alors qu'elle devrait être arrêtée : vérifier que la pompe est câblée sur **COM + NO** (pas NC).
+  Seulement pour un relais « actif à l'état haut », mettre `RELAY_ACTIVE_LOW false` dans `include/config.h`.
