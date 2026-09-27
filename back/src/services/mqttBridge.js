@@ -60,11 +60,21 @@ export function startMqttBridge({log = console} = {}) {
     if (Number.isFinite(Number(data.threshold)) && Number(data.threshold) !== irrigation.threshold) {
       publishDeviceConfig(activeDeviceId, {threshold: irrigation.threshold})
     }
+    if ((data.mode === 'auto' || data.mode === 'manual') && data.mode !== irrigation.mode) {
+      publishDeviceCommand({cmd: 'mode', mode: irrigation.mode}, activeDeviceId)
+    }
   })
 
   client.on('reconnect', () => log.log('[MQTT] Reconnexion au broker…'))
   client.on('error', error => log.error('[MQTT] Erreur :', error.message))
   return client
+}
+
+// Envoie une commande à l'ESP32 (mode d'arrosage, pompe manuelle). Retourne false si l'ESP32 n'est pas joignable.
+export function publishDeviceCommand(command, deviceId = activeDeviceId) {
+  if (!client?.connected || !deviceId) return false
+  client.publish(topic(`${deviceId}/commands`), JSON.stringify(command), {qos: 1})
+  return true
 }
 
 export function publishDeviceConfig(deviceId = activeDeviceId, config = {}) {

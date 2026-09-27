@@ -8,6 +8,14 @@ async function request(path, options) {
   return response.json()
 }
 
+// POST JSON qui remonte le message d'erreur du serveur (ex. ESP32 injoignable).
+async function send(path, data) {
+  const response = await fetch(`${API_URL}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+  const body = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(body.message || 'Le serveur ne répond pas')
+  return body
+}
+
 export const api = {
   dashboard: () => request('/dashboard'),
   sensorHistory: (limit = 100) => request(`/sensors/history?limit=${limit}`),
@@ -21,6 +29,8 @@ export const api = {
   },
   weatherInsights: (place, crop) => request(`/insights/weather?place=${encodeURIComponent(place)}&crop=${encodeURIComponent(crop)}`),
   marketInsights: () => request('/insights/market'),
+  setIrrigationMode: (mode) => send('/irrigation/mode', { mode }),
+  manualPump: (on) => send('/irrigation/pump', { on }),
   listings: () => request('/listings'),
   listingOptions: () => request('/listings/options'),
   publishListing: async (data) => {

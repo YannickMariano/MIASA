@@ -4,7 +4,7 @@ import {parseLine,startSerialBridge} from '../src/services/serialBridge.js'
 import {sensorStore} from '../src/store/sensorStore.js'
 import {app} from '../src/app.js'
 
-test('parseLine lit une mesure envoyée par l’ESP32',()=>{const parsed=parseLine('{"type":"reading","deviceId":"ESP32-PARCELLE-01","soilMoisture":42,"soilMoistureRaw":2500,"pump":true,"pumpLocked":false,"threshold":35}\r');assert.deepEqual(parsed,{reading:{soilMoisture:42,soilMoistureRaw:2500,deviceId:'ESP32-PARCELLE-01'},pumpOn:true,pumpLocked:false,threshold:35})})
+test('parseLine lit une mesure envoyée par l’ESP32',()=>{const parsed=parseLine('{"type":"reading","deviceId":"ESP32-PARCELLE-01","soilMoisture":42,"soilMoistureRaw":2500,"pump":true,"pumpLocked":false,"threshold":35}\r');assert.deepEqual(parsed,{reading:{soilMoisture:42,soilMoistureRaw:2500,deviceId:'ESP32-PARCELLE-01'},pumpOn:true,pumpLocked:false,threshold:35,mode:null})})
 test('parseLine ignore les messages texte et les valeurs invalides',()=>{assert.equal(parseLine('Pompe en marche (humidité 30% < seuil 35%).'),null);assert.equal(parseLine('{"type":"reading","soilMoisture":140}'),null);assert.equal(parseLine('{"type":"reading"'),null)})
 test('le débranchement USB passe l’appareil hors ligne immédiatement',()=>{sensorStore.add({soilMoisture:50,deviceId:'ESP32-TEST'});sensorStore.setLink({type:'usb',port:'COM7'});assert.equal(sensorStore.device().online,true);assert.deepEqual(sensorStore.device().link,{type:'usb',port:'COM7'});sensorStore.markOffline();assert.equal(sensorStore.device().online,false);assert.equal(sensorStore.device().link,null)})
 test('CORS autorise l’application sur un autre port localhost',async()=>{const server=app.listen(0);const port=server.address().port;const response=await fetch(`http://localhost:${port}/api/health`,{headers:{Origin:'http://localhost:5174'}});assert.equal(response.headers.get('access-control-allow-origin'),'http://localhost:5174');const other=await fetch(`http://localhost:${port}/api/health`,{headers:{Origin:'http://exemple.com'}});assert.equal(other.headers.get('access-control-allow-origin'),null);server.close()})
@@ -25,4 +25,25 @@ test('le pont série détecte l’ESP32, transmet les mesures, l’état de la p
   bridge.port.close();await wait(80)
   assert.equal(sensorStore.device().online,false);assert.equal(sensorStore.irrigation().pumpOn,false)
  }finally{bridge.stop()}
+})
+test('mode manuel : l’application commande la pompe par USB, le mode automatique refuse la commande',async()=>{
+ const {SerialPortMock}=await import('serialport')
+ SerialPortMock.binding.reset();SerialPortMock.binding.createPort('COM8',{record:true,vendorId:'10c4',manufacturer:'Silicon Labs'})
+ const bridge=startSerialBridge({Port:SerialPortMock,scanInterval:20,log:{log(){},warn(){},error(){}}}),server=app.listen(0)
+ const wait=ms=>new Promise(r=>setTimeout(r,ms)),url=`http://localhost:${server.address().port}/api/irrigation`
+ const post=(path,body)=>fetch(`${url}/${path}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+ try{
+  for(let i=0;i<50&&!bridge.port?.isOpen;i++)await wait(20)
+  assert.equal((await post('pump',{on:true})).status,409,'pompe refusée en mode automatique')
+  assert.equal((await post('mode',{mode:'bizarre'})).status,400)
+  const manual=await(await post('mode',{mode:'manual'})).json();assert.equal(manual.mode,'manual');assert.equal(manual.sent,true)
+  assert.equal((await post('pump',{on:true})).status,200);assert.equal((await post('pump',{on:false})).status,200)
+  await wait(50)
+  const sent=bridge.port.port.recording.toString()
+  assert.match(sent,/"cmd":"mode","mode":"manual"/);assert.match(sent,/"cmd":"pump","on":true/);assert.match(sent,/"cmd":"pump","on":false/)
+  // L'ESP32 redémarre en automatique : le serveur lui renvoie le mode manuel choisi.
+  bridge.port.port.emitData('{"type":"reading","deviceId":"ESP32-USB","soilMoisture":50,"pump":false,"pumpLocked":false,"threshold":35,"mode":"auto"}\n');await wait(80)
+  assert.equal((bridge.port.port.recording.toString().match(/"mode":"manual"/g)||[]).length,2)
+  assert.equal((await(await post('mode',{mode:'auto'})).json()).mode,'auto')
+ }finally{server.close();bridge.stop()}
 })

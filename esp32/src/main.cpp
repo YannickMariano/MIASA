@@ -69,6 +69,9 @@
 #ifndef PUMP_MAX_PULSES
 #define PUMP_MAX_PULSES 6
 #endif
+#ifndef MANUAL_MAX_MS
+#define MANUAL_MAX_MS 300000       // mode manuel : arrêt de sécurité après 5 min si personne n'arrête la pompe
+#endif
 #ifndef PUMP_LOCK_RETRY_MS
 #define PUMP_LOCK_RETRY_MS 60000   // après un blocage de sécurité, nouvel essai automatique
 #endif
@@ -78,6 +81,7 @@ constexpr uint8_t SAMPLE_COUNT = 16;
 int threshold = MOISTURE_THRESHOLD;
 bool pumpOn = false;
 bool pumpLocked = false;
+bool manualMode = false;  // mode manuel : l'arrosage automatique est suspendu, la pompe obéit aux boutons de l'application
 unsigned long pumpStartedAt = 0;
 unsigned long lastPumpStopAt = 0;
 bool pumpHasStopped = false;
@@ -90,6 +94,8 @@ int moistureBeforePulses = -1;
 int lastMoisture = -1;
 int lastRaw = 0;
 String inputLine;
+
+void applyCommand(const String &message);
 
 #if MQTT_ENABLED
 WiFiClient wifiClient;
@@ -148,7 +154,7 @@ void onMqttMessage(char *, byte *payload, unsigned int length) {
   String message;
   message.reserve(length);
   for (unsigned int i = 0; i < length; i++) message += static_cast<char>(payload[i]);
-  applyConfig(message);
+  applyCommand(message);
 }
 
 // Reconnexion sans bloquer l'arrosage : une connexion MQTT vers un broker injoignable peut figer la boucle
@@ -182,8 +188,8 @@ void connectNetwork() {
 
 void sendReading(int raw, int moisture) {
   char payload[256];
-  snprintf(payload, sizeof(payload), "{\"type\":\"reading\",\"deviceId\":\"%s\",\"soilMoisture\":%d,\"soilMoistureRaw\":%d,\"pump\":%s,\"pumpLocked\":%s,\"threshold\":%d}",
-           DEVICE_ID, moisture, raw, pumpOn ? "true" : "false", pumpLocked ? "true" : "false", threshold);
+  snprintf(payload, sizeof(payload), "{\"type\":\"reading\",\"deviceId\":\"%s\",\"soilMoisture\":%d,\"soilMoistureRaw\":%d,\"pump\":%s,\"pumpLocked\":%s,\"threshold\":%d,\"mode\":\"%s\"}",
+           DEVICE_ID, moisture, raw, pumpOn ? "true" : "false", pumpLocked ? "true" : "false", threshold, manualMode ? "manual" : "auto");
   Serial.println(payload);
 #if MQTT_ENABLED
   if (mqttClient.connected()) mqttClient.publish(telemetryTopic, payload, true);
@@ -198,6 +204,7 @@ void stopPump(const char *reason) {
 }
 
 void manageIrrigation(int moisture) {
+  if (manualMode) return;  // mode manuel : aucune décision automatique
   if (pumpOn) {
     // Arrêt dès que le sol est assez humide, sans attendre la fin de l'impulsion.
     if (moisture >= threshold && millis() - pumpStartedAt >= PUMP_MIN_ON_MS) stopPump("seuil atteint");
@@ -236,6 +243,38 @@ void manageIrrigation(int moisture) {
   Serial.printf("Pompe en marche (humidité %d%% < seuil %d%%).\n", moisture, threshold);
 }
 
+// Commandes de l'application : {"cmd":"mode","mode":"manual"|"auto"}, {"cmd":"pump","on":true|false}, {"cmd":"config",...}
+void applyCommand(const String &message) {
+  if (message.indexOf("\"cmd\":\"mode\"") >= 0) {
+    const bool manual = message.indexOf("\"manual\"") >= 0;
+    if (manual == manualMode) return;
+    if (pumpOn) stopPump(manual ? "passage en mode manuel" : "retour au mode automatique");
+    manualMode = manual;
+    consecutivePulses = 0;
+    moistureBeforePulses = -1;
+    pumpLocked = false;
+    publishNow = true;
+    Serial.println(manual ? "Mode MANUEL : arrosage automatique suspendu." : "Mode AUTOMATIQUE : arrosage selon le seuil.");
+    return;
+  }
+  if (message.indexOf("\"cmd\":\"pump\"") >= 0) {
+    if (!manualMode) {
+      Serial.println("Commande de pompe ignorée : l'ESP32 est en mode automatique.");
+      return;
+    }
+    const bool on = message.indexOf("\"on\":true") >= 0;
+    if (on && !pumpOn) {
+      setPump(true);
+      pumpStartedAt = millis();
+      Serial.println("Pompe en marche (commande manuelle).");
+    } else if (!on && pumpOn) {
+      stopPump("commande manuelle");
+    }
+    return;
+  }
+  applyConfig(message);
+}
+
 void readCommands() {
   while (Serial.available()) {
     const char c = Serial.read();
@@ -243,7 +282,7 @@ void readCommands() {
       if (inputLine.length() < 120) inputLine += c;
       continue;
     }
-    applyConfig(inputLine);
+    applyCommand(inputLine);
     inputLine = "";
   }
 }
@@ -296,7 +335,9 @@ void loop() {
   connectNetwork();
   mqttClient.loop();
 #endif
-  if (pumpOn && millis() - pumpStartedAt >= PUMP_PULSE_MS) stopPump("durée maximale de l'impulsion");
+  if (pumpOn && millis() - pumpStartedAt >= (manualMode ? MANUAL_MAX_MS : PUMP_PULSE_MS)) {
+    stopPump(manualMode ? "sécurité : 5 min en mode manuel" : "durée maximale de l'impulsion");
+  }
   if (millis() - lastReadAt >= MEASURE_INTERVAL_MS) {
     lastReadAt = millis();
     measure();

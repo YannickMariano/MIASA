@@ -56,6 +56,9 @@ La valeur brute (`Valeur brute ADC` dans l'application) dépend de chaque capteu
   (35 % par défaut, synchronisé avec l'application) et s'arrête **dès que le seuil est de nouveau atteint**.
 - Une impulsion dure au maximum **10 s**, suivie de **10 s** de pause pour laisser l'eau atteindre le capteur.
 - L'application reçoit l'état de la pompe immédiatement à chaque démarrage ou arrêt (sinon toutes les 5 s).
+- **Mode manuel** (bouton « Manuel » de la page Diagnostic par capteur) : l'arrosage automatique est suspendu et
+  la pompe obéit aux boutons « Lancer / Arrêter l'arrosage ». Arrêt de sécurité après 5 min (`MANUAL_MAX_MS`).
+  Au redémarrage, l'ESP32 repart en automatique puis l'application lui renvoie le mode choisi.
 - Au démarrage, le relais est coupé avant toute autre action : la pompe ne se déclenche jamais au branchement.
 - Si 6 impulsions de suite n'augmentent pas l'humidité (réservoir vide, capteur sorti du sol…), la pompe est
   **bloquée par sécurité** ; l'application affiche « Pompe bloquée ». Nouvel essai automatique après **60 s**

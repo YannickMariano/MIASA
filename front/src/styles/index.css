@@ -1082,3 +1082,25 @@ h1,h2,h3,p{margin:0}
 .care-group li::marker{font-weight:800;color:var(--green)}
 .care-group small{margin-top:10px;display:flex;gap:6px;align-items:flex-start;font-size:12px;line-height:1.45;color:var(--muted)}
 .care-group small .ms{font-size:15px;flex:none}
+
+/* ==========================================================================
+   Diagnostic par capteur : mode d'arrosage automatique / manuel
+   ========================================================================== */
+.irrigation-mode{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;padding:clamp(16px,2.5vw,22px);border-radius:24px;background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--glass-border);box-shadow:var(--shadow-md)}
+.irrigation-mode.manual{background:linear-gradient(120deg,rgba(255,243,218,.85),rgba(255,255,255,.7));border-color:rgba(232,115,30,.25)}
+.mode-copy{flex:1 1 300px;min-width:0}
+.mode-copy h3{margin-top:8px;font-size:20px;font-weight:800;letter-spacing:-.02em}
+.mode-copy p{margin-top:4px;font-size:14px;line-height:1.5;color:var(--text-2)}
+.mode-controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.mode-switch{display:inline-flex;padding:4px;border-radius:16px;background:rgba(31,36,16,.07)}
+.mode-switch button{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:700;color:var(--muted);transition:background .25s,color .25s,box-shadow .25s}
+.mode-switch button .ms{font-size:19px}
+.mode-switch button.active{background:var(--green);color:var(--bg);box-shadow:0 8px 18px -10px rgba(74,139,31,.9)}
+.irrigation-mode.manual .mode-switch button.active{background:var(--sunset);box-shadow:0 8px 18px -10px rgba(232,115,30,.9)}
+.mode-switch button:disabled{cursor:wait}
+.manual-actions{display:flex;flex-wrap:wrap;gap:10px}
+.manual-actions .btn{padding:11px 16px;font-size:14px}
+.mode-alert{flex-basis:100%;display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text-3)}
+.mode-alert .ms{font-size:18px;color:var(--muted)}
+.mode-alert.error{color:#8A3D0A}
+.mode-alert.error .ms{color:var(--sunset)}

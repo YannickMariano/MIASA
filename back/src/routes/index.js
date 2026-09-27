@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {addReading,getHistory,getLatest} from '../controllers/sensorController.js'
-import {settings,status,toggle} from '../controllers/irrigationController.js'
+import {manualPump,setMode,settings,status,toggle} from '../controllers/irrigationController.js'
 import {sensorStore} from '../store/sensorStore.js'
 import multer from 'multer'
 import {analyze} from '../controllers/diagnosisController.js'
@@ -13,6 +13,7 @@ router.get('/dashboard',(_req,res)=>res.json({sensors:sensorStore.latest(),irrig
 router.get('/device/status',(_req,res)=>res.json(sensorStore.device()))
 router.get('/sensors/latest',getLatest);router.get('/sensors/history',getHistory);router.post('/sensors/readings',addReading)
 router.get('/irrigation/status',status);router.post('/irrigation/toggle',toggle);router.put('/irrigation/settings',settings)
+router.post('/irrigation/mode',setMode);router.post('/irrigation/pump',manualPump)
 router.post('/diagnosis/analyze',upload.single('image'),analyze)
 router.get('/insights/weather',weather);router.get('/insights/market',market)
 router.get('/listings',listListings);router.get('/listings/options',listingOptions);router.post('/listings',createListing);router.delete('/listings/:id',removeListing)

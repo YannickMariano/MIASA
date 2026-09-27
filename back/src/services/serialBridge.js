@@ -5,6 +5,10 @@ import {sensorStore} from '../store/sensorStore.js'
 const ESP_VENDORS=['10c4','1a86','0403','303a']
 const BAUD_RATE=115200
 const SCAN_INTERVAL_MS=3000
+let activePort=null
+
+// Envoie une commande à l'ESP32 branché en USB. Retourne false si aucun ESP32 n'est connecté.
+export function sendSerialCommand(command){if(!activePort?.isOpen)return false;activePort.write(`${JSON.stringify(command)}\n`);return true}
 
 // Transforme une ligne JSON envoyée par le firmware en mesure exploitable. Retourne null si la ligne n'est pas une mesure.
 export function parseLine(line){
@@ -18,7 +22,7 @@ export function parseLine(line){
  const reading={soilMoisture}
  if(Number.isFinite(Number(data.soilMoistureRaw)))reading.soilMoistureRaw=Number(data.soilMoistureRaw)
  if(typeof data.deviceId==='string')reading.deviceId=data.deviceId.slice(0,50)
- return{reading,pumpOn:data.pump===true,pumpLocked:data.pumpLocked===true,threshold:Number.isFinite(Number(data.threshold))?Number(data.threshold):null}
+ return{reading,pumpOn:data.pump===true,pumpLocked:data.pumpLocked===true,threshold:Number.isFinite(Number(data.threshold))?Number(data.threshold):null,mode:data.mode==='manual'||data.mode==='auto'?data.mode:null}
 }
 
 const isEspPort=port=>ESP_VENDORS.includes(String(port.vendorId||'').toLowerCase())||/silicon labs|wch|ftdi|espressif|cp210|ch340|ch910/i.test(`${port.manufacturer||''} ${port.friendlyName||''}`)
@@ -42,6 +46,7 @@ export function startSerialBridge({portPath=process.env.SERIAL_PORT,log=console,
    warnedBusy.delete(path)
    log.log(`[ESP32] Connecté sur ${path} — lecture des mesures en cours.`)
    sensorStore.setLink({type:'usb',port:path})
+   activePort=port
    const parser=port.pipe(new ReadlineParser({delimiter:'\n'}))
    parser.on('data',line=>{
     const parsed=parseLine(line)
@@ -51,9 +56,11 @@ export function startSerialBridge({portPath=process.env.SERIAL_PORT,log=console,
     sensorStore.setIrrigation({pumpOn:parsed.pumpOn,pumpLocked:parsed.pumpLocked,...(parsed.pumpOn&&!irrigation.pumpOn?{lastRun:new Date().toISOString()}:{})})
     // Garde le seuil de l'ESP32 aligné avec celui de l'application.
     if(parsed.threshold!==null&&parsed.threshold!==irrigation.threshold)port.write(`${JSON.stringify({cmd:'config',threshold:irrigation.threshold})}\n`)
+    // Garde aussi le mode d'arrosage (automatique / manuel) aligné avec l'application.
+    if(parsed.mode!==null&&parsed.mode!==irrigation.mode)port.write(`${JSON.stringify({cmd:'mode',mode:irrigation.mode})}\n`)
    })
   })
-  port.on('close',()=>{if(current===port){current=null;sensorStore.markOffline();sensorStore.setIrrigation({pumpOn:false});log.log(`[ESP32] Déconnecté de ${path}.`)}})
+  port.on('close',()=>{if(activePort===port)activePort=null;if(current===port){current=null;sensorStore.markOffline();sensorStore.setIrrigation({pumpOn:false});log.log(`[ESP32] Déconnecté de ${path}.`)}})
   port.on('error',error=>log.error(`[ESP32] Erreur sur ${path} :`,error.message))
  }
  scan();timer=setInterval(scan,scanInterval)
